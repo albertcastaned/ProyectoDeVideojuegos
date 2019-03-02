@@ -7,8 +7,8 @@ import javax.imageio.ImageIO;
 public class FakeScrollLevel extends LevelController {
 
 	private BufferedImage img;
-	private int b1_xOff;
-	private int b2_xOff;
+	 int b1_xOff;
+	 int b2_xOff;
 	
 	public FakeScrollLevel(int width,int height)
 	{

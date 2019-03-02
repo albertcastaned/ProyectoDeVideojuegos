@@ -17,6 +17,16 @@ public class KeyInput implements KeyListener{
         if(key == KeyEvent.VK_S){down=true; jugador.setVelY(9);}
         if(key == KeyEvent.VK_A) {left=true;jugador.setVelX(-9);}
         if(key == KeyEvent.VK_D){right=true; jugador.setVelX(9);}
+        if(key == KeyEvent.VK_1)
+       	 jugador.asignarArma(0);
+        if(key == KeyEvent.VK_2)
+       	 jugador.asignarArma(1);
+        if(key == KeyEvent.VK_3)
+       	 jugador.asignarArma(2);
+        
+        if(key == KeyEvent.VK_R)
+       	 jugador.recargar();
+
 	}
 
 	@Override
@@ -55,6 +65,7 @@ public class KeyInput implements KeyListener{
                 	 jugador.setVelX(0);
                  }
              }
+
 
 }
 	

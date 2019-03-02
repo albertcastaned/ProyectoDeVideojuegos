@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferStrategy;
 public class Main extends Canvas implements Runnable{
 	
@@ -74,6 +76,27 @@ public class Main extends Canvas implements Runnable{
 			
 			
 		});
+		this.addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				// TODO Auto-generated method stub
+
+			      	e.consume(); 
+			        int notches = e.getWheelRotation();
+			        while (notches > 0) {
+			            jugador.cambiarArma(1);
+			            notches--;
+			        }
+			        while (notches < 0) {
+			            jugador.cambiarArma(-1);
+			            notches++;
+			        }
+			}
+
+
+			
+		});
 
 
 	}
@@ -145,8 +168,17 @@ public class Main extends Canvas implements Runnable{
         	g = bs.getDrawGraphics();
         	g.setColor(Color.BLACK);
         	g.fillRect(0,0,VentanaAncho,VentanaAltura);
-        	jugador.dibujar(g);
+        	jugador.render(g);
         	colBalas.render(g);
+        	g.setColor(Color.WHITE);
+
+        	g.drawString("CONTROLES:",20,200);
+        	g.drawString("W A S D para moverse",20, 220);
+        	g.drawString("1 , 2 , 3 para cambiar de arma",20, 240);
+        	g.drawString("R para recargar",20, 260);
+        	g.drawString("Click para disparar a direccion de mouse",20, 280);
+
+
         	//colBalas.actualizar();
         }finally {
         	g.dispose();
