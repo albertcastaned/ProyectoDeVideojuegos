@@ -1,36 +1,73 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-// Clase encargada de leer la entrada de teclado del usuario
+//Clase que detecta teclas y asigna direccion al personaje
 public class KeyInput implements KeyListener{
-	
-	
-	// Se crea a quién va a ser el escuchador de las teclas
-	Player player;
-	// Se hace el constructor, pasándole al escuchador
-	public KeyInput(Player player) 
+	private Personaje personaje;
+
+	public KeyInput(Personaje personaje)
 	{
-		this.player = player;
+
+		this.personaje = personaje;
 	}
-	// Si una tecla es presionada
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// Se obtiene el código entero de la tecla
+		// TODO Auto-generated method stub
+		
 		int key = e.getKeyCode();
-		// Se le pasa el código al método de tecla presionada del escuchador
-		player.keyPressed(key);
+		
+		//Teclas VK_W -> Tecla W
+        if(key == KeyEvent.VK_W) 
+        	personaje.setArriba(true);
+        
+        if(key == KeyEvent.VK_S)
+        	personaje.setAbajo(true);
+        
+        if(key == KeyEvent.VK_A)
+        	personaje.setIzquierda(true);
+        
+        if(key == KeyEvent.VK_D)
+        	personaje.setDerecha(true);
+        
+        if(key == KeyEvent.VK_1)
+        	personaje.asignarArma(0);
+        
+        if(key == KeyEvent.VK_2)
+        	personaje.asignarArma(1);
+        
+        if(key == KeyEvent.VK_3)
+        	personaje.asignarArma(2);
+        
+        if(key == KeyEvent.VK_R)
+        	personaje.recargar(); 
+
 	}
-	// Si una tecla es liberada
+
+
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// Se obtiene el código entero de la tecla
-		int key = e.getKeyCode();
-		// Se le pasa el código al método de tecla liberada del escuchador
-		player.keyReleased(key);
-	}
+		// TODO Auto-generated method stub
+		 int key = e.getKeyCode();
+		 if (key == KeyEvent.VK_W) 
+             personaje.setArriba(false);
+         
+         if (key == KeyEvent.VK_S) 
+             personaje.setAbajo(false);
+         
+         if (key == KeyEvent.VK_A)
+        	 personaje.setIzquierda(false);
 
+         
+         if (key == KeyEvent.VK_D)
+        	 personaje.setDerecha(false);
+
+             
+
+
+	}
 	@Override
-	public void keyTyped(KeyEvent e) {		
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
-
 }
+	

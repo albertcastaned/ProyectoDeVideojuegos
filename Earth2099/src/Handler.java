@@ -1,82 +1,59 @@
 import java.awt.Graphics;
-import java.util.ListIterator;
-import java.util.Random;
+import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-// Clase encargada de manejar a los objetos
+//Clase que guarda las entidades en una lista e itera sobre ella
 public class Handler {
-	// Se hace una lista de objetos
-	/*
-	 *  CopyOnWriteArrayList ayuda a que no importe que se intenten correr varios procesos
-	 *  a la vez sobre éste, siempre podrá ser modificada la lista
-	 */	
-	public CopyOnWriteArrayList <GameObject> obj;
-	private int newSpd;
-	// Constructor del Handler
+	
+	//Tipo de ArrayList que permite escribir y leer a la vez
+	public CopyOnWriteArrayList <Entidad> listaEntidades;
+	
 	public Handler()
 	{
-		// Se instancia como una nueva lista de objetos
-		obj = new CopyOnWriteArrayList <GameObject>();
-		newSpd=3;
+		//Crear lista
+		listaEntidades = new CopyOnWriteArrayList<Entidad>();
 	}
-	
-	// Método encargado de acutalizar los objetos contenidos en el Handler
-	public void tick()
-	{
-		// Se hace un iterador de la lista (se puede hacer con un for each)
-		ListIterator <GameObject> iterator = obj.listIterator();
-		boolean reset = false;
-		// Se actualizan todos los objetos
-		while (iterator.hasNext())
-		{
-			GameObject aux = iterator.next();
-			if(aux.getX() < 0)
-			{
-				removeObj(aux);
-				reset= true;
-			}else {
-			aux.tick();
-			}
-		}
-		if(reset)
-			resetear();
-	}
-	
-	public void resetear()
-	{
 
-		newSpd++;
-		Random ran = new Random();
-		int pos = ran.nextInt(5);
-		for(int i=0;i<5;i++)
+	//Llamado desde actualizar del main, actualiza cada entidad
+	public void actualizar()
+	{
+		//Iterar
+		Iterator<Entidad> itr = listaEntidades.iterator();
+		while(itr.hasNext())
 		{
-			if(i != pos)
-			addObj(new Bloque(800,96*i,newSpd,this));
+			Entidad ent = itr.next();
 			
+			//Llamar actualizar de la entidad
+			ent.actualizar();
 		}
 	}
-	// Método encargado de renderizar los objetos contenidos en el Hanlder
+	
+	//Llamado desde actualizar del maim, dibuja cada entidad
 	public void render(Graphics g)
 	{
-		// Se hace un iterador de la lista (se puede hacer con un for each)
-		ListIterator <GameObject> iterator = obj.listIterator();
-		// Se renderizan todos los objetos
-		while (iterator.hasNext())
+		//Iterar
+		Iterator<Entidad> itr = listaEntidades.iterator();
+		while(itr.hasNext())
 		{
-			GameObject aux = iterator.next();
-			aux.paint(g);
+			Entidad ent = itr.next();
+			
+			//Dibujar entidad
+			ent.render(g);
 		}
 	}
-	// Método para añadirle objetos al Handler
-	public void addObj(GameObject obj)
+	
+	//Agregar entidad a la lista
+	public void agregarObjeto(Entidad obj)
 	{
-		// Le añade el objeto a la lista
-		this.obj.add(obj);
+		System.out.println("Objeto agregado al Handler");
+		listaEntidades.add(obj);
 	}
-	// Método para remover los objetos del Handler
-	public void removeObj(GameObject obj)
+	
+	//Eliminar objeto de la lista
+	public void quitarObjeto(Entidad obj)
 	{
 		// Le remueve el objeto a la lista
-		this.obj.remove(obj);
+		listaEntidades.remove(obj);
+		System.out.println("Objeto eliminado de Handler");
 	}
 }
