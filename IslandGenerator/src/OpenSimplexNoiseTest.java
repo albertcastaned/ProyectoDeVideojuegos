@@ -26,8 +26,8 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int WIDTH = 1024;
-	private static final int HEIGHT = 1024;
+	private static final int WIDTH = 800;
+	private static final int HEIGHT = 800;
 	private static OpenSimplexNoise noise;
 	private JFrame frame;
 	private JButton generate;
@@ -45,7 +45,7 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 	public OpenSimplexNoiseTest() throws IOException
 	{
 		try {
-			test = ImageIO.read(Main.class.getResource("/TestA.png"));
+			test = ImageIO.read(OpenSimplexNoiseTest.class.getResource("/TestA.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -58,9 +58,9 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 
         frame.add(generate,BorderLayout.SOUTH);
         frame.pack();
-        frame.setPreferredSize(new Dimension(1024,1024));
-        frame.setMaximumSize(new Dimension(1024,1024));
-        frame.setMinimumSize(new Dimension(1024,1024));
+        frame.setPreferredSize(new Dimension(800,800));
+        frame.setMaximumSize(new Dimension(800,800));
+        frame.setMinimumSize(new Dimension(800,800));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -121,7 +121,7 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 		g = bs.getDrawGraphics();
 		
 		
-		g.clearRect(0, 0, 1024, 1024);
+		g.clearRect(0, 0, 800, 800);
 		g.drawImage(image,0,0,null);
 		
 		}finally{
@@ -147,6 +147,7 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 			
 				int aux = test.getRGB(x, y);
 				int red = (aux & 0x00ff0000) >> 16;
+				
 				int rgb = 0x010101 * ((int)(value) - red);
 				image.setRGB(x, y, rgb);
 				
