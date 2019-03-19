@@ -14,14 +14,12 @@ public class EnemigoPrueba extends TemplateEnemy{
 	public EnemigoPrueba(int x, int y, int ancho, int altura, String nombre, int vidaMax, int dano, Handler handler,Main main) {
 		super(x, y, ancho, altura, nombre, vidaMax, dano, handler,main);
 
+		timer = new Timer(3000,buscarJugador);
 		p = main.getPlayerPath(x, y);
 		pathIndex = 0;
-
 		px = p.getStep(pathIndex).getX() * 80;
 		py = p.getStep(pathIndex).getY() * 80;
-		timer = new Timer(3000,buscarJugador);
 		timer.start();
-
 	}
 
 	//Como seguira al jugador
@@ -44,9 +42,12 @@ public class EnemigoPrueba extends TemplateEnemy{
 		
 	}
 
+	
+	
 	//Actualizarlo
 	@Override
 	public void actualizar() {
+
 		velX = 0;
 		velY = 0;
 
@@ -58,6 +59,8 @@ public class EnemigoPrueba extends TemplateEnemy{
 		x+=velX;
 		y+=velY;
 		}
+
+
 		
 		
 
@@ -74,11 +77,11 @@ public class EnemigoPrueba extends TemplateEnemy{
 			{
 				if(pathIndex >= (p.getLength() -1))
 				{
-					x = px;
-					y = py;
+					///x = px;
+					//dy = py;
 					p = main.getPlayerPath(x, y);
 					pathIndex = 0;
-					timer.start();
+					timer.restart();
 					return;
 				}else {
 				pathIndex++;
@@ -88,9 +91,9 @@ public class EnemigoPrueba extends TemplateEnemy{
 				}
 			}
 
-			velX=8 * signDirX;
+			velX=4 * signDirX;
 			
-			velY=8 * signDirY;
+			velY=4 * signDirY;
 			
 
 	}
@@ -100,9 +103,11 @@ public class EnemigoPrueba extends TemplateEnemy{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
 			p = main.getPlayerPath(x, y);
 			pathIndex = 0;
-			timer.start();
+			timer.restart();
+			
 
 		}
     };

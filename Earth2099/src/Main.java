@@ -107,9 +107,10 @@ public class Main extends Canvas implements Runnable{
 			}
 		}
 
-		handler.agregarObjeto(new EnemigoPrueba(720,320,40,40,"Enemigo prueba",100,5,handler,this));
-		handler.agregarObjeto(new EnemigoPrueba(800,320,40,40,"Enemigo prueba 2",100,5,handler,this));
-
+		handler.agregarObjeto(new EnemigoPrueba(720,320,80,80,"Enemigo prueba",100,5,handler,this));
+		handler.agregarObjeto(new EnemigoPrueba(800,320,80,80,"Enemigo prueba 2",100,5,handler,this));
+		handler.agregarObjeto(new Invisibilidad(400,480,80,80,"Invisibilidad",handler,this));
+		
 	
 		//Agregar KeyListener al jugador
 		this.addKeyListener(new KeyInput(personaje));
@@ -235,7 +236,7 @@ public class Main extends Canvas implements Runnable{
 		start();
 	}
 	//Llamar los metodos actualizar de cada Entidad
-	private void actualizar()
+	private synchronized void actualizar()
 	{	
 		for(int i = 0; i < handler.listaEntidades.size();i++)
 		{
@@ -247,7 +248,7 @@ public class Main extends Canvas implements Runnable{
 		//Se llamara aqui metodo actualizar de cada entidad en el Handler
 		handler.actualizar();
 	}
-	private void dibujar()
+	private synchronized void dibujar()
 	{
 		//Crear u obtener BufferStrategy
         bs = getBufferStrategy();
@@ -262,8 +263,7 @@ public class Main extends Canvas implements Runnable{
         	Graphics2D g2d = (Graphics2D)g;
         	
         	g2d.setColor(Color.BLACK);
-        	g2d.clearRect(0, 0, VentanaAncho, VentanaAltura);
-        	g.fillRect(0,0,VentanaAncho,VentanaAltura);
+        	g2d.fillRect(0,0,VentanaAncho,VentanaAltura);
         	
 
         	//Mover el canvas a la posicion de la camara
@@ -276,13 +276,13 @@ public class Main extends Canvas implements Runnable{
         	handler.render(g2d);
     		for (int x=0;x<map.getWidthInTiles();x++) {
     			for (int y=0;y<map.getHeightInTiles();y++) {
-					g.setColor(Color.RED);
-    				g.drawRect(x*80, y*80, 80, 80);
+					g2d.setColor(Color.RED);
+    				g2d.drawRect(x*80, y*80, 80, 80);
     				
     				if(map.blocked(x, y))
     				{
-    					g.setColor(Color.GREEN);
-        				g.fillRect(x*80, y*80, 80, 80);
+    					g2d.setColor(Color.GREEN);
+        				g2d.fillRect(x*80, y*80, 80, 80);
     				}
 
     			}

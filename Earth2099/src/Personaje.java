@@ -27,7 +27,10 @@ public class Personaje extends Entidad{
 	//Numero de armas actuales
 	private int armasActuales;
 	
-
+	//Powerup equipado
+	private PowerUp powerup;
+	
+	
 	public Personaje(int x, int y, int ancho, int altura, String nombre, Handler handler,Main main) {
 		super(x,y,ancho,altura,nombre,handler,main);
 		vidaMaxima = 100;
@@ -162,7 +165,12 @@ public class Personaje extends Entidad{
 		y += velY;
 		y = clamp(y,0,8000 - 30);
 
-		
+	    //Si tiene un powerup, que tome su efecto
+	    if(powerup != null){
+	      if(!powerup.agregarAtributos(this)){
+	        powerup = null;
+	      }
+	    }
 	}
 
 	//Dibujar
@@ -233,8 +241,17 @@ public class Personaje extends Entidad{
 					vida-=5;
 				}
 			}
-
+		      //Si es un powerup, realizar efecto
+		      if(aux instanceof PowerUp){
+		        if(chocandoEn(x, y, aux)){
+		          this.powerup = ((PowerUp)aux);
+		          
+		          handler.quitarObjeto(aux);
+		        }
+		      }
 		}
+
+		
 		
 	}
 	
