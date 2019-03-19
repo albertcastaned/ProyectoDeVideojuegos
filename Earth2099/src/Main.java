@@ -25,7 +25,9 @@ public class Main extends Canvas implements Runnable{
 	//Variables para render de Imagen
 	private Graphics g;
 	private BufferStrategy bs;
-	
+	private GameMap map;
+	private Path path;
+	private AStarSearch a;
 	//Camara
 	private Camara camara;
 	
@@ -49,6 +51,31 @@ public class Main extends Canvas implements Runnable{
 		
 
 	}
+	public int getTilePosX(int x)
+	{
+		return (int) Math.floor(x/80);
+	}
+	public int getTilePosY(int y)
+	{
+		return (int) Math.floor(y/80);
+	}
+	
+	
+	public Path getPlayerPath(int x, int y)
+	{
+		a = new AStarSearch(map);
+		return a.findPath(getTilePosX(x),getTilePosY(y),getTilePosX(personaje.getX()),getTilePosY(personaje.getY()));
+
+	}
+	
+	public int getJugadorX()
+	{
+		return personaje.getX();
+	}
+	public int getJugadorY()
+	{
+		return personaje.getY();
+	}
 	
 	//Inicar el thread
 	public synchronized void start()
@@ -64,11 +91,26 @@ public class Main extends Canvas implements Runnable{
 		//Crear instancias iniciales
 		camara = new Camara(0,0);
 		handler = new Handler();
-		personaje = new Personaje(50,50,30,30,"Personaje",handler,this);
+		map = new GameMap();
+		personaje = new Personaje(0,0,30,30,"Personaje",handler,this);
+		a = new AStarSearch(map);
+
+
 		handler.agregarObjeto(personaje);
-		handler.agregarObjeto(new BloqueColision(-500,300,50,50,handler,this));
-		handler.agregarObjeto(new EnemigoPrueba(700,200,50,50,"Enemigo prueba",100,5,handler,this));
-		
+		for (int x=0;x<map.getWidthInTiles();x++) {
+			for (int y=0;y<map.getHeightInTiles();y++) {
+				if(map.blocked(x, y))
+				{
+					handler.agregarObjeto(new BloqueColision(80*x,80*y,80,80,handler,this));
+				}
+
+			}
+		}
+
+		handler.agregarObjeto(new EnemigoPrueba(720,320,40,40,"Enemigo prueba",100,5,handler,this));
+		handler.agregarObjeto(new EnemigoPrueba(800,320,40,40,"Enemigo prueba 2",100,5,handler,this));
+
+	
 		//Agregar KeyListener al jugador
 		this.addKeyListener(new KeyInput(personaje));
 
@@ -223,7 +265,7 @@ public class Main extends Canvas implements Runnable{
         	g2d.clearRect(0, 0, VentanaAncho, VentanaAltura);
         	g.fillRect(0,0,VentanaAncho,VentanaAltura);
         	
-        	
+
         	//Mover el canvas a la posicion de la camara
         	g2d.translate(camara.getxOffset(), camara.getyOffset()); //COMENZAR CAMARA
         	
@@ -232,7 +274,20 @@ public class Main extends Canvas implements Runnable{
         	////////////////////////////////////////////////////////////////////////////
         	//Se llamara aqui metodo render de cada entidad
         	handler.render(g2d);
-        	
+    		for (int x=0;x<map.getWidthInTiles();x++) {
+    			for (int y=0;y<map.getHeightInTiles();y++) {
+					g.setColor(Color.RED);
+    				g.drawRect(x*80, y*80, 80, 80);
+    				
+    				if(map.blocked(x, y))
+    				{
+    					g.setColor(Color.GREEN);
+        				g.fillRect(x*80, y*80, 80, 80);
+    				}
+
+    			}
+    		}
+    		
         	//Obtener posicion actual de la camara
         	int camPosX = (int) -camara.getxOffset();
         	int camPosY = (int) -camara.getyOffset();
@@ -255,7 +310,6 @@ public class Main extends Canvas implements Runnable{
 
 
 
-        	//colBalas.actualizar();
         }finally {
         	g.dispose();
         }

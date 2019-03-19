@@ -44,7 +44,9 @@ public class Personaje extends Entidad{
 		armasActuales = 0;
 		velocidad = 10;
 	}
-	
+	public static int clamp(int val, int min, int max) {
+	    return Math.max(min, Math.min(max, val));
+	}
 	//Asignar direcciones, se llaman desde el KeyInput
 	public void setAbajo(boolean aux)
 	{
@@ -156,7 +158,10 @@ public class Personaje extends Entidad{
 		
 		//Cambiar posicion
 		x += velX;
+		x = clamp(x,0,8000 - 30);
 		y += velY;
+		y = clamp(y,0,8000 - 30);
+
 		
 	}
 

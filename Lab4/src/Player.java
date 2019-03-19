@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.ListIterator;
 
@@ -8,31 +10,45 @@ public class Player extends Chracter{
 	
 	private boolean up,down;
 	private Game game;
+	private AnimationSprite imagen;
 	
 	// Constructor que recibe los atributos de un GameObject
 	public Player(double x, double y, int width, int height, Color color, Handler handler,Game game) {
 		super(x, y, width, height, color, handler);
-		// La velocidad al rebotar por defecto es de -8
-		// Es -8 dado a que al rebotar, la pelota se mueve a arriba (negativo)
 		velY = 0;
+		velX = 0;
 		up = false;
 		down = false;
 		this.game = game;
+		
+		SpriteBuilder builder = new SpriteBuilder("/Textures/bat.png",48,64);
+		builder.addImage(0, 2);
+		builder.addImage(1, 2);
+		builder.addImage(2, 2);
+		imagen = new AnimationSprite((int)x,(int)y,builder.build());
+		imagen.setAnimSpd(10);
+
 		}
 	
-	// Método que nos ayuda a actualizar al jugador
+	// Mï¿½todo que nos ayuda a actualizar al jugador
 	@Override
 	public void tick() 
 	{	
 		// Se revisan las colisiones
 		colision();
 		
-		
-		// Se actualiza la posición en x y en y con respecto a su velocidad
+		imagen.update();
+		// Se actualiza la posiciï¿½n en x y en y con respecto a su velocidad
+		if(y >= 0 && up)
 		y += velY;
+		else if(y <= 450 && down)
+		y += velY;
+		
+		imagen.setY((int)y);
+		imagen.setX((int)x);
 	}
 	
-	// Método que se encarga de detectar las colisiones
+	// Mï¿½todo que se encarga de detectar las colisiones
 	@Override
 	public void colision() 
 	{	
@@ -48,13 +64,13 @@ public class Player extends Chracter{
 			if (aux instanceof Bloque)
 			{
 				// Si hace contacto con el enemigo en el eje de las x al sumarle la velocidad
-				if (placeMeeting(x, y, aux))
+				if (placeMeeting(x + 10, y + 32, aux))
 				{
 					// Se detecta si va a la derecha o a la izquierda el jugador
 					int sign = velX > 0? 1: -1;
-					// Mientras aún no esté a un pixel de lejanía
+					// Mientras aï¿½n no estï¿½ a un pixel de lejanï¿½a
 					while(!placeMeeting(x + sign, y, aux))
-						// Se acerca de pixel en pixel a la dirección correspondiente
+						// Se acerca de pixel en pixel a la direcciï¿½n correspondiente
 						x += sign;
 					//GameOver
 					game.stop();
@@ -63,18 +79,31 @@ public class Player extends Chracter{
 		}
 	}
 
-	// Método que lee las teclas que han sido presionadas
+	
+	// Mï¿½todo que lee las teclas que han sido presionadas
 	public void keyPressed(int key) {
 		// Si es escape, cierra el juego
 		if (key == KeyEvent.VK_ESCAPE) System.exit(1);
-		// Si es la flecha izquierda, vuelve la velocidad en x -3
-		if (key == KeyEvent.VK_W) {up=true;velY = -9;}
-		// Si es la flecha derecha, vuelve la velocidad en x +3
-		if (key == KeyEvent.VK_S) {down=true;velY = 9;}
+		// Si es la flecha w, vuelve la velocidad en y -9
+		if (key == KeyEvent.VK_W) {
+			up=true;
+				velY = -9;
+			}
+		// Si es la flecha s, vuelve la velocidad en y +9
+		if (key == KeyEvent.VK_S) {
+			down=true;velY = 9;
+			}
+		
+
 		
 
 	}
-
+	@Override
+	public Rectangle getBounds() 
+	{
+		//Colision mas precisa para esta imagen quitando el espacio blanco de las celdas de la imagen del murcielago
+		return (new Rectangle(imagen.getX() + 10, imagen.getY() + 32, 26, 10));
+	}
 	public void keyReleased(int key) {
 		 if (key == KeyEvent.VK_W) {
              up = false;
@@ -92,9 +121,18 @@ public class Player extends Chracter{
             	 velY = 0;
              }
          }
+
 	}
 	public void keyTyped(int key) {
 		
 	}
+
+	@Override
+	public void paint(Graphics g) {
+		// TODO Auto-generated method stub
+		imagen.render(g);
+	}
+	
+	
 
 }

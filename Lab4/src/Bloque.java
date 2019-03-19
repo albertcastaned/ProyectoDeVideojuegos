@@ -15,7 +15,7 @@ public class Bloque extends Chracter {
 	public void draw(Graphics2D g)
 	{
 		g.setColor(Color.red);
-		g.fillRect((int)x, (int)y, 32, 80);
+		g.fillRect((int)x, (int)y, 32, 96);
 	}
 	public void tick()
 	{
@@ -29,8 +29,9 @@ public class Bloque extends Chracter {
 	{		
 		// Se le asigna el color que el personaje tiene
 		g.setColor(color);
-		// Los personajes en éste caso son óvalos, así que los dibujamos
+		// Los personajes en ï¿½ste caso son ï¿½valos, asï¿½ que los dibujamos
 		g.fillRect(getX(),getY(), width, height);
+
 	}
 	@Override
 	public void colision() {

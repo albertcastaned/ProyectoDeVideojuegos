@@ -1,10 +1,27 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.ListIterator;
+
+import javax.swing.Timer;
 
 //Enemigo prueba del Template, luego se agregaran enemigos con comportamientos diferentes
 public class EnemigoPrueba extends TemplateEnemy{
-
+	private int pathIndex;
+	private Path p;
+	private int px, py;
+	private Timer timer;
 	public EnemigoPrueba(int x, int y, int ancho, int altura, String nombre, int vidaMax, int dano, Handler handler,Main main) {
 		super(x, y, ancho, altura, nombre, vidaMax, dano, handler,main);
-		// TODO Auto-generated constructor stub
+
+		p = main.getPlayerPath(x, y);
+		pathIndex = 0;
+
+		px = p.getStep(pathIndex).getX() * 80;
+		py = p.getStep(pathIndex).getY() * 80;
+		timer = new Timer(3000,buscarJugador);
+		timer.start();
+
 	}
 
 	//Como seguira al jugador
@@ -26,12 +43,68 @@ public class EnemigoPrueba extends TemplateEnemy{
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 	//Actualizarlo
 	@Override
 	public void actualizar() {
-		// TODO Auto-generated method stub
+		velX = 0;
+		velY = 0;
+
+		if(p==null)
+			return;
+		if(pathIndex != p.getLength())
+		{
+		moveTowardsPath();
+		x+=velX;
+		y+=velY;
+		}
 		
+		
+
 	}
+	
+	public void moveTowardsPath() 
+	{
+			int signDirX = 0;
+			int signDirY = 0;
+			signDirX = (x==px)?0:(x<px)?1:-1;
+			signDirY = (y==py)?0:(y<py)?1:-1;
+
+			if(x == px && y == py)
+			{
+				if(pathIndex >= (p.getLength() -1))
+				{
+					x = px;
+					y = py;
+					p = main.getPlayerPath(x, y);
+					pathIndex = 0;
+					timer.start();
+					return;
+				}else {
+				pathIndex++;
+
+				px = p.getStep(pathIndex).getX() * 80;
+				py = p.getStep(pathIndex).getY() * 80;
+				}
+			}
+
+			velX=8 * signDirX;
+			
+			velY=8 * signDirY;
+			
+
+	}
+	//Timer
+    ActionListener buscarJugador = new ActionListener(){
+
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			p = main.getPlayerPath(x, y);
+			pathIndex = 0;
+			timer.start();
+
+		}
+    };
 
 }
