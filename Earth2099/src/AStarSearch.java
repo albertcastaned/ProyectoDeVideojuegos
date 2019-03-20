@@ -89,8 +89,8 @@ public class AStarSearch {
 						
 						float nextStepCost = current.cost + getMovementCost(current.x, current.y, xp, yp);
 						Node neighbour = nodes[xp][yp];
-						map.pathFinderVisited(xp, yp);
 
+						map.pathFinderVisited(xp, yp);
 						//Si el nuevo costo determinado es menor al que se determino
 						if (nextStepCost < neighbour.cost) {
 							if (inOpenList(neighbour)) {
@@ -104,6 +104,7 @@ public class AStarSearch {
 						if (!inOpenList(neighbour) && !(inClosedList(neighbour))) {
 							neighbour.cost = nextStepCost;
 							neighbour.heuristic = getHeuristicCost(xp, yp, tx, ty);
+
 							maxDepth = Math.max(maxDepth, neighbour.setParent(current));
 							addToOpen(neighbour);
 						}
@@ -127,6 +128,8 @@ public class AStarSearch {
 		while (target != nodes[sx][sy]) {
 			path.prependStep(target.x, target.y);
 			target = target.parent;
+			
+
 		}
 		path.prependStep(sx,sy);
 		

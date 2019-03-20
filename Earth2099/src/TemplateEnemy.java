@@ -6,7 +6,6 @@ public abstract class TemplateEnemy extends Entidad{
 	
 	//Vida actual, como no pueden recuperar vida no necesitamos vida maxima
 	private int vida;
-	
 	//Daño que hacen
 	private int dano;
 	
@@ -64,7 +63,7 @@ public abstract class TemplateEnemy extends Entidad{
 	public synchronized void render(Graphics g) {
 
 		g.setColor(Color.RED);
-		g.fillOval(x,y,ancho,altura);
+		g.fillOval((int)x,(int)y,ancho,altura);
 		
 	}
 	
@@ -72,10 +71,7 @@ public abstract class TemplateEnemy extends Entidad{
 	{
 		
 	}
-	
-	//Comportamiento diferente dependiendo de la subclase
-	public abstract void seguirJugador(int x, int y);
-	
+
 	public abstract void atacar(int x, int y);
 	
 	public abstract void disparar(int x, int y);

@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 
 //Clase principal que incializa las demas, y controla el Game Loop
@@ -64,10 +65,66 @@ public class Main extends Canvas implements Runnable{
 	public Path getPlayerPath(int x, int y)
 	{
 		a = new AStarSearch(map);
-		return a.findPath(getTilePosX(x),getTilePosY(y),getTilePosX(personaje.getX()),getTilePosY(personaje.getY()));
+		Path path = null;
+		if((Math.abs(x - personaje.getX()) + Math.abs(y - personaje.getY())) < 30)
+		{
+			path = a.findPath(getTilePosX(x),getTilePosY(y),getTilePosX(personaje.getX()),getTilePosY(personaje.getY()));
+			return path;
+		}
+		while(path==null)
+		{
+		Random rand = new Random();
+		int attackPoint = rand.nextInt(7);
+		int ex = 0, ye = 0;
+		switch(attackPoint)
+		{
+		case 0:
+			ex = getTilePosX(personaje.getX() + 80);
+			ye = getTilePosY(personaje.getY());
+			break;
+		case 1:
+			ex = getTilePosX(personaje.getX() - 80);
+			ye = getTilePosY(personaje.getY());
+			break;
+		case 2:
+			ex = getTilePosX(personaje.getX());
+			ye = getTilePosY(personaje.getY() + 80);
+			break;
+		case 3:
+			ex = getTilePosX(personaje.getX());
+			ye = getTilePosY(personaje.getY() - 80);
+			break;
+		case 4:
+			ex = getTilePosX(personaje.getX() + 80);
+			ye = getTilePosY(personaje.getY() + 80);
+			break;
+		case 5:
+			ex = getTilePosX(personaje.getX() - 80);
+			ye = getTilePosY(personaje.getY() - 80);
+			break;
+		case 6:
+			ex = getTilePosX(personaje.getX()+ 80);
+			ye = getTilePosY(personaje.getY() - 80);
+			break;
+		case 7:
+			ex = getTilePosX(personaje.getX() - 80);
+			ye = getTilePosY(personaje.getY() + 80);
+			break;
+			
+		}
+		ex = clamp(ex,0,8000);
+		ye = clamp(ye,0,8000);
+		
+		path = a.findPath(getTilePosX(x),getTilePosY(y),ex,ye);
+		
+		}
+
+		return path;
 
 	}
-	
+	public static int clamp(int val, int min, int max) {
+	    return Math.max(min, Math.min(max, val));
+	}
 	public int getJugadorX()
 	{
 		return personaje.getX();

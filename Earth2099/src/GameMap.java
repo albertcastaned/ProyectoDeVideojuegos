@@ -9,7 +9,6 @@ public class GameMap implements TiledBaseMap {
 	private int[][] terrain = new int[TileWIDTH][TileHEIGHT];
 	//Tiles que ya han sido visitados en la busqueda A*
 	private boolean[][] visited = new boolean[TileWIDTH][TileHEIGHT];
-	
 	public GameMap() {
 		
 		//Crear tiles del mapa
@@ -34,7 +33,9 @@ public class GameMap implements TiledBaseMap {
 
 
 	}
+	
 
+	
 	//Limpiar tiles visitados
 	public void clearVisited() {
 		for (int x=0;x<getWidthInTiles();x++) {

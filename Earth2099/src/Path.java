@@ -5,7 +5,6 @@ public class Path {
 	
 	//Lista de pasos a seguir
 	private ArrayList steps = new ArrayList();
-	
 	/**
 	 * Create an empty path
 	 */
@@ -86,7 +85,10 @@ public class Path {
 	public boolean contains(int x, int y) {
 		return steps.contains(new Step(x,y));
 	}
-	
+
+
+
+
 	/**
 	 * A single step within the path
 	 * 
@@ -108,7 +110,6 @@ public class Path {
 			this.x = x;
 			this.y = y;
 		}
-		
 		/**
 		 * Get the x coordinate of the new step
 		 * 
