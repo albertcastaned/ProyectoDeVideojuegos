@@ -9,7 +9,7 @@ import javax.swing.Timer;
 public class EnemigoPrueba extends TemplateEnemy{
 	private int pathIndex;
 	private Path p;
-	private int px, py, auxX,auxY;
+	private int px, py;
 	private Timer timer;
 	private boolean lastimado;
 
@@ -18,6 +18,7 @@ public class EnemigoPrueba extends TemplateEnemy{
 		lastimado = false;
 		timer = new Timer(3000,buscarJugador);
 		p = main.getPlayerPath(x, y);
+		System.out.println("le" + p.getLength());
 		pathIndex = 0;
 		px = p.getStep(pathIndex).getX() * 80;
 		py = p.getStep(pathIndex).getY() * 80;
@@ -25,80 +26,77 @@ public class EnemigoPrueba extends TemplateEnemy{
 	}
 
 
-
-	
-	public void seguirJugador() {
-		
-
-	int signDirX = 0;
-	int signDirY = 0;
-	signDirX = (x==px)?0:(x<px)?1:-1;
-	signDirY = (y==py)?0:(y<py)?1:-1;
-	
-	if(x == px && y == py)
-	{
-		if(pathIndex >= (p.getLength() -1))
+	public void checarColision() {
+		//Obtener Entidades del Handler
+		ListIterator <Entidad> iterator = handler.listaEntidades.listIterator();
+		while (iterator.hasNext())
 		{
+			Entidad aux = iterator.next();
+			
 
-			p = main.getPlayerPath(x, y);
-			pathIndex = 0;
-			//timer.restart();
-			return;
-		}else {
-		pathIndex++;
+			//Colision con un Enemigo
+			if (aux instanceof Bala)
+			{
+				if (chocandoEn(x, y, aux))
+				{
+					velX = 8;
+					handler.quitarObjeto(aux);
+				}
 
-		px = p.getStep(pathIndex).getX() * 80;
-		py = p.getStep(pathIndex).getY() * 80;
+			}
+
 		}
-	}
-	
-	velX=8 * signDirX;
-	
-	velY=8 * signDirY;
-	}
-	
-
-
-	//Como lo atacara
-	@Override
-	public void atacar(int x, int y) {
-		// TODO Auto-generated method stub
 		
 	}
-	//Como lo disparara si es que tiene arma
-	@Override
-	public void disparar(int x, int y) {
-		// TODO Auto-generated method stub
+	public void seguirJugador2()
+	{
+		int aux1 = Math.abs(px - x);
+		int aux2 = Math.abs(py - y);
+		if(8 >= (aux1 + aux2))
+		{
+			System.out.println(pathIndex);
+			if(pathIndex >= p.getLength() - 1)
+			{
+			
+
+				p = main.getPlayerPath(x, y);
+				pathIndex = 0;
+
+			}else {
+			pathIndex++;
+			px = p.getStep(pathIndex).getX() * 80;
+			py = p.getStep(pathIndex).getY() * 80;
+			}
+		}
+		int dx = px -x;
+		int dy = py - y;
+		double direction = Math.atan2(dy, dx);
+		
+		x = (int) (x + (4 * Math.cos(direction)));
+		y = (int) (y + (4 * Math.sin(direction)));
 		
 	}
 
-	
-	
+
 	//Actualizarlo
 	@Override
 	public void actualizar() {
 
-		velX = 0;
-		velY = 0;
+		velX =0;
 		if(p==null)
 			return;
 		if(pathIndex != p.getLength())
 		{
-		seguirJugador();
+		seguirJugador2();
 		checarColision();
-
-		x+=velX;
-		y+=velY;
+		x += velX;
+		System.out.println(x);
 		}
 
-
-		
-		
 
 	}
 
 	
-
 	//Timer
     ActionListener buscarJugador = new ActionListener(){
 
@@ -115,6 +113,21 @@ public class EnemigoPrueba extends TemplateEnemy{
 
 		}
     };
+
+	@Override
+	public void atacar(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+	@Override
+	public void disparar(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 
