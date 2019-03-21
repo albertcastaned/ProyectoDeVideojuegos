@@ -103,7 +103,7 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
         frame.setFocusable(false);
 		frame.requestFocus();
 		generateMap();
-		placeTile();
+		//placeTile();
 		start();
 	
 	
