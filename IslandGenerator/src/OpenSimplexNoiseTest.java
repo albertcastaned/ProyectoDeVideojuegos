@@ -28,15 +28,21 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 800;
+	private static final int WIDTHTILE = WIDTH/8;
+	private static final int HEIGHTILE = HEIGHT/8;
 	private static OpenSimplexNoise noise;
 	private JFrame frame;
 	private JButton generate;
 	private Thread thread;
 	private BufferedImage image;
+	private BufferedImage water;
+
+	private BufferedImage tile;
 	private BufferStrategy bs;
 	private Graphics g;
 	private boolean corriendo;
 	private BufferedImage test;
+	private ArrayList tiles;
 	public static void main(String[] args) throws IOException
 	{	
 		new OpenSimplexNoiseTest();
@@ -45,7 +51,19 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 	public OpenSimplexNoiseTest() throws IOException
 	{
 		try {
-			test = ImageIO.read(OpenSimplexNoiseTest.class.getResource("/TestA.png"));
+			test = ImageIO.read(OpenSimplexNoiseTest.class.getResource("/test.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		try {
+			tile = ImageIO.read(OpenSimplexNoiseTest.class.getResource("/grassTile1.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		try {
+			water = ImageIO.read(OpenSimplexNoiseTest.class.getResource("/wata.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -53,7 +71,7 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 		
         frame = new JFrame("Map generator");
         frame.add(this);
-
+        tiles = new ArrayList();
         generate = new JButton("Generate");
 
         frame.add(generate,BorderLayout.SOUTH);
@@ -72,6 +90,7 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 
         		try {
 					generateMap();
+					placeTile();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -84,6 +103,7 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
         frame.setFocusable(false);
 		frame.requestFocus();
 		generateMap();
+		placeTile();
 		start();
 	
 	
@@ -123,7 +143,10 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 		
 		g.clearRect(0, 0, 800, 800);
 		g.drawImage(image,0,0,null);
-		
+		for(int i = 0; i < tiles.size();i++)
+		{
+			((Tile) tiles.get(i)).render(g);
+		}
 		}finally{
 		g.dispose();
 		}
@@ -154,6 +177,27 @@ public class OpenSimplexNoiseTest extends Canvas implements Runnable
 			}
 		}
 		ImageIO.write(image, "png", new File("noise.png"));
+	}
+	
+	public void placeTile()
+	{	tiles.clear();
+		for (int y = 0; y < WIDTHTILE; y++)
+		{
+			for (int x = 0; x < HEIGHTILE; x++)
+			{
+				int aux = image.getRGB(x*8, y*8);
+				int red = (aux & 0x00ff0000) >> 16;
+				if(red < 180)
+				{
+					tiles.add(new Tile(x*8,y*8,tile));
+				}else {
+					tiles.add(new Tile(x*8,y*8,water));
+
+				}
+				//int test = test.getRGB(x,y);
+				
+			}
+		}
 	}
 	public static double sumOctave(double iterations,double x,double y,double persistence,double scale,double low,double high)
 	{

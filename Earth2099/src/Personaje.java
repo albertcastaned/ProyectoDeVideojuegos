@@ -164,7 +164,6 @@ public class Personaje extends Entidad{
 		x = clamp(x,0,8000 - 30);
 		y += velY;
 		y = clamp(y,0,8000 - 30);
-
 	    //Si tiene un powerup, que tome su efecto
 	    if(powerup != null){
 	      if(!powerup.agregarAtributos(this)){
@@ -236,6 +235,8 @@ public class Personaje extends Entidad{
 			//Si es un enemigo, reducir vida
 			if(aux instanceof TemplateEnemy)
 			{
+				
+				//Agregar aqui timer para que no recibir daño cada frame
 				if(chocandoEn(x,y,aux))
 				{
 					vida-=5;

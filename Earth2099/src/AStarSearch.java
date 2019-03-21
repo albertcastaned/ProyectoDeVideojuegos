@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
-
 
 //Clase que busca los nodos de una cuadricula para buscar la mejor ruta hasta el destino
 public class AStarSearch {
@@ -44,10 +42,9 @@ public class AStarSearch {
 		nodes[tx][ty].parent = null;
 
 		int maxDepth = 0;
-		//Distancia maxima de busqueda
-		int maxSearchDistance = 30;
+
 		//Mientras no haya nodos por visitar
-		while ((maxDepth < maxSearchDistance) && (open.size() != 0)) {
+		while ((open.size() != 0)) {
 			
 			//Obtener primer nodo de la lista open
 

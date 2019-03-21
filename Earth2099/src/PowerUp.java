@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 //Clase entidad que cambiara atributos al personaje, se generaran al azar por el escenario
 public abstract class PowerUp extends Entidad {

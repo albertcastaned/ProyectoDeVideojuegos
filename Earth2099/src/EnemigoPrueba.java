@@ -1,30 +1,32 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.ListIterator;
 
 import javax.swing.Timer;
 
 //Enemigo prueba del Template, luego se agregaran enemigos con comportamientos diferentes
 public class EnemigoPrueba extends TemplateEnemy{
+	//Index de la lista de pasos a seguir del Path
 	private int pathIndex;
+	//Camino que sigue
 	private Path p;
+	//Posicion del index de la lista de Path
 	private int px, py;
+	
+	//Timer para volver a hacer una busqueda
 	private Timer timer;
-	private boolean lastimado;
+	
+	//Esta siguiendo al jugador o no
+	private boolean siguiendo;
 
 	public EnemigoPrueba(int x, int y, int ancho, int altura, String nombre, int vidaMax, int dano, Handler handler,Main main) {
 		super(x, y, ancho, altura, nombre, vidaMax, dano, handler,main);
-		lastimado = false;
+		siguiendo = false;
+		
+		//Iniciar timer hacer una busqueda cada 3 segundos puede cambiar por enemigo
 		timer = new Timer(3000,buscarJugador);
-		p = main.getPlayerPath(x, y);
-		System.out.println("le" + p.getLength());
-		pathIndex = 0;
-		px = p.getStep(pathIndex).getX() * 80;
-		py = p.getStep(pathIndex).getY() * 80;
 		timer.start();
 	}
-
 
 	public void checarColision() {
 		//Obtener Entidades del Handler
@@ -38,8 +40,13 @@ public class EnemigoPrueba extends TemplateEnemy{
 			if (aux instanceof Bala)
 			{
 				if (chocandoEn(x, y, aux))
-				{
-					velX = 8;
+				{	//Quitar vida aqui
+					
+					
+					
+					//Si choca con bala eliminar bala y cambiar posicion de enemigo
+					velX = aux.getVelX();
+					velY = aux.getVelY();
 					handler.quitarObjeto(aux);
 				}
 
@@ -48,30 +55,43 @@ public class EnemigoPrueba extends TemplateEnemy{
 		}
 		
 	}
-	public void seguirJugador2()
+	public void seguirJugador()
 	{
-		int aux1 = Math.abs(px - x);
-		int aux2 = Math.abs(py - y);
-		if(8 >= (aux1 + aux2))
+		//Obtener distancia de el punto buscado a la actual
+		int distanciaAPuntoX = Math.abs(px - x);
+		int distanciaAPuntoY = Math.abs(py - y);
+		//Si la distancia es igual o menor a 8
+		if(8 >= (distanciaAPuntoX + distanciaAPuntoY))
 		{
-			System.out.println(pathIndex);
+			//Si esta al final de la lista del camino
 			if(pathIndex >= p.getLength() - 1)
 			{
-			
-
-				p = main.getPlayerPath(x, y);
+				//Obtener distancia al jugador
+				int distanciaJugadorX = Math.abs(main.getJugadorX() - x);
+				int distanciaJugadorY = Math.abs(main.getJugadorY() - y);
+				
+				//Si esta a mil o mas de distancia dejar de seguirlo
+				if(2000<= (distanciaJugadorX + distanciaJugadorY))
+				{
+				siguiendo = false;
+				}else {
+				//Sino crear un nuevo camino
+				p = main.obtenerCamino(x, y);
 				pathIndex = 0;
+				}
+				
 
 			}else {
+			//Obtener nueva posicion de la lista
 			pathIndex++;
 			px = p.getStep(pathIndex).getX() * 80;
 			py = p.getStep(pathIndex).getY() * 80;
 			}
 		}
+		//Calcular velocidad y angulo para llegar al punto
 		int dx = px -x;
 		int dy = py - y;
 		double direction = Math.atan2(dy, dx);
-		
 		x = (int) (x + (4 * Math.cos(direction)));
 		y = (int) (y + (4 * Math.sin(direction)));
 		
@@ -81,32 +101,67 @@ public class EnemigoPrueba extends TemplateEnemy{
 	//Actualizarlo
 	@Override
 	public void actualizar() {
-
-		velX =0;
-		if(p==null)
-			return;
-		if(pathIndex != p.getLength())
+		
+		//Inicar velocidad en 0
+		velX = 0;
+		velY = 0;
+		
+		if(siguiendo)
 		{
-		seguirJugador2();
+			//Si el camnio no es nulo y no esta en el ultimo punto del camino seguir al jugador
+			if(p==null)
+				return;
+			if(pathIndex != p.getLength())
+			{
+				seguirJugador();
+			}
+		}
+		else {
+			//Checar si esta a menos de 2000 de distancia para empezar a seguir
+			int distanciaJugadorX = Math.abs(main.getJugadorX() - x);
+			int distanciaJugadorY = Math.abs(main.getJugadorY() - y);
+			if(2000>= (distanciaJugadorX + distanciaJugadorY))
+			{
+				siguiendo = true;
+
+				p = main.obtenerCamino(x, y);
+				pathIndex = 0;
+				px = p.getStep(pathIndex).getX() * 80;
+				py = p.getStep(pathIndex).getY() * 80;
+			}
+		}
+		//Checar colision y aumentar posicion respecto a la velocidad 
 		checarColision();
+		if(velX != 0)
+		{
+			int sign = velX<0?-1:1;
+			velX+=sign;
+		}
+		if(velY != 0)
+		{
+			int sign = velY<0?-1:1;
+			velY+=sign;
+		}
 		x += velX;
-		System.out.println(x);
+		y += velY;
 		}
 
 
-	}
+	
 
 	
-	//Timer
+	//Timer para volver a buscar un nuevo camino
     ActionListener buscarJugador = new ActionListener(){
 
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			
-			p = main.getPlayerPath(x, y);
+			if(siguiendo)
+			{
+			p = main.obtenerCamino(x, y);
 			pathIndex = 0;
+			}
 			timer.restart();
 			
 			

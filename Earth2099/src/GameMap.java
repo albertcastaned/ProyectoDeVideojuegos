@@ -1,7 +1,7 @@
 
 public class GameMap implements TiledBaseMap {
 
-	//Dimensiones por TILE
+	//Dimensiones por TILE 80x80
 	public static int TileWIDTH = 8000/80;
 	public static int TileHEIGHT = 8000/80;
 	
@@ -21,7 +21,8 @@ public class GameMap implements TiledBaseMap {
 				terrain[i][j] = 0;
 			}
 		}
-		//Poner estos tiles como bloques solidos
+		//Poner estos tiles como bloques solidos, en este caso la posicion seria la posicion
+		//de la matriz por el tamaño  de los tiles (en este caso 80x80)
 		terrain[1][0] = 1;
 		terrain[1][1] = 1;
 
@@ -64,6 +65,7 @@ public class GameMap implements TiledBaseMap {
 	}
 	
 	
+	//Regresar dimensiones de tiles
 	@Override
 	public int getWidthInTiles() {
 		return TileWIDTH;
