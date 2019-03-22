@@ -27,7 +27,10 @@ public class Personaje extends Entidad{
 	//Numero de armas actuales
 	private int armasActuales;
 	
-
+	//Powerup equipado
+	private PowerUp powerup;
+	
+	
 	public Personaje(int x, int y, int ancho, int altura, String nombre, Handler handler,Main main) {
 		super(x,y,ancho,altura,nombre,handler,main);
 		vidaMaxima = 100;
@@ -44,7 +47,9 @@ public class Personaje extends Entidad{
 		armasActuales = 0;
 		velocidad = 10;
 	}
-	
+	public static int clamp(int val, int min, int max) {
+	    return Math.max(min, Math.min(max, val));
+	}
 	//Asignar direcciones, se llaman desde el KeyInput
 	public void setAbajo(boolean aux)
 	{
@@ -156,8 +161,15 @@ public class Personaje extends Entidad{
 		
 		//Cambiar posicion
 		x += velX;
+		x = clamp(x,0,8000 - 30);
 		y += velY;
-		
+		y = clamp(y,0,8000 - 30);
+	    //Si tiene un powerup, que tome su efecto
+	    if(powerup != null){
+	      if(!powerup.agregarAtributos(this)){
+	        powerup = null;
+	      }
+	    }
 	}
 
 	//Dibujar
@@ -223,13 +235,24 @@ public class Personaje extends Entidad{
 			//Si es un enemigo, reducir vida
 			if(aux instanceof TemplateEnemy)
 			{
+				
+				//Agregar aqui timer para que no recibir daño cada frame
 				if(chocandoEn(x,y,aux))
 				{
 					vida-=5;
 				}
 			}
-
+		      //Si es un powerup, realizar efecto
+		      if(aux instanceof PowerUp){
+		        if(chocandoEn(x, y, aux)){
+		          this.powerup = ((PowerUp)aux);
+		          
+		          handler.quitarObjeto(aux);
+		        }
+		      }
 		}
+
+		
 		
 	}
 	

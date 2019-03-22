@@ -51,7 +51,15 @@ public abstract class Entidad {
 	{
 		velY= ye;
 	}
+	public int getVelX()
+	{
+		return velX;
+	}
 	
+	public int getVelY()
+	{
+		return velY;
+	}
 	//Regresa dimensiones de Rectangulo del objeto para las Colisiones
 	public Rectangle getDimension()
 	{

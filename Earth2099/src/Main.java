@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 
 //Clase principal que incializa las demas, y controla el Game Loop
@@ -26,6 +27,13 @@ public class Main extends Canvas implements Runnable{
 	private Graphics g;
 	private BufferStrategy bs;
 	
+	//Clase que guarda los tiles del juego, y la informacion de cada una
+	private GameMap map;
+	
+	
+	//Algoritmo A* Pathfinding utilizado para la busqueda de caminos optimos para el enemigo
+	private AStarSearch a;
+	
 	//Camara
 	private Camara camara;
 	
@@ -44,10 +52,118 @@ public class Main extends Canvas implements Runnable{
 	public Main()
 	{
 		corriendo = false;
-
 		new MiCanvas(VentanaAncho,VentanaAltura, "Earth 2099", this);
+	}
+	
+	//Calcular posicion del tile en proporcion a las dimensiones de los tiles (Por ahora 80x80)
+	public int getTilePosX(int x)
+	{
+		return (int) Math.floor(x/80);
+	}
+	public int getTilePosY(int y)
+	{
+		return (int) Math.floor(y/80);
+	}
+	
+	
+	//Calcular camino al jugador
+	public Path obtenerCamino(int x, int y)
+	{
 		
+		//Nueva busqueda
+		a = new AStarSearch(map);
+		
+		//Iniciar camino nulo
+		Path path = null;
+		
+		//Si el jugador esta cerca ir a posicion directamente para ataque
+		if((Math.abs(x - personaje.getX()) + Math.abs(y - personaje.getY())) < 100)
+		{
+			path = a.findPath(getTilePosX(x),getTilePosY(y),getTilePosX(personaje.getX()),getTilePosY(personaje.getY()));
+			return path;
+		}
+		
+		//Mientras no se encuentre un camino valido
+		while(path==null)
+		{
+			
+		//Crear una posicion basada en la del jugador al azar
+		//Esto se usa para que el enemigo utilice diferentes caminos y ataque desde diferentes lados
+		Random rand = new Random();
+		int attackPoint = rand.nextInt(7);
+		int ex = 0, ye = 0;
+		switch(attackPoint)
+		{
+		//Atacar a derecha
+		case 0:
+			ex = getTilePosX(personaje.getX() + 80);
+			ye = getTilePosY(personaje.getY());
+			break;
+		//Atacar a izquierda
+		case 1:
+			ex = getTilePosX(personaje.getX() - 80);
+			ye = getTilePosY(personaje.getY());
+			break;
+		//Atacar a arriba
+		case 2:
+			ex = getTilePosX(personaje.getX());
+			ye = getTilePosY(personaje.getY() + 80);
+			break;
+		//Atacar a abajo
+		case 3:
+			ex = getTilePosX(personaje.getX());
+			ye = getTilePosY(personaje.getY() - 80);
+			break;
+		//Atacar a arriba derecha
+		case 4:
+			ex = getTilePosX(personaje.getX() + 80);
+			ye = getTilePosY(personaje.getY() + 80);
+			break;
+			
+		//Atacar a abajo izquierda
+		case 5:
+			ex = getTilePosX(personaje.getX() - 80);
+			ye = getTilePosY(personaje.getY() - 80);
+			break;
+		//Atacar a abajo derecha
+		case 6:
+			ex = getTilePosX(personaje.getX()+ 80);
+			ye = getTilePosY(personaje.getY() - 80);
+			break;
+		//Atacar a arriba izquierda
+		case 7:
+			ex = getTilePosX(personaje.getX() - 80);
+			ye = getTilePosY(personaje.getY() + 80);
+			break;
+			
+		}
+		
+		//Minimo posicion de matriz 0 , y maximo 99 para que no se salga de las dimensiones de la matriz
+		ex = clamp(ex,0,99);
+		ye = clamp(ye,0,99);
+		
+		//Calcular camino de posicion del jugador pasado hacia la posicion creada
+		path = a.findPath(getTilePosX(x),getTilePosY(y),ex,ye);
+		
+		}
+		//Regresar camino una vez que sea valido
+		return path;
 
+	}
+	
+	//Funcion para regresar valor con un minimo y un maximo posible
+	public static int clamp(int val, int min, int max) {
+	    return Math.max(min, Math.min(max, val));
+	}
+	
+	//Regresa posicion de jugador para llamarlo desde cualquier clase
+	public int getJugadorX()
+	{
+		return personaje.getX();
+	}
+	public int getJugadorY()
+	{
+		return personaje.getY();
 	}
 	
 	//Inicar el thread
@@ -64,11 +180,33 @@ public class Main extends Canvas implements Runnable{
 		//Crear instancias iniciales
 		camara = new Camara(0,0);
 		handler = new Handler();
-		personaje = new Personaje(50,50,30,30,"Personaje",handler,this);
-		handler.agregarObjeto(personaje);
-		handler.agregarObjeto(new BloqueColision(-500,300,50,50,handler,this));
-		handler.agregarObjeto(new EnemigoPrueba(700,200,50,50,"Enemigo prueba",100,5,handler,this));
 		
+		//Crear mapa que tendra los tiles
+		map = new GameMap();
+		personaje = new Personaje(0,0,30,30,"Personaje",handler,this);
+		
+		//Crear algoritmo de busqueda
+		a = new AStarSearch(map);
+
+
+		handler.agregarObjeto(personaje);
+		
+		//Crear colisiones basadas en donde hay tiles bloqueados
+		for (int x=0;x<map.getWidthInTiles();x++) {
+			for (int y=0;y<map.getHeightInTiles();y++) {
+				if(map.blocked(x, y))
+				{
+					handler.agregarObjeto(new BloqueColision(80*x,80*y,80,80,handler,this));
+				}
+
+			}
+		}
+
+		handler.agregarObjeto(new EnemigoPrueba(720,320,80,80,"Enemigo prueba",100,5,handler,this));
+		handler.agregarObjeto(new EnemigoPrueba(800,320,80,80,"Enemigo prueba 2",100,5,handler,this));
+		handler.agregarObjeto(new Invisibilidad(400,480,80,80,"Invisibilidad",handler,this));
+		
+	
 		//Agregar KeyListener al jugador
 		this.addKeyListener(new KeyInput(personaje));
 
@@ -193,7 +331,7 @@ public class Main extends Canvas implements Runnable{
 		start();
 	}
 	//Llamar los metodos actualizar de cada Entidad
-	private void actualizar()
+	private synchronized void actualizar()
 	{	
 		for(int i = 0; i < handler.listaEntidades.size();i++)
 		{
@@ -205,7 +343,7 @@ public class Main extends Canvas implements Runnable{
 		//Se llamara aqui metodo actualizar de cada entidad en el Handler
 		handler.actualizar();
 	}
-	private void dibujar()
+	private synchronized void dibujar()
 	{
 		//Crear u obtener BufferStrategy
         bs = getBufferStrategy();
@@ -220,10 +358,9 @@ public class Main extends Canvas implements Runnable{
         	Graphics2D g2d = (Graphics2D)g;
         	
         	g2d.setColor(Color.BLACK);
-        	g2d.clearRect(0, 0, VentanaAncho, VentanaAltura);
-        	g.fillRect(0,0,VentanaAncho,VentanaAltura);
+        	g2d.fillRect(0,0,VentanaAncho,VentanaAltura);
         	
-        	
+
         	//Mover el canvas a la posicion de la camara
         	g2d.translate(camara.getxOffset(), camara.getyOffset()); //COMENZAR CAMARA
         	
@@ -233,6 +370,21 @@ public class Main extends Canvas implements Runnable{
         	//Se llamara aqui metodo render de cada entidad
         	handler.render(g2d);
         	
+        	//Dibujar los tiles
+    		for (int x=0;x<map.getWidthInTiles();x++) {
+    			for (int y=0;y<map.getHeightInTiles();y++) {
+					g2d.setColor(Color.RED);
+    				g2d.drawRect(x*80, y*80, 80, 80);
+    				
+    				if(map.blocked(x, y))
+    				{
+    					g2d.setColor(Color.GREEN);
+        				g2d.fillRect(x*80, y*80, 80, 80);
+    				}
+
+    			}
+    		}
+    		
         	//Obtener posicion actual de la camara
         	int camPosX = (int) -camara.getxOffset();
         	int camPosY = (int) -camara.getyOffset();
@@ -255,7 +407,6 @@ public class Main extends Canvas implements Runnable{
 
 
 
-        	//colBalas.actualizar();
         }finally {
         	g.dispose();
         }
