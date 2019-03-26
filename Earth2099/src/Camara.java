@@ -30,8 +30,8 @@ public class Camara {
 	//Cambiar la posicion de la camara basandose en la posicion actual del jugador
 	public void actualizar(Personaje p)
 	{
-		xOffset = (int) lerp(xOffset,-p.getX() +(Main.getVentanaAncho()/2),(float) 0.1);
-		yOffset = (int) lerp(yOffset,-p.getY() + (Main.getVentanaAltura()/2),(float) 0.1);
+		xOffset = (int) lerp(xOffset,-p.getX() +(Game.getVentanaAncho()/2),(float) 0.1);
+		yOffset = (int) lerp(yOffset,-p.getY() + (Game.getVentanaAltura()/2),(float) 0.1);
 
 	}
 	

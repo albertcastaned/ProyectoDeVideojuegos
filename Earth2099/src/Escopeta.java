@@ -1,6 +1,6 @@
 //Subclase que dispara las BalaOla
 public class Escopeta extends Arma {
-	public Escopeta(String s, int d, int n, int m, int t, Handler handler,Main main) {
+	public Escopeta(String s, int d, int n, int m, int t, Handler handler,Game main) {
 		super(s, d, n, m, t, handler,main);
 		
 	}

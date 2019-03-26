@@ -8,7 +8,7 @@ public abstract class Arma {
 
 	protected String nombre;
 	
-	protected Main main;
+	protected Game main;
 	
 	//Daño que hace 
 	protected int danio;
@@ -31,7 +31,7 @@ public abstract class Arma {
 	//Timer que cambia puedeDisparar en cierto tiempo determinado
 	protected Timer timer;
 	
-	public Arma(String s,int d, int n, int m, int t,Handler handler,Main main)
+	public Arma(String s,int d, int n, int m, int t,Handler handler,Game main)
 	{
 		nombre = s;
 		danio = d;

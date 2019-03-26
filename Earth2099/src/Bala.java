@@ -8,7 +8,7 @@ public class Bala extends Entidad{
 	//Tamaño de la bala
 	protected int tamanio;
 		
-	public Bala(int x, int y, int mousePosX, int mousePosY, int tamanio,Handler handler,Main main)
+	public Bala(int x, int y, int mousePosX, int mousePosY, int tamanio,Handler handler,Game main)
 	{
 		
 		super(x,y,tamanio,tamanio,"Bala",handler,main);
@@ -38,7 +38,7 @@ public class Bala extends Entidad{
 		y += velY;
 		
 		//Eliminar si esta fuera de la camara
-		if(x < -main.getCamaraXOffset() || x > (-main.getCamaraXOffset() + Main.getVentanaAncho()) || y < -main.getCamaraYOffset() || y > (-main.getCamaraYOffset() + Main.getVentanaAltura()))
+		if(x < -main.getCamaraXOffset() || x > (-main.getCamaraXOffset() + Game.getVentanaAncho()) || y < -main.getCamaraYOffset() || y > (-main.getCamaraYOffset() + Game.getVentanaAltura()))
 			handler.quitarObjeto(this);
 	}
 	public void checarColision() {

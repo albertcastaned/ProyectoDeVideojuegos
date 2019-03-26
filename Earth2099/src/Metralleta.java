@@ -1,7 +1,7 @@
 //Subclase que dispara BalaNormal
 public class Metralleta extends Arma{
 	
-	public Metralleta(String s,int d, int n, int m, int t,Handler handler,Main main)
+	public Metralleta(String s,int d, int n, int m, int t,Handler handler,Game main)
 	{
 		super(s,d,n,m,t,handler,main);
 	}

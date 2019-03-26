@@ -11,7 +11,7 @@ public abstract class Entidad {
 	protected Handler handler;
 	
 	//Referencia a la clase principal
-	protected Main main;
+	protected Game main;
 	//Constructor default
 	public Entidad() {
 		x = 0;
@@ -23,7 +23,7 @@ public abstract class Entidad {
 	}
 	
 	//Constructor descriptivo
-	public Entidad(int x, int y,int ancho, int altura,String nombre,Handler handler,Main main)
+	public Entidad(int x, int y,int ancho, int altura,String nombre,Handler handler,Game main)
 	{
 		this.x = x;
 		this.y = y;

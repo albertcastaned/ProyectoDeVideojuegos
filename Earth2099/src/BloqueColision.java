@@ -4,7 +4,7 @@ import java.awt.Graphics;
 public class BloqueColision extends Entidad {
 
 	
-	public BloqueColision(int x,int y, int ancho, int altura,Handler handler,Main main)
+	public BloqueColision(int x,int y, int ancho, int altura,Handler handler,Game main)
 	{
 		super(x,y,ancho,altura,"Bloque" ,handler,main);
 	}
