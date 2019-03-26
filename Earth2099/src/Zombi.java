@@ -1,11 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ListIterator;
 
 import javax.swing.Timer;
 
 //Enemigo prueba del Template, luego se agregaran enemigos con comportamientos diferentes
-public class EnemigoPrueba extends TemplateEnemy{
+public class Zombi extends TemplateEnemy{
 	//Index de la lista de pasos a seguir del Path
 	private int pathIndex;
 	//Camino que sigue
@@ -19,8 +18,8 @@ public class EnemigoPrueba extends TemplateEnemy{
 	//Esta siguiendo al jugador o no
 	private boolean siguiendo;
 
-	public EnemigoPrueba(int x, int y, int ancho, int altura, String nombre, int vidaMax, int dano, Handler handler,Main main) {
-		super(x, y, ancho, altura, nombre, vidaMax, dano, handler,main);
+	public Zombi(int x, int y, int ancho, int altura, String nombre, int vidaMax, int dano, int velocidad,Handler handler,Game main) {
+		super(x, y, ancho, altura, nombre, vidaMax, dano, velocidad,handler,main);
 		siguiendo = false;
 		
 		//Iniciar timer hacer una busqueda cada 3 segundos puede cambiar por enemigo
@@ -28,33 +27,7 @@ public class EnemigoPrueba extends TemplateEnemy{
 		timer.start();
 	}
 
-	public void checarColision() {
-		//Obtener Entidades del Handler
-		ListIterator <Entidad> iterator = handler.listaEntidades.listIterator();
-		while (iterator.hasNext())
-		{
-			Entidad aux = iterator.next();
-			
 
-			//Colision con un Enemigo
-			if (aux instanceof Bala)
-			{
-				if (chocandoEn(x, y, aux))
-				{	//Quitar vida aqui
-					
-					
-					
-					//Si choca con bala eliminar bala y cambiar posicion de enemigo
-					velX = aux.getVelX();
-					velY = aux.getVelY();
-					handler.quitarObjeto(aux);
-				}
-
-			}
-
-		}
-		
-	}
 	public void seguirJugador()
 	{
 		//Obtener distancia de el punto buscado a la actual
@@ -92,8 +65,8 @@ public class EnemigoPrueba extends TemplateEnemy{
 		int dx = px -x;
 		int dy = py - y;
 		double direction = Math.atan2(dy, dx);
-		x = (int) (x + (4 * Math.cos(direction)));
-		y = (int) (y + (4 * Math.sin(direction)));
+		x = (int) (x + (velocidad * Math.cos(direction)));
+		y = (int) (y + (velocidad * Math.sin(direction)));
 		
 	}
 

@@ -14,7 +14,7 @@ public abstract class PowerUp extends Entidad {
     this.counter = 0;
 	}
 	
-	public PowerUp(int posX, int posY, int ancho, int altura, String nombre, Handler handler,Main main) {
+	public PowerUp(int posX, int posY, int ancho, int altura, String nombre, Handler handler,Game main) {
 		super(posX,posY,ancho,altura,nombre,handler,main);
 	}
 	

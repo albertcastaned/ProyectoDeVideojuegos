@@ -31,7 +31,7 @@ public class Personaje extends Entidad{
 	private PowerUp powerup;
 	
 	
-	public Personaje(int x, int y, int ancho, int altura, String nombre, Handler handler,Main main) {
+	public Personaje(int x, int y, int ancho, int altura, String nombre, Handler handler,Game main) {
 		super(x,y,ancho,altura,nombre,handler,main);
 		vidaMaxima = 100;
 		vida = vidaMaxima;

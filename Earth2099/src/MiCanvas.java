@@ -10,7 +10,7 @@ public class MiCanvas extends Canvas {
 	private JFrame frame;
 	
 	//Iniciar ventana
-	public MiCanvas(int ancho, int altura, String titulo, Main main)
+	public MiCanvas(int ancho, int altura, String titulo, Game main)
 	{
         frame = new JFrame(titulo);
         frame.setPreferredSize(new Dimension(ancho,altura));

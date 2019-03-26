@@ -4,7 +4,7 @@ import java.util.Random;
 public class BalaOla extends Bala {
 	private double dx;
 	private int dir;
-	public BalaOla(int x, int y, int mousePosX, int mousePosY, int tamanio,Handler handler,Main main) {
+	public BalaOla(int x, int y, int mousePosX, int mousePosY, int tamanio,Handler handler,Game main) {
 		super(x, y, mousePosX, mousePosY, tamanio,handler,main);
 		// TODO Auto-generated constructor stub
 		dx = 0;
