@@ -1,4 +1,4 @@
-import java.awt.Color;
+
 import java.awt.Graphics;
 //Clase creada como prueba de Colision, luego se remplazara por objetos dibujados del Escenario
 public class BloqueColision extends Entidad {
@@ -19,9 +19,6 @@ public class BloqueColision extends Entidad {
 	//Dibujar
 	@Override
 	public void render(Graphics g) {
-		// TODO Auto-generated method stub
-		g.setColor(Color.YELLOW);
-		g.fillRect(x,y,ancho,altura);
 	}
 
 }

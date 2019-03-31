@@ -7,6 +7,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
+import image.Assets;
 
 
 //Clase principal que incializa las demas, y controla el Game Loop
@@ -60,6 +61,14 @@ public class Game extends Canvas implements Runnable{
 		//Detener si ya se esta corriendo
 		if (corriendo) return;
 		
+		// Inicializa todas las imágenes (se encuentran en Assets)
+		/*
+		 * Hacer uso de Assets nos da la ventaja de no tener que estar cargando
+		 * las imágenes cada que sean ocupadas, sino que solo se cargan una vez
+		 * y son referenciadas cuando se requieran usar.
+		 */
+		Assets.init();
+		
 		//Empezar el thread
 		thread = new Thread(this);
 		thread.start();
@@ -71,12 +80,10 @@ public class Game extends Canvas implements Runnable{
 		
 		//Crear mapa que tendra los tiles
 		map = new GameMap();
-		personaje = new Personaje(0,0,30,30,"Personaje",handler,this);
+		personaje = new Personaje(4000,4000,30,30,"Personaje",handler,this);
 		
 		//Crear algoritmo de busqueda
 		a = new AStarSearch(map);
-
-
 		handler.agregarObjeto(personaje);
 		
 		//Crear colisiones basadas en donde hay tiles bloqueados
@@ -90,10 +97,10 @@ public class Game extends Canvas implements Runnable{
 			}
 		}
 
-		handler.agregarObjeto(new Zombi(720,320,80,80,"Zombi 1",100,5,4,handler,this));
-		handler.agregarObjeto(new Zombi(800,320,80,80,"Zombi 2",100,5,4,handler,this));
-		handler.agregarObjeto(new Fantasma(1000,320,80,80,"Fantasma 1",100,5,2,handler,this));
-		handler.agregarObjeto(new Invisibilidad(400,480,80,80,"Invisibilidad",handler,this));
+		handler.agregarObjeto(new Zombi(4333,4000,80,80,"Zombi 1",100,5,8,handler,this));
+		handler.agregarObjeto(new Zombi(4333,4000,80,80,"Zombi 2",100,5,8,handler,this));
+		handler.agregarObjeto(new Fantasma(4333,4000,80,80,"Fantasma 1",100,5,2,handler,this));
+		handler.agregarObjeto(new Invisibilidad(4000,4000,80,80,"Invisibilidad",handler,this));
 		
 	
 		//Agregar KeyListener al jugador
@@ -249,7 +256,7 @@ public class Game extends Canvas implements Runnable{
         	g2d.setColor(Color.BLACK);
         	g2d.fillRect(0,0,VentanaAncho,VentanaAltura);
         	
-
+        	
         	//Mover el canvas a la posicion de la camara
         	g2d.translate(camara.getxOffset(), camara.getyOffset()); //COMENZAR CAMARA
         	
@@ -257,22 +264,22 @@ public class Game extends Canvas implements Runnable{
         	
         	////////////////////////////////////////////////////////////////////////////
         	//Se llamara aqui metodo render de cada entidad
-        	handler.render(g2d);
-        	
         	//Dibujar los tiles
     		for (int x=0;x<map.getWidthInTiles();x++) {
     			for (int y=0;y<map.getHeightInTiles();y++) {
-					g2d.setColor(Color.RED);
-    				g2d.drawRect(x*80, y*80, 80, 80);
-    				
     				if(map.blocked(x, y))
     				{
-    					g2d.setColor(Color.GREEN);
-        				g2d.fillRect(x*80, y*80, 80, 80);
+    					g2d.drawImage(Assets.waterTile,x*80,y*80,null);
+    				}else {
+    					g2d.drawImage(Assets.grassTile,x*80,y*80,null);
+
     				}
 
     			}
     		}
+        	handler.render(g2d);
+        	
+
     		
         	//Obtener posicion actual de la camara
         	int camPosX = (int) -camara.getxOffset();
@@ -336,17 +343,17 @@ public class Game extends Canvas implements Runnable{
 	
 	
 	//Calcular camino al jugador
-	public Path obtenerCamino(int x, int y)
+	public synchronized Path obtenerCamino(int x, int y)
 	{
 		
 		//Nueva busqueda
-		a = new AStarSearch(map);
+		a.clear();
 		
 		//Iniciar camino nulo
 		Path path = null;
 		
 		//Si el jugador esta cerca ir a posicion directamente para ataque
-		if((Math.abs(x - personaje.getX()) + Math.abs(y - personaje.getY())) < 100)
+		if((Math.abs(x - personaje.getX()) + Math.abs(y - personaje.getY())) < 300)
 		{
 			path = a.findPath(getTilePosX(x),getTilePosY(y),getTilePosX(personaje.getX()),getTilePosY(personaje.getY()));
 			return path;

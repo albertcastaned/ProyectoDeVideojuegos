@@ -8,5 +8,10 @@ public class PatoCabezaRoja extends Pato{
 		comoVuela = new VuelaConAlas();
 		
 	}
+	
+	public void shithimself()
+	{
+		
+	}
 
 }

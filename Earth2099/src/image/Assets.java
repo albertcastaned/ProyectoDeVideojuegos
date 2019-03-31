@@ -11,13 +11,17 @@ public class Assets {
 	 * Ejemplo de BufferedImage con varias imágenes:
 	 * public static BufferedImage background, player, cloud, enemy...; 
 	*/
-	public static BufferedImage background;
+	public static BufferedImage waterTile;
+	public static BufferedImage grassTile;
 	
 	// En éste método se inicializan todas las imágenes que se van a ocupar
 	public static void init()
 	{
 		// Se hace uso de la clase ImageLoader para cargar la imágen 
 		// (la clase debió ser creada previamente)
-		background = ImageLoader.loadImage("/Textures/background.png");
+		grassTile = ImageLoader.loadImage("/grassTile.png");
+		waterTile = ImageLoader.loadImage("/waterTile.png");
+
+		
 	}
 }

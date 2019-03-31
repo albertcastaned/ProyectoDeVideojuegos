@@ -5,12 +5,14 @@ import java.util.Collections;
 public class AStarSearch {
 	
 	//Lista de nodos que ya han sido visitados
-	private ArrayList<Node> closed = new ArrayList<Node>();
+	private volatile ArrayList<Node> closed = new ArrayList<Node>();
 	//Lista de nodos que pueden ser visitados
-	private SortedList open = new SortedList();
+	private volatile SortedList open = new SortedList();
 	
 	private GameMap map;
-	private Node[][] nodes;
+	private volatile Node[][] nodes;
+	
+	private int maxSearchDistance = 20;
 	
 	//Crear nodos de busqueda basados en el mapa dado
 	public AStarSearch(GameMap map)
@@ -24,8 +26,19 @@ public class AStarSearch {
 		}
 	}
 	
+	public void clear()
+	{
+		open.clear();
+		closed.clear();
+		nodes = new Node[map.getWidthInTiles()][map.getHeightInTiles()];
+		for (int x=0;x<map.getWidthInTiles();x++) {
+			for (int y=0;y<map.getHeightInTiles();y++) {
+				nodes[x][y] = new Node(x,y);
+			}
+		}
+	}
 	//Regresa un camino dado los puntos iniciales y los puntos destino
-	public Path findPath(int sx, int sy, int tx, int ty) {
+	public synchronized Path findPath(int sx, int sy, int tx, int ty) {
 		
 		//Si el destino esta bloqueado, entonces no hay forma de llegar
 		if (map.blocked(tx, ty)) {
@@ -44,7 +57,7 @@ public class AStarSearch {
 		int maxDepth = 0;
 
 		//Mientras no haya nodos por visitar
-		while ((open.size() != 0)) {
+		while ((maxDepth < maxSearchDistance) && (open.size() != 0)) {
 			
 			//Obtener primer nodo de la lista open
 
@@ -101,7 +114,6 @@ public class AStarSearch {
 						if (!inOpenList(neighbour) && !(inClosedList(neighbour))) {
 							neighbour.cost = nextStepCost;
 							neighbour.heuristic = getHeuristicCost(xp, yp, tx, ty);
-
 							maxDepth = Math.max(maxDepth, neighbour.setParent(current));
 							addToOpen(neighbour);
 						}

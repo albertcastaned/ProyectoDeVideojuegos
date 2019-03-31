@@ -1,3 +1,4 @@
+import java.io.IOException;
 
 public class GameMap implements TiledBaseMap {
 
@@ -9,27 +10,19 @@ public class GameMap implements TiledBaseMap {
 	private int[][] terrain = new int[TileWIDTH][TileHEIGHT];
 	//Tiles que ya han sido visitados en la busqueda A*
 	private boolean[][] visited = new boolean[TileWIDTH][TileHEIGHT];
+	
+	//Clase que generara el mapa
+	private MapGenerator mapGenerator;
 	public GameMap() {
 		
-		//Crear tiles del mapa
-		
-		for(int i=0;i<TileWIDTH;i++)
-		{
-			for(int j=0;j<TileHEIGHT;j++)
-			{
-				//Poner valor de terreno como 0 osea espacio libre
-				terrain[i][j] = 0;
-			}
+		try {
+			mapGenerator = new MapGenerator();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		//Poner estos tiles como bloques solidos, en este caso la posicion seria la posicion
-		//de la matriz por el tamaño  de los tiles (en este caso 80x80)
-		terrain[1][0] = 1;
-		terrain[1][1] = 1;
-
-		terrain[2][4] = 1;
-		terrain[1][3] = 1;
-		terrain[1][4] = 1;
-		terrain[1][5] = 1;
+		//Crear tiles del mapa copiando la matriz del map generator
+		terrain = mapGenerator.placeTile();
 
 
 
