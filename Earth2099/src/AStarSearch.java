@@ -5,14 +5,14 @@ import java.util.Collections;
 public class AStarSearch {
 	
 	//Lista de nodos que ya han sido visitados
-	private volatile ArrayList<Node> closed = new ArrayList<Node>();
+	private ArrayList<Node> closed = new ArrayList<Node>();
 	//Lista de nodos que pueden ser visitados
-	private volatile SortedList open = new SortedList();
+	private SortedList open = new SortedList();
 	
 	private GameMap map;
-	private volatile Node[][] nodes;
+	private Node[][] nodes;
 	
-	private int maxSearchDistance = 20;
+	private int maxSearchDistance = 60;
 	
 	//Crear nodos de busqueda basados en el mapa dado
 	public AStarSearch(GameMap map)

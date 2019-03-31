@@ -92,7 +92,7 @@ public class Zombi extends TemplateEnemy{
 			//Checar si esta a menos de 1000 de distancia para empezar a seguir
 			int distanciaJugadorX = Math.abs(main.getJugadorX() - x);
 			int distanciaJugadorY = Math.abs(main.getJugadorY() - y);
-			if(1200 >= (distanciaJugadorX + distanciaJugadorY))
+			if(800 >= (distanciaJugadorX + distanciaJugadorY))
 			{
 
 				p = main.obtenerCamino(x, y);

@@ -15,7 +15,7 @@ public class Game extends Canvas implements Runnable{
 	
 	private static final long serialVersionUID = 1L;
 	//Iniciar dimensiones de ventana
-	private static final int VentanaAncho = 1280, VentanaAltura = VentanaAncho/16 * 9;
+	private static final int VentanaAncho = 1280, VentanaAltura = VentanaAncho;
 	
 	//Variables para Thread
 	private Thread thread;
@@ -343,7 +343,7 @@ public class Game extends Canvas implements Runnable{
 	
 	
 	//Calcular camino al jugador
-	public synchronized Path obtenerCamino(int x, int y)
+	public Path obtenerCamino(int x, int y)
 	{
 		
 		//Nueva busqueda
