@@ -13,7 +13,7 @@ public class Assets {
 	*/
 	public static BufferedImage waterTile;
 	public static BufferedImage grassTile;
-	
+	public static BufferedImage tree;
 	// En éste método se inicializan todas las imágenes que se van a ocupar
 	public static void init()
 	{
@@ -21,6 +21,7 @@ public class Assets {
 		// (la clase debió ser creada previamente)
 		grassTile = ImageLoader.loadImage("/grassTile.png");
 		waterTile = ImageLoader.loadImage("/waterTile.png");
+		tree = ImageLoader.loadImage("/Tree.png");
 
 		
 	}

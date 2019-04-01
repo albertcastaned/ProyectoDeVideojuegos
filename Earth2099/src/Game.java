@@ -39,7 +39,7 @@ public class Game extends Canvas implements Runnable{
 	private Camara camara;
 	
 	//Objeto Handler para guardar en lista entidades que interactuan con otros
-	private Handler handler;
+	private static Handler handler;
 	
 	
 	//Iniciar
@@ -440,6 +440,11 @@ public class Game extends Canvas implements Runnable{
 	public int getJugadorY()
 	{
 		return personaje.getY();
+	}
+	
+	public static Handler getHandler()
+	{
+		return handler;
 	}
 	
 }

@@ -16,13 +16,15 @@ public class GameMap implements TiledBaseMap {
 	public GameMap() {
 		
 		try {
-			mapGenerator = new MapGenerator();
+			mapGenerator = new MapGenerator(this);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//Crear tiles del mapa copiando la matriz del map generator
 		terrain = mapGenerator.placeTile();
+		mapGenerator.generateTrees();
+
 
 
 
