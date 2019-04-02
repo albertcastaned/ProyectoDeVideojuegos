@@ -15,7 +15,7 @@ public class Game extends Canvas implements Runnable{
 	
 	private static final long serialVersionUID = 1L;
 	//Iniciar dimensiones de ventana
-	private static final int VentanaAncho = 1280, VentanaAltura = VentanaAncho;
+	private static final int VentanaAncho = 800, VentanaAltura = VentanaAncho;
 	
 	//Variables para Thread
 	private Thread thread;
@@ -61,10 +61,10 @@ public class Game extends Canvas implements Runnable{
 		//Detener si ya se esta corriendo
 		if (corriendo) return;
 		
-		// Inicializa todas las imágenes (se encuentran en Assets)
+		// Inicializa todas las imï¿½genes (se encuentran en Assets)
 		/*
 		 * Hacer uso de Assets nos da la ventaja de no tener que estar cargando
-		 * las imágenes cada que sean ocupadas, sino que solo se cargan una vez
+		 * las imï¿½genes cada que sean ocupadas, sino que solo se cargan una vez
 		 * y son referenciadas cuando se requieran usar.
 		 */
 		Assets.init();
@@ -79,7 +79,7 @@ public class Game extends Canvas implements Runnable{
 		handler = new Handler();
 		
 		//Crear mapa que tendra los tiles
-		map = new GameMap();
+		map = new GameMap(this);
 		personaje = new Personaje(4000,4000,30,30,"Personaje",handler,this);
 		
 		//Crear algoritmo de busqueda
@@ -265,18 +265,22 @@ public class Game extends Canvas implements Runnable{
         	////////////////////////////////////////////////////////////////////////////
         	//Se llamara aqui metodo render de cada entidad
         	//Dibujar los tiles
-    		for (int x=0;x<map.getWidthInTiles();x++) {
-    			for (int y=0;y<map.getHeightInTiles();y++) {
-    				if(map.blocked(x, y))
+    		for (int x=(int) -camara.getxOffset() / 80;x < (-camara.getxOffset() + VentanaAncho) / 80;x++) {
+    			for (int y=(int) -camara.getyOffset() / 80;y < (-camara.getyOffset() + VentanaAltura) / 80;y++) {
+	    			if(x > 99 || x < 0 || y > 99 || y < 0)
+	    				continue;
+    				if(map.getTipo(x, y) == 1)
     				{
     					g2d.drawImage(Assets.waterTile,x*80,y*80,null);
-    				}else {
+    				}else if(map.getTipo(x, y) == 0){
     					g2d.drawImage(Assets.grassTile,x*80,y*80,null);
 
     				}
+    				
 
     			}
     		}
+
         	handler.render(g2d);
         	
 
@@ -446,5 +450,6 @@ public class Game extends Canvas implements Runnable{
 	{
 		return handler;
 	}
+
 	
 }

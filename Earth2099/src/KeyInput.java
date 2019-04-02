@@ -39,7 +39,8 @@ public class KeyInput implements KeyListener{
         
         if(key == KeyEvent.VK_R)
         	personaje.recargar(); 
-
+        if(key == KeyEvent.VK_ESCAPE)
+        	System.exit(0);
 	}
 
 

@@ -63,9 +63,11 @@ public abstract class TemplateEnemy extends Entidad{
 
 	@Override
 	public synchronized void render(Graphics g) {
-
+		if(enCamara())
+		{
 		g.setColor(Color.RED);
 		g.fillOval((int)x,(int)y,ancho,altura);
+		}
 		
 	}
 	

@@ -82,7 +82,7 @@ public class MapGenerator {
 	}
 	
 	
-	public void generateTrees()
+	public void generateTrees(Game main)
 	{
 		Random ran = new Random();
 		for(int x=0;x < 100 - 1;x++)
@@ -95,8 +95,9 @@ public class MapGenerator {
 				{
 				if(!map.blocked(x, y))
 				{
-				Game.getHandler().agregarObjeto(new Tree(x*80,y*80,Assets.tree));
-				System.out.println("Arbol creado en: " + x*80 + y*80);
+				Game.getHandler().agregarObjeto(new Tree(x*80,y*80,Assets.tree,Game.getHandler(),main));
+				map.setBloqueado(x, y + 1);
+				map.setTipo(x, y+1);
 				}
 				}
 				

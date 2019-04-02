@@ -11,9 +11,12 @@ public class GameMap implements TiledBaseMap {
 	//Tiles que ya han sido visitados en la busqueda A*
 	private boolean[][] visited = new boolean[TileWIDTH][TileHEIGHT];
 	
+	//Tipo de tile
+	private int[][] tipo = new int[TileWIDTH][TileHEIGHT];
+	
 	//Clase que generara el mapa
 	private MapGenerator mapGenerator;
-	public GameMap() {
+	public GameMap(Game main) {
 		
 		try {
 			mapGenerator = new MapGenerator(this);
@@ -23,8 +26,10 @@ public class GameMap implements TiledBaseMap {
 		}
 		//Crear tiles del mapa copiando la matriz del map generator
 		terrain = mapGenerator.placeTile();
-		mapGenerator.generateTrees();
-
+		tipo = mapGenerator.placeTile();
+		mapGenerator.generateTrees(main);
+		
+		
 
 
 
@@ -47,9 +52,25 @@ public class GameMap implements TiledBaseMap {
 	}
 	
 	
-	//Obtener tipo de terreno del tile
+	//Obtener si tiene colision del tile
 	public int getTerrain(int x, int y) {
 		return terrain[x][y];
+	}
+	
+	//Obtener tipo de terreno del tile
+	public int getTipo(int x, int y) {
+		return tipo[x][y];
+	}
+	
+	//Poner tipo
+	public void setTipo(int x, int y)
+	{
+		tipo[x][y] = 0;
+	}
+	//Poner como bloqueado
+	public void setBloqueado(int x, int y)
+	{
+		terrain[x][y] = 1;
 	}
 	
 	//Obtener si un tile esta bloqueado
