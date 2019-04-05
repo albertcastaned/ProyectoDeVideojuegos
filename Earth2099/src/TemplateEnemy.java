@@ -89,14 +89,18 @@ public abstract class TemplateEnemy extends Entidad{
 			if (aux instanceof Bala)
 			{
 				if (chocandoEn(x, y, aux))
-				{	//Quitar vida aqui
-					
-					
+				{	
+
+
 					
 					//Si choca con bala eliminar bala y cambiar posicion de enemigo
 					velX = aux.getVelX();
 					velY = aux.getVelY();
 					handler.quitarObjeto(aux);
+					this.vida -= 5;
+					
+					if(this.vida == 0)
+						handler.quitarObjeto(this);
 				}
 
 			}

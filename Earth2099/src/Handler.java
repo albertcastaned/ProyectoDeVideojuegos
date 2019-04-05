@@ -36,7 +36,19 @@ public class Handler {
 		while(itr.hasNext())
 		{
 			Entidad ent = itr.next();
-			
+			/* Hace falta probar si no alenta mucho el programa
+			if(ent instanceof Personaje)
+			{
+				if(ent.getVelX() !=0 || ent.getVelY() != 0)
+				{
+					 Collections.sort(listaEntidades, new Comparator<Entidad>() {
+					        public int compare(Entidad o1, Entidad o2) {
+					            return Integer.compare(o2.getY(), o1.getY());
+					        }
+					    });			
+				}
+			}
+			*/
 			//Dibujar entidad
 			ent.render(g);
 		}
