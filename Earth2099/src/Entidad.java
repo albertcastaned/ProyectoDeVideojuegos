@@ -35,6 +35,10 @@ public abstract class Entidad {
 		this.handler = handler;
 		this.main = main;
 	}
+	public int getAltura()
+	{
+		return altura;
+	}
 	public int getX()
 	{
 		return x;

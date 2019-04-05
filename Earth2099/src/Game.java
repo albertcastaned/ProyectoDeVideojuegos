@@ -42,11 +42,6 @@ public class Game extends Canvas implements Runnable{
 	private static Handler handler;
 	
 	
-	//Iniciar
-	public static void main(String args[])
-	{
-		new Game();
-	}
 	
 	//Iniciar juego
 	public Game()

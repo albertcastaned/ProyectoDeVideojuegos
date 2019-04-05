@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ListIterator;
 
+
 //Clase que el jugador controla
 public class Personaje extends Entidad{
 	
@@ -31,6 +32,8 @@ public class Personaje extends Entidad{
 	private PowerUp powerup;
 	
 	
+	
+	
 	public Personaje(int x, int y, int ancho, int altura, String nombre, Handler handler,Game main) {
 		super(x,y,ancho,altura,nombre,handler,main);
 		vidaMaxima = 100;
@@ -46,6 +49,7 @@ public class Personaje extends Entidad{
 		puntuacion = 0;
 		armasActuales = 0;
 		velocidad = 10;
+		
 	}
 	public static int clamp(int val, int min, int max) {
 	    return Math.max(min, Math.min(max, val));
@@ -234,15 +238,17 @@ public class Personaje extends Entidad{
 			
 			//Si es un enemigo, reducir vida
 			if(aux instanceof TemplateEnemy)
+			
 			{
-				
 				//Agregar aqui timer para que no recibir daño cada frame
 				if(chocandoEn(x,y,aux))
 				{
 					vida-=5;
 				}
+				if(vida == 0)
+					System.exit(0);
 			}
-		      //Si es un powerup, realizar efecto
+			System.out.println(vida);
 		      if(aux instanceof PowerUp){
 		        if(chocandoEn(x, y, aux)){
 		          this.powerup = ((PowerUp)aux);
@@ -251,7 +257,7 @@ public class Personaje extends Entidad{
 		        }
 		      }
 		}
-
+		
 		
 		
 	}
@@ -272,4 +278,6 @@ public class Personaje extends Entidad{
 		}
 		
 	}
+	
+	
 }
