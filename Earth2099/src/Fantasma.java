@@ -42,7 +42,7 @@ public class Fantasma extends TemplateEnemy{
 			//Checar si esta a menos de 2000 de distancia para empezar a seguir
 			int distanciaJugadorX = Math.abs(main.getJugadorX() - x);
 			int distanciaJugadorY = Math.abs(main.getJugadorY() - y);
-			if(2000>= (distanciaJugadorX + distanciaJugadorY))
+			if(1500>= (distanciaJugadorX + distanciaJugadorY))
 			{
 				siguiendo = true;
 			}

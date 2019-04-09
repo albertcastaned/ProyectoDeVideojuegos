@@ -81,7 +81,7 @@ public abstract class Entidad {
 	//Si esta adentro de la camara, dibujar
 	public boolean enCamara()
 	{
-		if((new Rectangle(x,y,ancho,altura)).intersects(new Rectangle((int)-main.getCamaraXOffset() - 150,(int)-main.getCamaraYOffset() - 150,Game.getVentanaAncho() + 150,Game.getVentanaAltura() + 150 )))
+		if((new Rectangle(x,y,ancho,altura)).intersects(new Rectangle((int)-main.getCamaraXOffset() - 200,(int)-main.getCamaraYOffset() - 200,Game.getVentanaAncho() + 200,Game.getVentanaAltura() + 200 )))
 				return true;
 		else
 			return false;

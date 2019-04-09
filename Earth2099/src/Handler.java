@@ -36,7 +36,7 @@ public class Handler {
 		while(itr.hasNext())
 		{
 			Entidad ent = itr.next();
-			/* Hace falta probar si no alenta mucho el programa
+			/*
 			if(ent instanceof Personaje)
 			{
 				if(ent.getVelX() !=0 || ent.getVelY() != 0)
@@ -49,6 +49,7 @@ public class Handler {
 				}
 			}
 			*/
+			
 			//Dibujar entidad
 			ent.render(g);
 		}

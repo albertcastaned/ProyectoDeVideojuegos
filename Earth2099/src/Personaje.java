@@ -1,6 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ListIterator;
+
+import javax.swing.Timer;
 
 
 //Clase que el jugador controla
@@ -31,7 +35,11 @@ public class Personaje extends Entidad{
 	//Powerup equipado
 	private PowerUp powerup;
 	
+	//Variables para controlar el tiempo en el que puede ser lastimado el jugador
+	private boolean puedeSerLastimado;
+	private Timer puedeSerLastimadoTimer;
 	
+	private int tiempoPuedeSerLastimado = 1000; 
 	
 	
 	public Personaje(int x, int y, int ancho, int altura, String nombre, Handler handler,Game main) {
@@ -49,8 +57,23 @@ public class Personaje extends Entidad{
 		puntuacion = 0;
 		armasActuales = 0;
 		velocidad = 10;
+		puedeSerLastimado = true;
+		puedeSerLastimadoTimer = new Timer(tiempoPuedeSerLastimado,timerPoderDisparar);
 		
 	}
+	
+	//Timer
+    ActionListener timerPoderDisparar = new ActionListener(){
+
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			puedeSerLastimado = true;
+			puedeSerLastimadoTimer.stop();
+		}
+    };
+    
 	public static int clamp(int val, int min, int max) {
 	    return Math.max(min, Math.min(max, val));
 	}
@@ -183,7 +206,7 @@ public class Personaje extends Entidad{
     	int camPosX = (int) -main.getCamaraXOffset();
     	int camPosY = (int) -main.getCamaraYOffset();
 		//Dibujar texto de informacion de prueba
-		g.drawString("Vida: " + getVida(), camPosX + 20, camPosY + 20);
+		g.drawString("Vida: " + vida, camPosX + 20, camPosY + 20);
 		g.drawString("Nombre de arma: " + armas[indexArma].getNombre(), camPosX + 20,camPosY + 40);
 		g.drawString("Numero de balas: " + armas[indexArma].getBalas(), camPosX + 20, camPosY + 60);
 		g.drawString("Puede disparar: " + String.valueOf(armas[indexArma].getPuedeDisparar()), camPosX + 20, camPosY + 80);
@@ -241,14 +264,17 @@ public class Personaje extends Entidad{
 			
 			{
 				//Agregar aqui timer para que no recibir daño cada frame
-				if(chocandoEn(x,y,aux))
+				if(puedeSerLastimado && chocandoEn(x,y,aux))
 				{
 					vida-=5;
+					puedeSerLastimado = false;
+					puedeSerLastimadoTimer.start();
+					if(vida <= 0)
+						System.exit(0);
 				}
-				if(vida == 0)
+				if(vida <= 0)
 					System.exit(0);
 			}
-			System.out.println(vida);
 		      if(aux instanceof PowerUp){
 		        if(chocandoEn(x, y, aux)){
 		          this.powerup = ((PowerUp)aux);

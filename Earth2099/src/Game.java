@@ -15,7 +15,7 @@ public class Game extends Canvas implements Runnable{
 	
 	private static final long serialVersionUID = 1L;
 	//Iniciar dimensiones de ventana
-	private static final int VentanaAncho = 800, VentanaAltura = VentanaAncho;
+	private static final int VentanaAncho = 1000, VentanaAltura = 1000;
 	
 	//Variables para Thread
 	private Thread thread;
@@ -41,9 +41,15 @@ public class Game extends Canvas implements Runnable{
 	//Objeto Handler para guardar en lista entidades que interactuan con otros
 	private static Handler handler;
 	
+	//Tipo de nivel que se generara (1 - Bosque, 2 - Volcan, 3 - Desierto, 4 - Tundra)
+	private int tipoDeNivel;
 	
 	
 	//Iniciar juego
+	public static void main(String args[])
+	{
+		new Game();
+	}
 	public Game()
 	{
 		corriendo = false;
@@ -73,14 +79,40 @@ public class Game extends Canvas implements Runnable{
 		camara = new Camara(0,0);
 		handler = new Handler();
 		
-		//Crear mapa que tendra los tiles
-		map = new GameMap(this);
+
 		personaje = new Personaje(4000,4000,30,30,"Personaje",handler,this);
+		handler.agregarObjeto(personaje);
+		
+		//Crear un tipo de nivel al azar
+		Random tipoRandom = new Random();
+		tipoDeNivel = tipoRandom.nextInt(4) + 1;
+		
+		
+		//Crear mapa que tendra los tiles
+		map = new GameMap(this,tipoDeNivel);
+
 		
 		//Crear algoritmo de busqueda
 		a = new AStarSearch(map);
-		handler.agregarObjeto(personaje);
 		
+		
+		//Crear una posicion para el enemigo mientras no este en un espacio bloqueado que no debe de estar
+		int enemigoPosX = 4330,enemigoPosY = 4000;
+		while(map.blocked(getTilePosX(enemigoPosX), getTilePosY(enemigoPosY)))
+		{
+			Random ran = new Random();
+
+			enemigoPosX = ran.nextInt(7920);
+			enemigoPosY = ran.nextInt(7920);
+		}
+		
+		//Agregar enemigos
+		handler.agregarObjeto(new Zombi(enemigoPosX,enemigoPosY,80,80,"Zombi 1",100,5,8,handler,this));
+		handler.agregarObjeto(new Zombi(enemigoPosX,enemigoPosY,80,80,"Zombi 2",100,5,8,handler,this));
+		handler.agregarObjeto(new Fantasma(4333,4000,80,80,"Fantasma 1",100,5,2,handler,this));
+
+		
+
 		//Crear colisiones basadas en donde hay tiles bloqueados
 		for (int x=0;x<map.getWidthInTiles();x++) {
 			for (int y=0;y<map.getHeightInTiles();y++) {
@@ -92,9 +124,7 @@ public class Game extends Canvas implements Runnable{
 			}
 		}
 
-		handler.agregarObjeto(new Zombi(4333,4000,80,80,"Zombi 1",100,5,8,handler,this));
-		handler.agregarObjeto(new Zombi(4333,4000,80,80,"Zombi 2",100,5,8,handler,this));
-		handler.agregarObjeto(new Fantasma(4333,4000,80,80,"Fantasma 1",100,5,2,handler,this));
+		//Agregar Power-Up
 		handler.agregarObjeto(new Invisibilidad(4000,4000,80,80,"Invisibilidad",handler,this));
 		
 	
@@ -264,13 +294,45 @@ public class Game extends Canvas implements Runnable{
     			for (int y=(int) -camara.getyOffset() / 80;y < (-camara.getyOffset() + VentanaAltura) / 80;y++) {
 	    			if(x > 99 || x < 0 || y > 99 || y < 0)
 	    				continue;
+	    			
+	    			//Dibujar dependiendo del tipo de tile y el tipo de nivel actual
     				if(map.getTipo(x, y) == 1)
     				{
-    					g2d.drawImage(Assets.waterTile,x*80,y*80,null);
+    					switch(tipoDeNivel)
+    					{
+    						case 1:
+    							g2d.drawImage(Assets.waterTile,x*80,y*80,null);
+    							break;
+    						case 2:
+    							g2d.drawImage(Assets.lavaTile,x*80,y*80,null);
+    							break;
+    						case 3:
+    							g2d.drawImage(Assets.waterTile,x*80,y*80,null);
+    							break;
+    						case 4:
+    							g2d.drawImage(Assets.iceTile,x*80,y*80,null);
+    							break;
+    					}
     				}else if(map.getTipo(x, y) == 0){
-    					g2d.drawImage(Assets.grassTile,x*80,y*80,null);
+    					switch(tipoDeNivel)
+    					{
+    						case 1:
+    							g2d.drawImage(Assets.grassTile,x*80,y*80,null);
+    							break;
+    						case 2:
+    							g2d.drawImage(Assets.rockTile,x*80,y*80,null);
+    							break;
+    						case 3:
+    							g2d.drawImage(Assets.desertTile,x*80,y*80,null);
+    							break;
+    						case 4:
+    							g2d.drawImage(Assets.snowTile,x*80,y*80,null);
+    							break;
+    					}
 
     				}
+    				
+
     				
 
     			}

@@ -1,4 +1,3 @@
-import java.io.IOException;
 
 public class GameMap implements TiledBaseMap {
 
@@ -15,25 +14,35 @@ public class GameMap implements TiledBaseMap {
 	private int[][] tipo = new int[TileWIDTH][TileHEIGHT];
 	
 	//Clase que generara el mapa
-	private MapGenerator mapGenerator;
-	public GameMap(Game main) {
+	private GeneradorDeMapa mapGenerator;
+	public GameMap(Game main, int tipoDeNivel) {
 		
-		try {
-			mapGenerator = new MapGenerator(this);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		//Se crea el tipo de generador dependiendo del numero parametrizado
+		switch(tipoDeNivel)
+		{
+		
+		case 1:
+			mapGenerator = new ForestGenerator(this);
+			break;
+		case 2:
+		mapGenerator = new VolcanoGenerator(this);
+			break;
+		
+		case 3:
+		mapGenerator = new DesertGenerator(this);
+			break;
+		case 4:
+		mapGenerator = new SnowGenerator(this);
+			break;
 		}
 		//Crear tiles del mapa copiando la matriz del map generator
 		terrain = mapGenerator.placeTile();
 		tipo = mapGenerator.placeTile();
-		mapGenerator.generateTrees(main);
-		
-		
-
-
-
+		mapGenerator.generarAdornos(main);
 	}
+
+
+	
 	
 
 	
