@@ -263,7 +263,11 @@ public class Personaje extends Entidad{
 			if(aux instanceof TemplateEnemy)
 			
 			{
+<<<<<<< HEAD
 				//Agregar aqui timer para que no recibir daño cada frame
+=======
+				//Agregar aqui timer para que no recibir daÃ±o cada frame
+>>>>>>> ac2d2c55ffe1007ba1612bfff4017f69a9f22bb8
 				if(puedeSerLastimado && chocandoEn(x,y,aux))
 				{
 					vida-=5;
