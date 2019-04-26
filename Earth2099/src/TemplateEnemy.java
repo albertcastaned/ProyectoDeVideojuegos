@@ -1,6 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ListIterator;
+import java.awt.Graphics2D;
 
 //Templete de los tipos de enemigos que habra
 public abstract class TemplateEnemy extends Entidad{
@@ -9,13 +9,14 @@ public abstract class TemplateEnemy extends Entidad{
 	protected int vida;
 	//Daño que hacen
 	protected int dano;
-	
+	protected int knockbackX = 0,knockbackY = 0;
+
 	//Velocidad a la que el enemigo se mueve
 	protected int velocidad;
 	
 	//Arma que portan si es que lo hacen
 	private Arma arma;
-	private boolean useArma;
+	protected boolean useArma = false;
 	
 
 	public TemplateEnemy(int x, int y,int ancho, int altura, String nombre, int vidaMax,int dano, int velocidad,Handler handler,Game main) {
@@ -61,52 +62,14 @@ public abstract class TemplateEnemy extends Entidad{
 		this.useArma = useArma;
 	}
 
-	@Override
-	public synchronized void render(Graphics g) {
-		if(enCamara())
-		{
-		g.setColor(Color.RED);
-		g.fillOval((int)x,(int)y,ancho,altura);
-		}
-		
-	}
 	
-
-	public abstract void atacar(int x, int y);
 	
-	public abstract void disparar(int x, int y);
 	
-	public void checarColision()
-	{
-		//Obtener Entidades del Handler
-		ListIterator <Entidad> iterator = handler.listaEntidades.listIterator();
-		while (iterator.hasNext())
-		{
-			Entidad aux = iterator.next();
-			
-
-			//Colision con un Enemigo
-			if (aux instanceof Bala)
-			{
-				if (chocandoEn(x, y, aux))
-				{	
-
-
-					
-					//Si choca con bala eliminar bala y cambiar posicion de enemigo
-					velX = aux.getVelX();
-					velY = aux.getVelY();
-					handler.quitarObjeto(aux);
-					this.vida -= 5;
-					
-					if(this.vida == 0)
-						handler.quitarObjeto(this);
-				}
-
-			}
-
-		}
-		
+	public void render(Graphics2D g) {
+		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
+		g.setColor(Color.BLUE);
+		g.fillOval((int)x, (int)y, ancho, altura);
 	}
 
 

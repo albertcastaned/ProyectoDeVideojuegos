@@ -1,13 +1,22 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.util.ListIterator;
+
+import image.Assets;
 
 //Clase bala que se movera a velocidad constante en una direccion hasta chocar con algun solido o fuera del escenario
 public class Bala extends Entidad{
 
 	//Tamaño de la bala
 	protected int tamanio;
-		
+	protected float angulo;
+	protected BufferedImage img;
 	public Bala(int x, int y, int mousePosX, int mousePosY, int tamanio,Handler handler,Game main)
 	{
 		
@@ -23,14 +32,23 @@ public class Bala extends Entidad{
 		velX = (int) (30 * dirX/dirLength);
 		velY = (int) (30 * dirY/dirLength);
 
+		angulo = getAngulo(new Point(mousePosX,mousePosY));
+		
+		img = Assets.bala;
 		
 	}
 	
-	
+	public float getAngulo(Point destino) {
+	    float angulo = (float) Math.toDegrees(Math.atan2(destino.y - 500, destino.x - 500));
+
+	    if(angulo < 0)
+	    	angulo += 360;
+	    return angulo;
+	}
 
 	
 	//Metodo actualizar que se llama a seguido
-	public synchronized void actualizar(){
+	public void actualizar(){
 		
 		//Checar si esta colisionando con alguna entidad
 		checarColision();
@@ -67,7 +85,13 @@ public class Bala extends Entidad{
 			{
 				if (chocandoEn(x, y, aux))
 				{
-					((TemplateEnemy) aux).setVida(((TemplateEnemy) aux).getVida());
+
+					((TemplateEnemy) aux).setVida(((TemplateEnemy) aux).getVida() - 50);
+					if(((TemplateEnemy) aux).getVida() <= 0)
+						handler.quitarObjeto(aux);
+					aux.setVelX(velX/2);
+					aux.setVelY(velY/2);
+					
 					handler.quitarObjeto(this);
 				}
 
@@ -78,10 +102,12 @@ public class Bala extends Entidad{
 	}
 	
 	//Dibujar la bala
-	public synchronized void render(Graphics g)
+	public  void render(Graphics2D g2d)
 	{
-		g.setColor(Color.BLUE);
-		g.fillOval((int)x, (int)y, tamanio, tamanio);
+		g2d.drawImage(img,x,y,null);
+		
 	}
+
+
 
 }

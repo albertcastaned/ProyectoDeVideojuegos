@@ -46,7 +46,7 @@ public class DesertGenerator extends GeneradorDeMapa{
 				{
 				if(!map.blocked(x, y))
 				{
-				Game.getHandler().agregarObjeto(new Cactus(x*80,y*80,Assets.cactus,Game.getHandler(),main));
+				Game.getHandler().agregarObjeto(new Decoracion(x*80,y*80,Assets.cactus,Game.getHandler(),main));
 				map.setBloqueado(x, y + 1);
 				map.setTipo(x, y+1);
 				}

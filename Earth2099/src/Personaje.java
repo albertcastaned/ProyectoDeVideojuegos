@@ -1,15 +1,38 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.ListIterator;
 
 import javax.swing.Timer;
 
+import image.Assets;
+
 
 //Clase que el jugador controla
 public class Personaje extends Entidad{
+	//Sprites
+	private image.AnimationSprite imagen;
+	private image.AnimationSprite abajoAnimacion;
+	private image.AnimationSprite abajoDerechaAnimacion;
+	private image.AnimationSprite derechaAnimacion;
+	private image.AnimationSprite arribaDerechaAnimacion;
+	private image.AnimationSprite arribaAnimacion;
+	private image.AnimationSprite arribaIzquierdaAnimacion;
+	private image.AnimationSprite izquierdaAnimacion;
+	private image.AnimationSprite abajoIzquierdaAnimacion;
 	
+	private int imageOffsetX;
+	private int imageOffsetY;
+	private BufferedImage armaImagen;
+	
+	private float angulo;
+
+	//Posicion del mouse
+	private Point posicionMouse;
 	//Velocidad que tendra el jugador
 	private int velocidad;
 	
@@ -46,7 +69,11 @@ public class Personaje extends Entidad{
 		super(x,y,ancho,altura,nombre,handler,main);
 		vidaMaxima = 100;
 		vida = vidaMaxima;
-
+		
+		//Poscicion Mouse
+		posicionMouse = new Point();
+		posicionMouse.x = x;
+		posicionMouse.y = y;
 		//Agregar armas
 		armas = new Arma[3];
 		armas[0] = new Metralleta("Metralleta",10,50,50,50,handler,main);
@@ -60,6 +87,82 @@ public class Personaje extends Entidad{
 		puedeSerLastimado = true;
 		puedeSerLastimadoTimer = new Timer(tiempoPuedeSerLastimado,timerPoderDisparar);
 		
+		armaImagen = Assets.pArmaAbajo;
+		image.SpriteBuilder builder = new image.SpriteBuilder(Assets.pAbajo,76,96);
+		builder.addImage(0, 0);
+		builder.addImage(1, 0);
+		builder.addImage(2, 0);
+		builder.addImage(3, 0);
+
+		abajoAnimacion = new image.AnimationSprite((int)x,(int)y,builder.build());
+		abajoAnimacion.setAnimSpd(10);
+		
+		builder = new image.SpriteBuilder(Assets.pAD,76,96);
+		builder.addImage(0, 0);
+		builder.addImage(1, 0);
+		builder.addImage(2, 0);
+		builder.addImage(3, 0);
+
+		abajoDerechaAnimacion = new image.AnimationSprite((int)x,(int)y,builder.build());
+		abajoDerechaAnimacion.setAnimSpd(10);
+		
+		
+		builder = new image.SpriteBuilder(Assets.pDerecha,76,96);
+		builder.addImage(0, 0);
+		builder.addImage(1, 0);
+		builder.addImage(2, 0);
+		builder.addImage(3, 0);
+
+		derechaAnimacion = new image.AnimationSprite((int)x,(int)y,builder.build());
+		derechaAnimacion.setAnimSpd(10);
+		
+		builder = new image.SpriteBuilder(Assets.pArribaDerecha,76,96);
+		builder.addImage(0, 0);
+		builder.addImage(1, 0);
+		builder.addImage(2, 0);
+		builder.addImage(3, 0);
+
+		arribaDerechaAnimacion = new image.AnimationSprite((int)x,(int)y,builder.build());
+		arribaDerechaAnimacion.setAnimSpd(10);
+		
+		builder = new image.SpriteBuilder(Assets.pArriba,76,96);
+		builder.addImage(0, 0);
+		builder.addImage(1, 0);
+		builder.addImage(2, 0);
+		builder.addImage(3, 0);
+
+		arribaAnimacion = new image.AnimationSprite((int)x,(int)y,builder.build());
+		arribaAnimacion.setAnimSpd(10);
+		
+		builder = new image.SpriteBuilder(Assets.pArribaIzquierda,76,96);
+		builder.addImage(0, 0);
+		builder.addImage(1, 0);
+		builder.addImage(2, 0);
+		builder.addImage(3, 0);
+
+		arribaIzquierdaAnimacion = new image.AnimationSprite((int)x,(int)y,builder.build());
+		arribaIzquierdaAnimacion.setAnimSpd(10);
+		
+		builder = new image.SpriteBuilder(Assets.pIzquierda,76,96);
+		builder.addImage(0, 0);
+		builder.addImage(1, 0);
+		builder.addImage(2, 0);
+		builder.addImage(3, 0);
+
+		izquierdaAnimacion = new image.AnimationSprite((int)x,(int)y,builder.build());
+		izquierdaAnimacion.setAnimSpd(10);
+		
+		builder = new image.SpriteBuilder(Assets.pAbajoIzquierda,76,96);
+		builder.addImage(0, 0);
+		builder.addImage(1, 0);
+		builder.addImage(2, 0);
+		builder.addImage(3, 0);
+
+		abajoIzquierdaAnimacion = new image.AnimationSprite((int)x,(int)y,builder.build());
+		abajoIzquierdaAnimacion.setAnimSpd(10);
+		
+		imagen = abajoAnimacion;
+
 	}
 	
 	//Timer
@@ -173,49 +276,119 @@ public class Personaje extends Entidad{
 	//Llamar metodo disparar de la arma actual
 	public synchronized void disparar(int mx, int my)
 	{
-		armas[indexArma].disparar(x, y, mx, my);
+		armas[indexArma].disparar(x+imageOffsetX, y+imageOffsetY, mx, my);
 		
 	}
+	public float getAngulo(Point destino) {
+	    float angulo = (float) Math.toDegrees(Math.atan2(destino.y - 500, destino.x - 500));
+
+	    if(angulo < 0)
+	    	angulo += 360;
+	    return angulo;
+	}
 	
+	//Posicion del mouse
+	public void cambiarPosicionMouse(int a,int b)
+	{
+		posicionMouse.x = a;
+		posicionMouse.y = b;
+	}
 	//Actualizar
 	@Override
-	public synchronized void actualizar() {
+	public void actualizar() {
 		//Asignar direccion dependiendo de las teclas
 		asignarDireccion();
 		
+
 		//Checar si esta colisionando con otra entidad
 		checarColision();
 		
+		angulo = getAngulo(posicionMouse);
+		System.out.println(String.valueOf(getAngulo(posicionMouse)));
+		
+		if(angulo < 100 && angulo > 70)
+		{
+			imagen = abajoAnimacion;
+			armaImagen = Assets.pArmaAbajo;
+			imageOffsetX = -5;
+			imageOffsetY = 30;
+		}else if(angulo < 70 && angulo > 20)
+		{
+			imagen = abajoDerechaAnimacion;
+			armaImagen = Assets.pArmaAD;
+			imageOffsetX = 10;
+			imageOffsetY = 20;
+		}
+		else if(angulo > -10 && angulo < 20)
+		{
+			imagen = derechaAnimacion;
+			armaImagen = Assets.pArmaDerecha;
+			imageOffsetX = 10;
+			imageOffsetY = 0;
+
+		}else if((angulo < -10 && angulo > 0) || (angulo < 365 && angulo > 280))
+		{		imagen = arribaDerechaAnimacion;
+			armaImagen = Assets.pArmaArD;
+			imageOffsetX = 10;
+			imageOffsetY = -20;
+
+		}else if(angulo < 280 && angulo > 240)
+		{
+				imagen = arribaAnimacion;
+				armaImagen = Assets.pArmaArriba;
+				imageOffsetX = 0;
+				imageOffsetY = -40;
+
+		}else if(angulo < 240 && angulo > 200)
+		{
+			imagen = arribaIzquierdaAnimacion;
+			armaImagen = Assets.pArmaArI;
+			imageOffsetX = -50;
+			imageOffsetY = -20;
+
+		}
+		else if(angulo < 200 && angulo > 170)
+		{
+			imagen = izquierdaAnimacion;
+			armaImagen = Assets.pArmaIzquierda;
+			imageOffsetX = -50;
+			imageOffsetY = 0;
+
+		}
+		else if(angulo < 170 && angulo > 100)
+		{
+			imagen = abajoIzquierdaAnimacion;
+			armaImagen = Assets.pArmaAI;
+			imageOffsetX = -50;
+			imageOffsetY = 20;
+		}
+	
+				
+		
+		//Animar
+		if(velX != 0 || velY != 0)
+			imagen.update();
 		//Cambiar posicion
 		x += velX;
 		x = clamp(x,0,8000 - 30);
 		y += velY;
-		y = clamp(y,0,8000 - 30);
+		y = clamp(y,0,8000 - 60);
 	    //Si tiene un powerup, que tome su efecto
 	    if(powerup != null){
 	      if(!powerup.agregarAtributos(this)){
 	        powerup = null;
 	      }
 	    }
+		imagen.setY((int)y - 40);
+		imagen.setX((int)x - 25);
 	}
-
-	//Dibujar
 	@Override
-	public synchronized void render(Graphics g) {
-		g.setColor(Color.WHITE);
-    	int camPosX = (int) -main.getCamaraXOffset();
-    	int camPosY = (int) -main.getCamaraYOffset();
-		//Dibujar texto de informacion de prueba
-		g.drawString("Vida: " + vida, camPosX + 20, camPosY + 20);
-		g.drawString("Nombre de arma: " + armas[indexArma].getNombre(), camPosX + 20,camPosY + 40);
-		g.drawString("Numero de balas: " + armas[indexArma].getBalas(), camPosX + 20, camPosY + 60);
-		g.drawString("Puede disparar: " + String.valueOf(armas[indexArma].getPuedeDisparar()), camPosX + 20, camPosY + 80);
-		g.setColor(Color.GREEN);
-		
-		//Dibujar al personaje por el momento un circulo
-		g.fillOval(x,y,ancho,altura);
-		
+	public int getDepth() {
+		// TODO Auto-generated method stub
+		return (y-30) + 96;
 	}
+	
+
 	
 	//Checar colision
 	public void checarColision() {
@@ -304,6 +477,34 @@ public class Personaje extends Entidad{
 			return false;
 		}
 		
+	}
+	@Override
+	public void render(Graphics2D g) {
+		// TODO Auto-generated method stub
+		g.setColor(Color.WHITE);
+    	int camPosX = (int) -main.getCamaraXOffset();
+    	int camPosY = (int) -main.getCamaraYOffset();
+		//Dibujar texto de informacion de prueba
+		g.drawString("Vida: " + vida, camPosX + 20, camPosY + 20);
+		g.drawString("Nombre de arma: " + armas[indexArma].getNombre(), camPosX + 20,camPosY + 40);
+		g.drawString("Numero de balas: " + armas[indexArma].getBalas(), camPosX + 20, camPosY + 60);
+		g.drawString("Puede disparar: " + String.valueOf(armas[indexArma].getPuedeDisparar()), camPosX + 20, camPosY + 80);
+
+		
+		//Dibujar al personaje por el momento un circulo
+		//g.fillOval(x,y,ancho,altura);
+		
+		if(angulo < 365 && angulo > 200)
+		{
+			
+			g.drawImage(armaImagen,x + imageOffsetX,y + imageOffsetY,null);
+			imagen.render(g);
+		}else {
+			
+			imagen.render(g);
+			g.drawImage(armaImagen,x + imageOffsetX ,y + imageOffsetY,null);
+
+		}
 	}
 	
 	

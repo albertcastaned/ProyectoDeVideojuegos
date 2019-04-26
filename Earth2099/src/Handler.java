@@ -1,5 +1,7 @@
 import java.awt.Graphics;
-
+import java.awt.Graphics2D;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -30,26 +32,26 @@ public class Handler {
 	}
 	
 	//Llamado desde actualizar del maim, dibuja cada entidad
-	public void render(Graphics g)
+	public synchronized void render(Graphics2D g)
 	{
 		//Iterar
 		Iterator<Entidad> itr = listaEntidades.iterator();
 		while(itr.hasNext())
 		{
 			Entidad ent = itr.next();
-			/*
-			if(ent instanceof Personaje)
+			
+			if(ent instanceof Entidad)
 			{
 				if(ent.getVelX() !=0 || ent.getVelY() != 0)
 				{
 					 Collections.sort(listaEntidades, new Comparator<Entidad>() {
 					        public int compare(Entidad o1, Entidad o2) {
-					            return Integer.compare(o2.getY(), o1.getY());
+					            return Integer.compare(o1.getDepth(),o2.getDepth());
 					        }
 					    });			
 				}
 			}
-			*/
+			
 			
 			//Dibujar entidad
 			ent.render(g);

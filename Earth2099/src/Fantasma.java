@@ -1,4 +1,6 @@
+import java.awt.Graphics2D;
 
+//Enemigo que puede pasar por colisiones
 public class Fantasma extends TemplateEnemy{
 	//Esta siguiendo al jugador o no
 	private boolean siguiendo;
@@ -19,22 +21,11 @@ public class Fantasma extends TemplateEnemy{
 		y = (int) (y + (velocidad * Math.sin(direction)));
 		
 	}
-	@Override
-	public void atacar(int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void disparar(int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void actualizar()
 	{	velX=0;
 		velY=0;
-		checarColision();
 		if(siguiendo)
 		{
 		seguirJugador();
@@ -49,6 +40,10 @@ public class Fantasma extends TemplateEnemy{
 		}
 		x+=velX;
 		y+=velY;
+		//Inicar velocidad en 0
+		velX = 0;
+		velY = 0;
+
 	}
 
 }

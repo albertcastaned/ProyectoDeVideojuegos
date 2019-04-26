@@ -22,6 +22,29 @@ public class Assets {
 	public static BufferedImage snowTile;
 	public static BufferedImage snowTree;
 	public static BufferedImage iceTile;
+	
+	//Personaje
+	public static BufferedImage pAbajo;
+	public static BufferedImage pAD;
+	public static BufferedImage pDerecha;
+	public static BufferedImage pArribaDerecha;
+	public static BufferedImage pArriba;
+	public static BufferedImage pArribaIzquierda;
+	public static BufferedImage pIzquierda;
+	public static BufferedImage pAbajoIzquierda;
+	
+	//Armas
+	public static BufferedImage pArmaArriba;
+	public static BufferedImage pArmaAbajo;
+	public static BufferedImage pArmaDerecha;
+	public static BufferedImage pArmaIzquierda;
+	public static BufferedImage pArmaAD;
+	public static BufferedImage pArmaAI;
+	public static BufferedImage pArmaArD;
+	public static BufferedImage pArmaArI;
+
+	
+	public static BufferedImage bala;
 
 
 
@@ -41,8 +64,25 @@ public class Assets {
 		snowTile = ImageLoader.loadImage("/snowTile.png");
 		iceTile = ImageLoader.loadImage("/iceTile.png");
 		snowTree = ImageLoader.loadImage("/snowTree.png");
+		pAbajo = ImageLoader.loadImage("/SpritesPersonaje/pAbajo.png");
+		pAD = ImageLoader.loadImage("/SpritesPersonaje/pAD.png");
+		pDerecha = ImageLoader.loadImage("/SpritesPersonaje/pDerecha.png");
+		pArribaDerecha = ImageLoader.loadImage("/SpritesPersonaje/pArribaD.png");
+		pArriba = ImageLoader.loadImage("/SpritesPersonaje/pArriba.png");
+		pArribaIzquierda = ImageLoader.loadImage("/SpritesPersonaje/pArribaI.png");
+		pIzquierda = ImageLoader.loadImage("/SpritesPersonaje/pIzquierda.png");
+		pAbajoIzquierda = ImageLoader.loadImage("/SpritesPersonaje/pAbajoIzquierda.png");
 
-
+		pArmaArriba = ImageLoader.loadImage("/SpritesArmas/mg_up.png");
+		pArmaAbajo = ImageLoader.loadImage("/SpritesArmas/mg_down.png");
+		pArmaDerecha = ImageLoader.loadImage("/SpritesArmas/mg_sideL.png");
+		pArmaIzquierda = ImageLoader.loadImage("/SpritesArmas/mg_side.png");
+		pArmaAD = ImageLoader.loadImage("/SpritesArmas/mg_diagdown.png");
+		pArmaAI = ImageLoader.loadImage("/SpritesArmas/mg_diagdownL.png");
+		pArmaArD = ImageLoader.loadImage("/SpritesArmas/mg_diagup.png");
+		pArmaArI = ImageLoader.loadImage("/SpritesArmas/mg_diagupLeft.png");
+		
+		bala = ImageLoader.loadImage("/bulletc.png");
 
 
 

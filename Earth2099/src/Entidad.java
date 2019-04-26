@@ -1,5 +1,5 @@
 import java.awt.Graphics;
-
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 //Superclase que define a todos los objetos que pueden interactuar con otros y se pueden mover
 public abstract class Entidad {
@@ -9,7 +9,6 @@ public abstract class Entidad {
 	
 	//Referencia al Handler
 	protected Handler handler;
-	
 	//Referencia a la clase principal
 	protected Game main;
 	//Constructor default
@@ -35,6 +34,7 @@ public abstract class Entidad {
 		this.handler = handler;
 		this.main = main;
 	}
+
 	public int getAltura()
 	{
 		return altura;
@@ -46,6 +46,10 @@ public abstract class Entidad {
 	public int getY()
 	{
 		return y;
+	}
+	public int getDepth()
+	{
+		return y + altura;
 	}
 	public synchronized void setVelX(int ex)
 	{
@@ -89,5 +93,5 @@ public abstract class Entidad {
 	//Metodos abstractos
 	public abstract void actualizar();
 	
-	public abstract void render(Graphics g);
+	public abstract void render(Graphics2D g);
 }

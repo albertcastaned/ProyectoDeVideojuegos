@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 //Enemigo prueba del Template, luego se agregaran enemigos con comportamientos diferentes
 public class Zombi extends TemplateEnemy{
 	//Index de la lista de pasos a seguir del Path
@@ -70,9 +73,6 @@ public class Zombi extends TemplateEnemy{
 	@Override
 	public void actualizar() {
 		
-		//Inicar velocidad en 0
-		velX = 0;
-		velY = 0;
 
 		
 		if(siguiendo)
@@ -107,7 +107,6 @@ public class Zombi extends TemplateEnemy{
 			}
 		}
 		//Checar colision y aumentar posicion respecto a la velocidad 
-		checarColision();
 		if(velX != 0)
 		{
 			int sign = velX<0?-1:1;
@@ -120,26 +119,19 @@ public class Zombi extends TemplateEnemy{
 		}
 		x += velX;
 		y += velY;
+		//Inicar velocidad en 0
+		velX = 0;
+		velY = 0;
+
 		}
 
 
 
 
 
-	@Override
-	public void atacar(int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 
-
-	@Override
-	public void disparar(int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 

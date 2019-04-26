@@ -47,7 +47,7 @@ public class VolcanoGenerator extends GeneradorDeMapa{
 				{
 				if(!map.blocked(x, y))
 				{
-				Game.getHandler().agregarObjeto(new Rock(x*80,y*80 + 60,Assets.rock,Game.getHandler(),main));
+				Game.getHandler().agregarObjeto(new Decoracion(x*80,y*80 + 60,Assets.rock,Game.getHandler(),main));
 				map.setBloqueado(x, y + 1);
 				map.setTipo(x, y+1);
 				}

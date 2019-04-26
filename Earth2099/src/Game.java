@@ -3,6 +3,7 @@ import java.awt.*;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferStrategy;
@@ -43,7 +44,8 @@ public class Game extends Canvas implements Runnable{
 	
 	//Tipo de nivel que se generara (1 - Bosque, 2 - Volcan, 3 - Desierto, 4 - Tundra)
 	private int tipoDeNivel;
-	
+
+	private MiCanvas canvas;
 	
 	//Iniciar juego
 	public static void main(String args[])
@@ -53,7 +55,7 @@ public class Game extends Canvas implements Runnable{
 	public Game()
 	{
 		corriendo = false;
-		new MiCanvas(VentanaAncho,VentanaAltura, "Earth 2099", this);
+		canvas = new MiCanvas(VentanaAncho,VentanaAltura, "Earth 2099", this);
 	}
 	
 	//Inicar el thread
@@ -80,7 +82,7 @@ public class Game extends Canvas implements Runnable{
 		handler = new Handler();
 		
 
-		personaje = new Personaje(4000,4000,30,30,"Personaje",handler,this);
+		personaje = new Personaje(4000,4000,30,60,"Personaje",handler,this);
 		handler.agregarObjeto(personaje);
 		
 		//Crear un tipo de nivel al azar
@@ -106,10 +108,6 @@ public class Game extends Canvas implements Runnable{
 			enemigoPosY = ran.nextInt(7920);
 		}
 		
-		//Agregar enemigos
-		handler.agregarObjeto(new Zombi(enemigoPosX,enemigoPosY,80,80,"Zombi 1",100,5,8,handler,this));
-		handler.agregarObjeto(new Zombi(enemigoPosX,enemigoPosY,80,80,"Zombi 2",100,5,8,handler,this));
-		handler.agregarObjeto(new Fantasma(4333,4000,80,80,"Fantasma 1",100,5,2,handler,this));
 
 		
 
@@ -124,8 +122,6 @@ public class Game extends Canvas implements Runnable{
 			}
 		}
 
-		//Agregar Power-Up
-		handler.agregarObjeto(new Invisibilidad(4000,4000,80,80,"Invisibilidad",handler,this));
 		
 	
 		//Agregar KeyListener al jugador
@@ -195,6 +191,23 @@ public class Game extends Canvas implements Runnable{
 
 			
 		});
+		
+		this.addMouseMotionListener(new MouseMotionListener() {
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				// TODO Auto-generated method stub
+				personaje.cambiarPosicionMouse(e.getX(),e.getY());
+			}
+			
+			
+		});
 
 
 	}
@@ -210,6 +223,7 @@ public class Game extends Canvas implements Runnable{
 			e.printStackTrace();
 		}
 	}
+	
 
 	//Llamar los metodos actualizar y render 60 veces por segundo y mantener el loop constante.
 	@Override
@@ -404,7 +418,7 @@ public class Game extends Canvas implements Runnable{
 	
 	
 	//Calcular camino al jugador
-	public Path obtenerCamino(int x, int y)
+	public synchronized Path obtenerCamino(int x, int y)
 	{
 		
 		//Nueva busqueda
@@ -421,8 +435,8 @@ public class Game extends Canvas implements Runnable{
 		}
 		
 		//Mientras no se encuentre un camino valido
-		while(path==null)
-		{
+		//while(path==null)
+		//{
 			
 		//Crear una posicion basada en la del jugador al azar
 		//Esto se usa para que el enemigo utilice diferentes caminos y ataque desde diferentes lados
@@ -482,7 +496,7 @@ public class Game extends Canvas implements Runnable{
 		//Calcular camino de posicion del jugador pasado hacia la posicion creada
 		path = a.findPath(getTilePosX(x),getTilePosY(y),ex,ye);
 		
-		}
+		//}
 		//Regresar camino una vez que sea valido
 		return path;
 
@@ -502,6 +516,8 @@ public class Game extends Canvas implements Runnable{
 	{
 		return personaje.getY();
 	}
+	
+
 	
 	public static Handler getHandler()
 	{
