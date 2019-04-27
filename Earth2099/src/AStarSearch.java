@@ -38,7 +38,7 @@ public class AStarSearch {
 		}
 	}
 	//Regresa un camino dado los puntos iniciales y los puntos destino
-	public synchronized Path findPath(int sx, int sy, int tx, int ty) {
+	public Path findPath(int sx, int sy, int tx, int ty) {
 		
 		//Si el destino esta bloqueado, entonces no hay forma de llegar
 		if (map.blocked(tx, ty)) {

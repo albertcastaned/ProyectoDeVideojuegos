@@ -43,7 +43,7 @@ public class Esqueleto extends TemplateEnemy {
 			destinoY = main.getJugadorY();
 			
 			//Agregar bala del enemigo al handler
-			handler.agregarObjeto(new BalaEnemigo(x,y,destinoX,destinoY,20,handler,main));
+			handler.agregarObjeto(new BalaEnemigo(x,y,destinoX,destinoY,20,10,handler,main));
 		}
     };
     

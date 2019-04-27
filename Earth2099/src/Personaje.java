@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -274,9 +273,9 @@ public class Personaje extends Entidad{
 	}
 	
 	//Llamar metodo disparar de la arma actual
-	public synchronized void disparar(int mx, int my)
+	public void disparar(int mx, int my)
 	{
-		armas[indexArma].disparar(x+imageOffsetX, y+imageOffsetY, mx, my);
+		armas[indexArma].disparar(x+imageOffsetX, y+imageOffsetY, mx, my,angulo);
 		
 	}
 	public float getAngulo(Point destino) {
@@ -304,7 +303,6 @@ public class Personaje extends Entidad{
 		checarColision();
 		
 		angulo = getAngulo(posicionMouse);
-		System.out.println(String.valueOf(getAngulo(posicionMouse)));
 		
 		if(angulo < 100 && angulo > 70)
 		{

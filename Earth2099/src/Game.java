@@ -418,7 +418,7 @@ public class Game extends Canvas implements Runnable{
 	
 	
 	//Calcular camino al jugador
-	public synchronized Path obtenerCamino(int x, int y)
+	public Path obtenerCamino(int x, int y)
 	{
 		
 		//Nueva busqueda

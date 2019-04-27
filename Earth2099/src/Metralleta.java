@@ -7,7 +7,7 @@ public class Metralleta extends Arma{
 	}
 
 	@Override
-	public void disparar(int x, int y, int mx, int my) {
+	public void disparar(int x, int y, int mx, int my,float angulo) {
 		// TODO Auto-generated method stub
 
 		//Si ha pasado el tiempo para poder disparar y tiene balas
@@ -18,7 +18,7 @@ public class Metralleta extends Arma{
 		timer.start();
 		
 		//Crear tipo de bala de esta arma
-		Bala bal = new BalaNormal(x,y,mx,my,danio,handler,main);
+		Bala bal = new BalaNormal(x,y,mx,my,danio,angulo,handler,main);
 		
 		//Agregar al handler
 		handler.agregarObjeto(bal);

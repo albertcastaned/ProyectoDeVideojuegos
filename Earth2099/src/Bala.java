@@ -15,9 +15,8 @@ public class Bala extends Entidad{
 
 	//Tamaño de la bala
 	protected int tamanio;
-	protected float angulo;
 	protected BufferedImage img;
-	public Bala(int x, int y, int mousePosX, int mousePosY, int tamanio,Handler handler,Game main)
+	public Bala(int x, int y, int mousePosX, int mousePosY, int tamanio, float angulo, Handler handler,Game main)
 	{
 		
 		super(x,y,tamanio,tamanio,"Bala",handler,main);
@@ -32,10 +31,15 @@ public class Bala extends Entidad{
 		velX = (int) (30 * dirX/dirLength);
 		velY = (int) (30 * dirY/dirLength);
 
-		angulo = getAngulo(new Point(mousePosX,mousePosY));
-		
+		System.out.println(angulo - 5);
+		float finalAngulo = (float) Math.toRadians(angulo - 5);
 		img = Assets.bala;
+		AffineTransform tx = new AffineTransform();
+		tx.rotate(finalAngulo,img.getWidth()/2,img.getHeight()/2);
 		
+		AffineTransformOp op = new AffineTransformOp(tx,AffineTransformOp.TYPE_BILINEAR);
+		
+		img = op.filter(img, null);
 	}
 	
 	public float getAngulo(Point destino) {
