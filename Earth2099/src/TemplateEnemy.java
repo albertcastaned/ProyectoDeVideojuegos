@@ -18,7 +18,8 @@ public abstract class TemplateEnemy extends Entidad{
 	private Arma arma;
 	protected boolean useArma = false;
 	
-
+	//Animacion
+	protected image.AnimationSprite imagen,imgArriba,imgAbajo,imgDerecha,imgIzquierda;
 	public TemplateEnemy(int x, int y,int ancho, int altura, String nombre, int vidaMax,int dano, int velocidad,Handler handler,Game main) {
 		super(x,y,ancho,altura,nombre,handler,main);
 		vida = vidaMax;

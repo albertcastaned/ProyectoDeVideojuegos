@@ -43,9 +43,11 @@ public class Assets {
 	public static BufferedImage pArmaArD;
 	public static BufferedImage pArmaArI;
 
-	
+	//Bala
 	public static BufferedImage bala;
 
+	//Enemigos
+	public static BufferedImage zombieEsqueletoSheet;
 
 
 	// En éste método se inicializan todas las imágenes que se van a ocupar
@@ -84,7 +86,7 @@ public class Assets {
 		
 		bala = ImageLoader.loadImage("/bulletc.png");
 
-
+		zombieEsqueletoSheet = ImageLoader.loadImage("/ZombieYEsqueleto.png");
 
 		
 	}

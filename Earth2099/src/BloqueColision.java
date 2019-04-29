@@ -1,5 +1,4 @@
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 //Clase creada como prueba de Colision, luego se remplazara por objetos dibujados del Escenario
 public class BloqueColision extends Entidad {

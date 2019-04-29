@@ -51,11 +51,11 @@ public abstract class Entidad {
 	{
 		return y + altura;
 	}
-	public synchronized void setVelX(int ex)
+	public void setVelX(int ex)
 	{
 		velX= ex;
 	}
-	public synchronized void setVelY(int ye)
+	public void setVelY(int ye)
 	{
 		velY= ye;
 	}

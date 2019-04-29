@@ -195,10 +195,10 @@ public class AStarSearch {
 	
 	//Obtener costo distancia hipotenusa
 	public float getHeuristicCost(int x, int y, int tx, int ty) {
-		   int dx = tx - x;
-		   int dy = ty - y;
+		   int dx = Math.abs(tx - x);
+		   int dy = Math.abs(ty - y);
 
-		   return (float) Math.sqrt((dx*dx) + (dy*dy));
+		   return dx + dy;
 	}
 	
 	//Lista sorteada

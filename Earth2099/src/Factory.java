@@ -15,6 +15,7 @@ public abstract class Factory {
 		timer = new Timer(tiempo,timerCrearEntidad);
 		this.map = map;
 		timer.start();
+		timer.setRepeats(true);
 	}
 	public abstract void crear();
 	
@@ -26,7 +27,7 @@ public abstract class Factory {
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			crear();
-			timer.restart();
+			
 		}
     };
 }

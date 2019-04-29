@@ -18,23 +18,7 @@ public class GameMap implements TiledBaseMap {
 	public GameMap(Game main, int tipoDeNivel) {
 		
 		//Se crea el tipo de generador dependiendo del numero parametrizado
-		switch(tipoDeNivel)
-		{
-		
-		case 1:
-			mapGenerator = new ForestGenerator(this);
-			break;
-		case 2:
-		mapGenerator = new VolcanoGenerator(this);
-			break;
-		
-		case 3:
-		mapGenerator = new DesertGenerator(this);
-			break;
-		case 4:
-		mapGenerator = new SnowGenerator(this);
-			break;
-		}
+		mapGenerator = new GeneradorDeMapa(this,tipoDeNivel);
 		//Crear tiles del mapa copiando la matriz del map generator
 		terrain = mapGenerator.placeTile();
 		tipo = mapGenerator.placeTile();

@@ -96,7 +96,8 @@ public class Game extends Canvas implements Runnable{
 		
 		//Crear algoritmo de busqueda
 		a = new AStarSearch(map);
-		
+		handler.agregarObjeto(new Esqueleto(4080,4080,40,40,"Esqueleto",100,5,8,Game.getHandler(),this));
+
 		
 		//Crear una posicion para el enemigo mientras no este en un espacio bloqueado que no debe de estar
 		int enemigoPosX = 4330,enemigoPosY = 4000;
@@ -116,12 +117,16 @@ public class Game extends Canvas implements Runnable{
 			for (int y=0;y<map.getHeightInTiles();y++) {
 				if(map.blocked(x, y))
 				{
-					handler.agregarObjeto(new BloqueColision(80*x,80*y,80,80,handler,this));
+					if(map.getTipo(x,y) == 0)
+						handler.agregarObjeto(new AguaColision(80*x,80*y,80,80,handler,this));
+					else
+						handler.agregarObjeto(new BloqueColision(80*x,80*y,80,80,handler,this));
+
 				}
 
 			}
 		}
-
+		
 		
 	
 		//Agregar KeyListener al jugador
@@ -418,7 +423,7 @@ public class Game extends Canvas implements Runnable{
 	
 	
 	//Calcular camino al jugador
-	public Path obtenerCamino(int x, int y)
+	public Path obtenerCamino(int x, int y,int attackPoint)
 	{
 		
 		//Nueva busqueda
@@ -434,14 +439,10 @@ public class Game extends Canvas implements Runnable{
 			return path;
 		}
 		
-		//Mientras no se encuentre un camino valido
-		//while(path==null)
-		//{
 			
 		//Crear una posicion basada en la del jugador al azar
 		//Esto se usa para que el enemigo utilice diferentes caminos y ataque desde diferentes lados
-		Random rand = new Random();
-		int attackPoint = rand.nextInt(7);
+
 		int ex = 0, ye = 0;
 		switch(attackPoint)
 		{
@@ -496,7 +497,7 @@ public class Game extends Canvas implements Runnable{
 		//Calcular camino de posicion del jugador pasado hacia la posicion creada
 		path = a.findPath(getTilePosX(x),getTilePosY(y),ex,ye);
 		
-		//}
+
 		//Regresar camino una vez que sea valido
 		return path;
 

@@ -35,7 +35,7 @@ public class EnemyFactory extends Factory{
 				//Tipo de enemigo basado en porcentaje de 1 al 100
 				int tipoEnemigo = ran.nextInt(100);
 				if(tipoEnemigo <= 60)
-					Game.getHandler().agregarObjeto(new Zombi(x * 80,y * 80,80,80,"Zombi",100,5,8,Game.getHandler(),game));
+					Game.getHandler().agregarObjeto(new Zombi(x * 80,y * 80,40,40,"Zombi",100,5,8,Game.getHandler(),game));
 				else if(tipoEnemigo < 60 && tipoEnemigo <= 80)
 					Game.getHandler().agregarObjeto(new Esqueleto(x * 80,y * 80,80,80,"Esqueleto",100,5,8,Game.getHandler(),game));
 				else

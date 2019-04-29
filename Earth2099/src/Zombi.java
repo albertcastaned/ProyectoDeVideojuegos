@@ -1,5 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Random;
+
+import image.Assets;
 
 //Enemigo prueba del Template, luego se agregaran enemigos con comportamientos diferentes
 public class Zombi extends TemplateEnemy{
@@ -13,11 +16,53 @@ public class Zombi extends TemplateEnemy{
 	
 	//Esta siguiendo al jugador o no
 	private boolean siguiendo;
-
+	
+	private int attackPoint;
+	
+	
 	public Zombi(int x, int y, int ancho, int altura, String nombre, int vidaMax, int dano, int velocidad,Handler handler,Game main) {
 		super(x, y, ancho, altura, nombre, vidaMax, dano, velocidad,handler,main);
 		siguiendo = false;
+		Random ran = new Random();
+		attackPoint = ran.nextInt(8);
+		
+		
+		image.SpriteBuilder builder = new image.SpriteBuilder(Assets.zombieEsqueletoSheet,96,96);
+		builder.addImage(0, 0);
+		builder.addImage(1, 0);
+		builder.addImage(2, 0);
 
+
+		imgAbajo = new image.AnimationSprite((int)x,(int)y,builder.build());
+		imgAbajo.setAnimSpd(10);
+		
+		builder = new image.SpriteBuilder(Assets.zombieEsqueletoSheet,96,96);
+		builder.addImage(0, 1);
+		builder.addImage(1, 1);
+		builder.addImage(2, 1);
+
+
+		imgIzquierda = new image.AnimationSprite((int)x,(int)y,builder.build());
+		imgIzquierda.setAnimSpd(10);
+		
+		builder = new image.SpriteBuilder(Assets.zombieEsqueletoSheet,96,96);
+		builder.addImage(0, 2);
+		builder.addImage(1, 2);
+		builder.addImage(2, 2);
+
+
+		imgDerecha = new image.AnimationSprite((int)x,(int)y,builder.build());
+		imgDerecha.setAnimSpd(10);
+		
+		builder = new image.SpriteBuilder(Assets.zombieEsqueletoSheet,96,96);
+		builder.addImage(0, 3);
+		builder.addImage(1, 3);
+		builder.addImage(2, 3);
+
+
+		imgArriba = new image.AnimationSprite((int)x,(int)y,builder.build());
+		imgArriba.setAnimSpd(10);
+		imagen = imgAbajo;
 	}
 
 	
@@ -43,7 +88,7 @@ public class Zombi extends TemplateEnemy{
 				
 				}else {
 				//Sino crear un nuevo camino
-				p = main.obtenerCamino(x, y);
+				p = main.obtenerCamino(x, y,attackPoint);
 				if(p==null)
 					siguiendo = false;
 				else
@@ -63,8 +108,8 @@ public class Zombi extends TemplateEnemy{
 		int dx = px -x;
 		int dy = py - y;
 		double direction = Math.atan2(dy, dx);
-		x = (int) (x + (velocidad * Math.cos(direction)));
-		y = (int) (y + (velocidad * Math.sin(direction)));
+		velX = (int) ((velocidad * Math.cos(direction)));
+		velY = (int) ((velocidad * Math.sin(direction)));
 		
 	}
 
@@ -95,7 +140,7 @@ public class Zombi extends TemplateEnemy{
 			if(800 >= (distanciaJugadorX + distanciaJugadorY))
 			{
 
-				p = main.obtenerCamino(x, y);
+				p = main.obtenerCamino(x, y,attackPoint);
 				if(p!=null)
 				{
 				pathIndex = 0;
@@ -106,24 +151,40 @@ public class Zombi extends TemplateEnemy{
 				}
 			}
 		}
-		//Checar colision y aumentar posicion respecto a la velocidad 
-		if(velX != 0)
+
+		if(velX < 0)
 		{
-			int sign = velX<0?-1:1;
-			velX+=sign;
+			imagen = imgIzquierda;
+		}else if(velX > 0){
+			imagen = imgDerecha;
 		}
-		if(velY != 0)
+		else if(velY < 0)
 		{
-			int sign = velY<0?-1:1;
-			velY+=sign;
+			imagen = imgArriba;
+		}else if(velY > 0)
+		{
+			imagen = imgAbajo;
 		}
+		
+
+		if(velX != 0 || velY != 0)
+			imagen.update();
 		x += velX;
 		y += velY;
 		//Inicar velocidad en 0
 		velX = 0;
 		velY = 0;
-
+		imagen.setY((int)y - 60);
+		imagen.setX((int)x - 30);
 		}
+	
+	@Override
+	public void render(Graphics2D g)
+	{
+		imagen.render(g);
+		g.setColor(Color.RED);
+		g.drawRect(x, y, ancho, altura);
+	}
 
 
 
