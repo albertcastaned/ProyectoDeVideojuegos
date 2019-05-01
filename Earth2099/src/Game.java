@@ -103,7 +103,6 @@ public class Game extends Canvas implements Runnable{
 		
 
 		
-		handler.agregarObjeto(new Fantasma(4000,4000,30,30,"Test",100,100,2,handler,this));
 		
 
 		//Crear colisiones basadas en donde hay tiles bloqueados
