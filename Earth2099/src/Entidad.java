@@ -10,15 +10,7 @@ public abstract class Entidad {
 	protected Handler handler;
 	//Referencia a la clase principal
 	protected Game main;
-	//Constructor default
-	public Entidad() {
-		x = 0;
-		y = 0;
-		velX = 0;
-		velY = 0;
-		ancho = 0;
-		altura = 0;
-	}
+
 	
 	//Constructor descriptivo
 	public Entidad(int x, int y,int ancho, int altura,String nombre,Handler handler,Game main)
@@ -84,8 +76,8 @@ public abstract class Entidad {
 	//Si esta adentro de la camara, dibujar
 	public boolean enCamara()
 	{
-		if((new Rectangle(x,y,ancho,altura)).intersects(new Rectangle((int)-main.getCamaraXOffset() - 200,(int)-main.getCamaraYOffset() - 200,Game.getVentanaAncho() + 200,Game.getVentanaAltura() + 200 )))
-				return true;
+		if(x < -main.getCamaraXOffset() + Game.getVentanaAncho() + 200 && x > -main.getCamaraXOffset() - 200 && y < -main.getCamaraYOffset() + Game.getVentanaAltura() + 200 && y > -main.getCamaraYOffset() - 280)
+			return true;
 		else
 			return false;
 	}

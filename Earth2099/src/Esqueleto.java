@@ -1,4 +1,3 @@
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,9 +28,10 @@ public class Esqueleto extends TemplateEnemy {
 			Handler handler, Game main) {
 		super(x, y, ancho, altura, nombre, vidaMax, dano, velocidad, handler, main);
 		siguiendo = false;
-		timerTirarHueso = new Timer(2000,tirarHueso);
+		timerTirarHueso = new Timer(1000,tirarHueso);
 		Random ran = new Random();
 		attackPoint = ran.nextInt(8);
+		velocidad += ran.nextInt(10);
 		
 		image.SpriteBuilder builder = new image.SpriteBuilder(Assets.zombieEsqueletoSheet,96,96);
 		builder.addImage(9, 0);
@@ -95,7 +95,10 @@ public class Esqueleto extends TemplateEnemy {
     };
     
 
-   
+    public void stopTimer()
+    {
+    	timerTirarHueso.stop();
+    }
 	public void seguirJugador()
 	{
 		//Obtener distancia de el punto buscado a la actual
@@ -112,7 +115,7 @@ public class Esqueleto extends TemplateEnemy {
 				int distanciaJugadorY = Math.abs(main.getJugadorY() - y);
 				
 				//Si esta a 600 o mas de distancia dejar de seguirlo
-				if(1200 <= (distanciaJugadorX + distanciaJugadorY))
+				if(1600 <= (distanciaJugadorX + distanciaJugadorY))
 				{
 				siguiendo = false;
 				
@@ -129,8 +132,7 @@ public class Esqueleto extends TemplateEnemy {
 					pathIndex = 0;
 
 				}
-				//255 255 1100 0000 0
-				//255 255 1111 1110 0000 0000
+
 			}else {
 			//Obtener nueva posicion de la lista
 			pathIndex++;
@@ -149,8 +151,10 @@ public class Esqueleto extends TemplateEnemy {
 
 	@Override
 	public void actualizar() {
+		//Inicar velocidad en 0
+		velX = 0;
+		velY = 0;
 		//Si tiene 0 de vida morir
-		
 		if(vida <= 0)
 		{
 			timerTirarHueso.stop();
@@ -168,13 +172,34 @@ public class Esqueleto extends TemplateEnemy {
 				seguirJugador();
 			}
 			
+			if(velX < 0)
+			{
+				imagen = imgIzquierda;
+			}else if(velX > 0){
+				imagen = imgDerecha;
+			}
+			else if(velY < 0)
+			{
+				imagen = imgArriba;
+			}else if(velY > 0)
+			{
+				imagen = imgAbajo;
+			}
 			
+
+			if(velX != 0 || velY != 0)
+				imagen.update();
+			x += velX + knockbackX;
+			y += velY + knockbackY;
+
+			imagen.setY((int)y - 60);
+			imagen.setX((int)x - 30);
 		}
 		else {
 			//Checar si esta a menos de 1000 de distancia para empezar a seguir
 			int distanciaJugadorX = Math.abs(main.getJugadorX() - x);
 			int distanciaJugadorY = Math.abs(main.getJugadorY() - y);
-			if(800 >= (distanciaJugadorX + distanciaJugadorY))
+			if(1600 >= (distanciaJugadorX + distanciaJugadorY))
 			{
 
 				p = main.obtenerCamino(x, y,attackPoint);
@@ -190,38 +215,11 @@ public class Esqueleto extends TemplateEnemy {
 				}
 			}
 		}
-		if(velX < 0)
-		{
-			imagen = imgIzquierda;
-		}else if(velX > 0){
-			imagen = imgDerecha;
-		}
-		else if(velY < 0)
-		{
-			imagen = imgArriba;
-		}else if(velY > 0)
-		{
-			imagen = imgAbajo;
-		}
-		
 
-		if(velX != 0 || velY != 0)
-			imagen.update();
-		x += velX;
-		y += velY;
-		//Inicar velocidad en 0
-		velX = 0;
-		velY = 0;
-		imagen.setY((int)y - 60);
-		imagen.setX((int)x - 30);
 		
 	}
 	
-	//Dibujar la bala
-	@Override
-	public void render(Graphics2D g) {
-		imagen.render(g);
-	}
+
 }
 
 

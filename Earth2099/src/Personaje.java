@@ -477,19 +477,14 @@ public class Personaje extends Entidad{
 	}
 	@Override
 	public void render(Graphics2D g) {
-		// TODO Auto-generated method stub
-		g.setColor(Color.WHITE);
+		
     	int camPosX = (int) -main.getCamaraXOffset();
     	int camPosY = (int) -main.getCamaraYOffset();
-		//Dibujar texto de informacion de prueba
-		g.drawString("Vida: " + vida, camPosX + 20, camPosY + 20);
-		g.drawString("Nombre de arma: " + armas[indexArma].getNombre(), camPosX + 20,camPosY + 40);
-		g.drawString("Numero de balas: " + armas[indexArma].getBalas(), camPosX + 20, camPosY + 60);
-		g.drawString("Puede disparar: " + String.valueOf(armas[indexArma].getPuedeDisparar()), camPosX + 20, camPosY + 80);
+    	
+    	
 
 		
-		//Dibujar al personaje por el momento un circulo
-		//g.fillOval(x,y,ancho,altura);
+
 		
 		if(angulo < 365 && angulo > 200)
 		{
@@ -502,6 +497,21 @@ public class Personaje extends Entidad{
 			g.drawImage(armaImagen,x + imageOffsetX ,y + imageOffsetY,null);
 
 		}
+		
+		//Dibujar texto de informacion de prueba
+
+		g.setColor(Color.WHITE);
+		g.drawString("Vida: " + vida, camPosX + 20, camPosY + 20);
+		g.drawString("Nombre de arma: " + armas[indexArma].getNombre(), camPosX + 20,camPosY + 40);
+		g.drawString("Numero de balas: " + armas[indexArma].getBalas(), camPosX + 20, camPosY + 60);
+		g.drawString("Puede disparar: " + String.valueOf(armas[indexArma].getPuedeDisparar()), camPosX + 20, camPosY + 80);
+		
+		if(Game.getDebug())
+		{
+			g.setColor(Color.RED);
+			g.drawRect(x, y, ancho, altura);
+		}
+    	
 	}
 	
 	

@@ -19,6 +19,8 @@ public class Game extends Canvas implements Runnable{
 	private static int VentanaAncho;
 	private static int VentanaAltura;
 	
+	
+	private static boolean DEBUG = false;
 	//Variables para Thread
 	private Thread thread;
 	private boolean corriendo;
@@ -101,7 +103,7 @@ public class Game extends Canvas implements Runnable{
 		
 
 		
-
+		handler.agregarObjeto(new Fantasma(4000,4000,30,30,"Test",100,100,2,handler,this));
 		
 
 		//Crear colisiones basadas en donde hay tiles bloqueados
@@ -265,13 +267,8 @@ public class Game extends Canvas implements Runnable{
 	//Llamar los metodos actualizar de cada Entidad
 	private synchronized void actualizar()
 	{	
-		for(int i = 0; i < handler.listaEntidades.size();i++)
-		{
-			if(handler.listaEntidades.get(i) instanceof Personaje)
-			{
-				camara.actualizar((Personaje) handler.listaEntidades.get(i));
-			}
-		}
+
+		camara.actualizar(personaje);
 		//Se llamara aqui metodo actualizar de cada entidad en el Handler
 		handler.actualizar();
 	}
@@ -280,8 +277,7 @@ public class Game extends Canvas implements Runnable{
 		//Crear u obtener BufferStrategy
         bs = getBufferStrategy();
         if(bs == null){
-            createBufferStrategy(2
-            		);
+            createBufferStrategy(2);
             return;
         }
         try {
@@ -371,8 +367,11 @@ public class Game extends Canvas implements Runnable{
         	g.drawString("W A S D para moverse", camPosX + 20, camPosY +  220);
         	g.drawString("1 , 2 , 3 para cambiar de arma", camPosX + 20, camPosY + 240);
         	g.drawString("R para recargar", camPosX + 20, camPosY + 260);
-        	g.drawString("Click para disparar a direccion de mouse", camPosX + 20, camPosY + 280);
-        	
+        	g.drawString("P para activar modo DEBUG", camPosX + 20, camPosY + 280);
+        	g.drawString("Click para disparar a direccion de mouse", camPosX + 20, camPosY + 300);
+    		
+    		
+    		
         	////////////////////////////////////////////////////////////////////////////
         	g2d.translate(-camara.getxOffset(), -camara.getyOffset()); //TERMINAR CAMARA
 
@@ -524,6 +523,15 @@ public class Game extends Canvas implements Runnable{
 	{
 		return handler;
 	}
-
+	
+	public static void setDebug()
+	{
+		DEBUG = !DEBUG;
+	}
+	
+	public static boolean getDebug()
+	{
+		return DEBUG;
+	}
 	
 }

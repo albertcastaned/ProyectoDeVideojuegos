@@ -28,7 +28,7 @@ public class Bala extends Entidad{
 		velY = (int) (30 * dirY/dirLength);
 
 		img = Assets.bala;
-		float finalAngulo = (float) Math.toRadians(angulo - 10);
+		float finalAngulo = (float) Math.toRadians(angulo);
 		AffineTransform tx = new AffineTransform();
 		tx.rotate(finalAngulo,img.getWidth()/2,img.getHeight()/2);
 		
@@ -68,15 +68,11 @@ public class Bala extends Entidad{
 			//Colision con un Bloque solido
 			if (aux instanceof AguaColision)
 			{
-				if (chocandoEn(x+velX, y, aux))
+				if (chocandoEn(x, y, aux))
 				{
 					handler.quitarObjeto(this);
 				}
-				if (chocandoEn(x, y+velY, aux))
-				{
-					handler.quitarObjeto(this);
 
-				}
 
 			}
 			//Colision con un Enemigo
@@ -84,14 +80,22 @@ public class Bala extends Entidad{
 			{
 				if (chocandoEn(x, y, aux))
 				{
-
-					((TemplateEnemy) aux).setVida(((TemplateEnemy) aux).getVida() - 50);
+					
+					((TemplateEnemy) aux).setVida(((TemplateEnemy) aux).getVida() - 20);
+					((TemplateEnemy) aux).setKnockbackX(velX / 2);
+					((TemplateEnemy) aux).setKnockbackY(velY / 2);
+					((TemplateEnemy) aux).activateTimer();
 					if(((TemplateEnemy) aux).getVida() <= 0)
+					{
+						//Si es esqueleto parar el timer de tirar hueso
+						if(aux instanceof Esqueleto)
+							((Esqueleto) aux).stopTimer();
 						handler.quitarObjeto(aux);
-					aux.setVelX(velX/2);
-					aux.setVelY(velY/2);
+					}
+					
 					
 					handler.quitarObjeto(this);
+					break;
 				}
 
 			}
@@ -104,8 +108,11 @@ public class Bala extends Entidad{
 	public  void render(Graphics2D g2d)
 	{
 		g2d.drawImage(img,x,y,null);
+		if(Game.getDebug())
+		{
 		g2d.setColor(Color.RED);
 		g2d.drawRect(x, y, ancho, altura);
+		}
 		
 	}
 

@@ -20,7 +20,6 @@ public class AnimationSprite {
 	{
 		imageIndex = 0;
 		this.sprite = sprite;
-		System.out.println("Sprite count: " + sprite.size());
 		sX = x;
 		sY = y;
 		

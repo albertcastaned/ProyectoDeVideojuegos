@@ -1,5 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Timer;
 
 //Templete de los tipos de enemigos que habra
 public abstract class TemplateEnemy extends Entidad{
@@ -8,7 +12,6 @@ public abstract class TemplateEnemy extends Entidad{
 	protected int vida;
 	//Daño que hacen
 	protected int dano;
-	protected int knockbackX = 0,knockbackY = 0;
 
 	//Velocidad a la que el enemigo se mueve
 	protected int velocidad;
@@ -16,7 +19,9 @@ public abstract class TemplateEnemy extends Entidad{
 	//Arma que portan si es que lo hacen
 	private Arma arma;
 	protected boolean useArma = false;
-	
+	protected int knockbackX = 0,knockbackY = 0;
+	protected Timer timerKnockback;
+
 	//Animacion
 	protected image.AnimationSprite imagen,imgArriba,imgAbajo,imgDerecha,imgIzquierda;
 	public TemplateEnemy(int x, int y,int ancho, int altura, String nombre, int vidaMax,int dano, int velocidad,Handler handler,Game main) {
@@ -24,10 +29,32 @@ public abstract class TemplateEnemy extends Entidad{
 		vida = vidaMax;
 		this.dano = dano;
 		this.velocidad = velocidad;
+		timerKnockback = new Timer(30,resetKnockback);
 
 	}
-	
+	public void setKnockbackX(int a)
+	{
+		knockbackX = a;
+	}
+	public void setKnockbackY(int a)
+	{
+		knockbackY = a;
+	}
+	public void activateTimer()
+	{
+		timerKnockback.start();
+	}
+	//Timer
+    ActionListener resetKnockback = new ActionListener(){
 
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			knockbackX = 0;
+			knockbackY = 0;
+			timerKnockback.stop();
+		}
+    };
 	public int getVida() {
 		return vida;
 	}
@@ -66,10 +93,16 @@ public abstract class TemplateEnemy extends Entidad{
 	
 	
 	public void render(Graphics2D g) {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
-		g.setColor(Color.BLUE);
-		g.fillOval((int)x, (int)y, ancho, altura);
+		if(enCamara())
+		{
+			imagen.render(g);
+			
+			if(Game.getDebug())
+			{
+				g.setColor(Color.RED);
+				g.drawRect(x, y, ancho, altura);
+			}
+		}
 	}
 
 

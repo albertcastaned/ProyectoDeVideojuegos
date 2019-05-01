@@ -18,8 +18,8 @@ public class Decoracion extends Entidad{
 		// TODO Auto-generated method stub
 		if(enCamara())
 		{
-		g.drawImage(img,x,y,null);
-		
+			g.drawImage(img,x,y,null);
+
 		}
 	}
 	@Override
