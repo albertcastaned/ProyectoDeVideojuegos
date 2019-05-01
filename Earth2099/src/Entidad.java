@@ -1,5 +1,4 @@
-import java.awt.Graphics;
-
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 //Superclase que define a todos los objetos que pueden interactuar con otros y se pueden mover
 public abstract class Entidad {
@@ -9,18 +8,9 @@ public abstract class Entidad {
 	
 	//Referencia al Handler
 	protected Handler handler;
-	
 	//Referencia a la clase principal
 	protected Game main;
-	//Constructor default
-	public Entidad() {
-		x = 0;
-		y = 0;
-		velX = 0;
-		velY = 0;
-		ancho = 0;
-		altura = 0;
-	}
+
 	
 	//Constructor descriptivo
 	public Entidad(int x, int y,int ancho, int altura,String nombre,Handler handler,Game main)
@@ -35,6 +25,7 @@ public abstract class Entidad {
 		this.handler = handler;
 		this.main = main;
 	}
+
 	public int getAltura()
 	{
 		return altura;
@@ -47,11 +38,15 @@ public abstract class Entidad {
 	{
 		return y;
 	}
-	public synchronized void setVelX(int ex)
+	public int getDepth()
+	{
+		return y + altura;
+	}
+	public void setVelX(int ex)
 	{
 		velX= ex;
 	}
-	public synchronized void setVelY(int ye)
+	public void setVelY(int ye)
 	{
 		velY= ye;
 	}
@@ -81,13 +76,13 @@ public abstract class Entidad {
 	//Si esta adentro de la camara, dibujar
 	public boolean enCamara()
 	{
-		if((new Rectangle(x,y,ancho,altura)).intersects(new Rectangle((int)-main.getCamaraXOffset() - 150,(int)-main.getCamaraYOffset() - 150,Game.getVentanaAncho() + 150,Game.getVentanaAltura() + 150 )))
-				return true;
+		if(x < -main.getCamaraXOffset() + Game.getVentanaAncho() + 200 && x > -main.getCamaraXOffset() - 200 && y < -main.getCamaraYOffset() + Game.getVentanaAltura() + 200 && y > -main.getCamaraYOffset() - 280)
+			return true;
 		else
 			return false;
 	}
 	//Metodos abstractos
 	public abstract void actualizar();
 	
-	public abstract void render(Graphics g);
+	public abstract void render(Graphics2D g);
 }

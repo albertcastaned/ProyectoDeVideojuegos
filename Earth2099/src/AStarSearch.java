@@ -38,7 +38,7 @@ public class AStarSearch {
 		}
 	}
 	//Regresa un camino dado los puntos iniciales y los puntos destino
-	public synchronized Path findPath(int sx, int sy, int tx, int ty) {
+	public Path findPath(int sx, int sy, int tx, int ty) {
 		
 		//Si el destino esta bloqueado, entonces no hay forma de llegar
 		if (map.blocked(tx, ty)) {
@@ -195,10 +195,10 @@ public class AStarSearch {
 	
 	//Obtener costo distancia hipotenusa
 	public float getHeuristicCost(int x, int y, int tx, int ty) {
-		   int dx = tx - x;
-		   int dy = ty - y;
+		   int dx = Math.abs(tx - x);
+		   int dy = Math.abs(ty - y);
 
-		   return (float) Math.sqrt((dx*dx) + (dy*dy));
+		   return dx + dy;
 	}
 	
 	//Lista sorteada

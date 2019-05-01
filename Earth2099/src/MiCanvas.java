@@ -7,21 +7,23 @@ public class MiCanvas extends Canvas {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JFrame frame;
-	
+	private static JFrame frame;
+
+
 	//Iniciar ventana
-	public MiCanvas(int ancho, int altura, String titulo, Game main)
+	public MiCanvas(String titulo, Game main)
 	{
         frame = new JFrame(titulo);
-        frame.setPreferredSize(new Dimension(ancho,altura));
-        frame.setMaximumSize(new Dimension(ancho,altura));
-        frame.setMinimumSize(new Dimension(ancho,altura));
+        frame.setMinimumSize(new Dimension(800,800));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        frame.add(main);
+        frame.setState(Frame.NORMAL);
         
+        frame.add(main);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        frame.setUndecorated(true);
         frame.setVisible(true);
         frame.setFocusable(false);
 		frame.requestFocus();
@@ -30,5 +32,17 @@ public class MiCanvas extends Canvas {
         //Empezar el thread ya que se inicio la ventana
         main.start(); 
 	}
+	
+	public static int getWindowWidth()
+	{
+		return frame.getWidth();
+	}
+	
+	public static int getWindowHeight()
+	{
+		return frame.getHeight();
+	}
+	
+
 
 }

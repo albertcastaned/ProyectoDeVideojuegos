@@ -6,28 +6,69 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import image.Assets;
-
-public class MapGenerator {
-	//Imagen auxiliar para restar color para forma de isla
-	private BufferedImage substract;
-	//Imagen que se creara usando OpenSimplexNoise
-	private BufferedImage image;
+//Super clase de los generadores de nivel
+public class GeneradorDeMapa {
+		
 	//Algoritmo libre de uso usado de Internet para crear imagenes con ruido
 	private static OpenSimplexNoise simplexNoise;
-	private int waterLevel = 180; //Entre mas bajo este, menos agua tendra (Rango 0 - 255)
+	//Imagen auxiliar para restar color para forma de isla
+	private BufferedImage substract;
+	private BufferedImage image;
+	private int waterLevel;
 	private int TileImageWidth = 800/8, TileImageHeight = 800/8;
 	
 	private GameMap map;
-	public MapGenerator(GameMap map) throws IOException
-	{	
+	
+	private int probabilidadDecoracion;
+	
+	private BufferedImage decoracionImagen;
+	
+	private int xImagenOffset = 0, yImagenOffset = 0;
+	
+	public GeneradorDeMapa(GameMap map,int tipoDeNivel)
+	{
+		this.map = map;
 		try {
-			substract = ImageIO.read(MapGenerator.class.getResource("/substract.png"));
+			substract = ImageIO.read(Game.class.getResource("/substract.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
+		switch(tipoDeNivel)
+		{
 		
-		this.map = map;
+		
+		//Nivel tipo bosque
+		case 1:
+			waterLevel = 150;
+			probabilidadDecoracion = 15;
+			decoracionImagen = Assets.tree;
+			xImagenOffset = -35;
+			yImagenOffset = -60;
+			break;
+		case 2:
+			waterLevel = 80;
+			probabilidadDecoracion = 5;
+			decoracionImagen = Assets.rock;
+			xImagenOffset = 0;
+			yImagenOffset = 60;
+			break;
+		
+		case 3:
+			waterLevel = 240;
+			probabilidadDecoracion = 10;
+			decoracionImagen = Assets.cactus;
+			xImagenOffset = 0;
+			yImagenOffset = 0;
+			break;
+		case 4:
+			waterLevel = 240;
+			probabilidadDecoracion = 10;
+			decoracionImagen = Assets.snowTree;
+			xImagenOffset = -35;
+			yImagenOffset = - 50;
+			break;
+		}
 		
 		//Crear ruido con una semilla aleatoria
 		Random ran = new Random();
@@ -53,10 +94,37 @@ public class MapGenerator {
 			}
 		}
 		//Guardar imagen para pruebas
-		ImageIO.write(image, "png", new File("resultNoise.png"));
-		
+		try {
+			ImageIO.write(image, "png", new File("resultNoise.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+	//Generar objetos de decoracion
+	public void generarAdornos(Game main)
+	{
+		Random ran = new Random();
+		for(int x=0;x < 100 - 1;x++)
+		{
+			
+			for(int y=0;y < 100 - 1;y++)
+			{
+				
+				if(ran.nextInt(100) < probabilidadDecoracion)
+				{
+				if(!map.blocked(x, y))
+				{
+				Game.getHandler().agregarObjeto(new Decoracion(x*80 + xImagenOffset,y*80 + yImagenOffset,decoracionImagen,Game.getHandler(),main));
+				map.setBloqueado(x, y + 1);
+				map.setTipo(x, y+1);
+				}
+				}
+				
+			}
+		}
+
+	}
 	//Basandose en la imagen creada, poner bloques dependiendo del color que se creo del ruido
 	public int[][] placeTile()
 	{	
@@ -80,31 +148,6 @@ public class MapGenerator {
 		}
 		return mat;
 	}
-	
-	
-	public void generateTrees(Game main)
-	{
-		Random ran = new Random();
-		for(int x=0;x < 100 - 1;x++)
-		{
-			
-			for(int y=0;y < 100 - 1;y++)
-			{
-				
-				if(ran.nextInt(100) < 15)
-				{
-				if(!map.blocked(x, y))
-				{
-				Game.getHandler().agregarObjeto(new Tree(x*80,y*80,Assets.tree,Game.getHandler(),main));
-				map.setBloqueado(x, y + 1);
-				map.setTipo(x, y+1);
-				}
-				}
-				
-			}
-		}
-
-	}
 	public static double sumOctave(double iterations,double x,double y,double persistence,double scale,double low,double high)
 	{
 		double maxAmp = 0;
@@ -124,5 +167,6 @@ public class MapGenerator {
 		newNoise = newNoise * (high-low)/2 + (high + low) / 2;
 		return newNoise;
 	}
+
 
 }
