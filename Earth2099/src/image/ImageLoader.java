@@ -1,6 +1,5 @@
 package image;
 
-
 // Carga las librerías que se van a utilizar
 import java.awt.image.BufferedImage;
 import java.io.IOException;

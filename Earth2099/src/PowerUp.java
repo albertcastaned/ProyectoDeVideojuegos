@@ -1,5 +1,5 @@
 import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 
 //Clase entidad que cambiara atributos al personaje, se generaran al azar por el escenario
 public abstract class PowerUp extends Entidad {
@@ -8,7 +8,11 @@ public abstract class PowerUp extends Entidad {
 	protected volatile int duracion;
   protected volatile int counter;
 	
-
+	public PowerUp() {
+		super();
+		this.duracion = 20;
+    this.counter = 0;
+	}
 	
 	public PowerUp(int posX, int posY, int ancho, int altura, String nombre, Handler handler,Game main) {
 		super(posX,posY,ancho,altura,nombre,handler,main);
@@ -20,7 +24,7 @@ public abstract class PowerUp extends Entidad {
 	
 
 	//Dibujar
-	public void render(Graphics2D g) {
+	public void render(Graphics g) {
 		g.setColor(Color.CYAN);
 		g.fillOval(x, y, ancho, altura);
 	}

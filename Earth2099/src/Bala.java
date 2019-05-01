@@ -1,23 +1,19 @@
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
+import java.awt.Graphics;
 import java.util.ListIterator;
-
-import image.Assets;
 
 //Clase bala que se movera a velocidad constante en una direccion hasta chocar con algun solido o fuera del escenario
 public class Bala extends Entidad{
 
-
-	protected static BufferedImage img = Assets.bala;
-	public Bala(int x, int y, int mousePosX, int mousePosY, float angulo, Handler handler,Game main)
+	//Tamaño de la bala
+	protected int tamanio;
+		
+	public Bala(int x, int y, int mousePosX, int mousePosY, int tamanio,Handler handler,Game main)
 	{
-	
-		super(x,y,img.getWidth(),img.getHeight(),"Bala",handler,main);
+		
+		super(x,y,tamanio,tamanio,"Bala",handler,main);
 
+		this.tamanio = tamanio;
 		
 		//Obtener velocidad x y velocidad y utilizando la hipotenusa respecto a ellas
 		float dirX = mousePosX - x;
@@ -27,27 +23,14 @@ public class Bala extends Entidad{
 		velX = (int) (30 * dirX/dirLength);
 		velY = (int) (30 * dirY/dirLength);
 
-		img = Assets.bala;
-		float finalAngulo = (float) Math.toRadians(angulo);
-		AffineTransform tx = new AffineTransform();
-		tx.rotate(finalAngulo,img.getWidth()/2,img.getHeight()/2);
 		
-		AffineTransformOp op = new AffineTransformOp(tx,AffineTransformOp.TYPE_BILINEAR);
-		
-		img = op.filter(img, null);
 	}
 	
-	public float getAngulo(Point destino) {
-	    float angulo = (float) Math.toDegrees(Math.atan2(destino.y - 500, destino.x - 500));
-
-	    if(angulo < 0)
-	    	angulo += 360;
-	    return angulo;
-	}
+	
 
 	
 	//Metodo actualizar que se llama a seguido
-	public void actualizar(){
+	public synchronized void actualizar(){
 		
 		//Checar si esta colisionando con alguna entidad
 		checarColision();
@@ -66,13 +49,17 @@ public class Bala extends Entidad{
 			Entidad aux = iterator.next();
 			
 			//Colision con un Bloque solido
-			if (aux instanceof AguaColision)
+			if (aux instanceof BloqueColision)
 			{
-				if (chocandoEn(x, y, aux))
+				if (chocandoEn(x+velX, y, aux))
 				{
 					handler.quitarObjeto(this);
 				}
+				if (chocandoEn(x, y+velY, aux))
+				{
+					handler.quitarObjeto(this);
 
+				}
 
 			}
 			//Colision con un Enemigo
@@ -80,22 +67,8 @@ public class Bala extends Entidad{
 			{
 				if (chocandoEn(x, y, aux))
 				{
-					
-					((TemplateEnemy) aux).setVida(((TemplateEnemy) aux).getVida() - 20);
-					((TemplateEnemy) aux).setKnockbackX(velX / 2);
-					((TemplateEnemy) aux).setKnockbackY(velY / 2);
-					((TemplateEnemy) aux).activateTimer();
-					if(((TemplateEnemy) aux).getVida() <= 0)
-					{
-						//Si es esqueleto parar el timer de tirar hueso
-						if(aux instanceof Esqueleto)
-							((Esqueleto) aux).stopTimer();
-						handler.quitarObjeto(aux);
-					}
-					
-					
+					((TemplateEnemy) aux).setVida(((TemplateEnemy) aux).getVida());
 					handler.quitarObjeto(this);
-					break;
 				}
 
 			}
@@ -105,17 +78,10 @@ public class Bala extends Entidad{
 	}
 	
 	//Dibujar la bala
-	public  void render(Graphics2D g2d)
+	public synchronized void render(Graphics g)
 	{
-		g2d.drawImage(img,x,y,null);
-		if(Game.getDebug())
-		{
-		g2d.setColor(Color.RED);
-		g2d.drawRect(x, y, ancho, altura);
-		}
-		
+		g.setColor(Color.BLUE);
+		g.fillOval((int)x, (int)y, tamanio, tamanio);
 	}
-
-
 
 }

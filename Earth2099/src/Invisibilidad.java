@@ -1,5 +1,7 @@
 public class Invisibilidad extends PowerUp{
-
+  public Invisibilidad(){
+    super();
+  }
 	public Invisibilidad(int posX, int posY, int ancho, int altura, String nombre, Handler handler,Game main) {
 		super(posX,posY,ancho,altura,nombre,handler,main);
     this.duracion = 600; //CYCLES

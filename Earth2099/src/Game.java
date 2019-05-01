@@ -3,7 +3,6 @@ import java.awt.*;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferStrategy;
@@ -16,11 +15,8 @@ public class Game extends Canvas implements Runnable{
 	
 	private static final long serialVersionUID = 1L;
 	//Iniciar dimensiones de ventana
-	private static int VentanaAncho;
-	private static int VentanaAltura;
+	private static final int VentanaAncho = 800, VentanaAltura = VentanaAncho;
 	
-	
-	private static boolean DEBUG = false;
 	//Variables para Thread
 	private Thread thread;
 	private boolean corriendo;
@@ -45,20 +41,13 @@ public class Game extends Canvas implements Runnable{
 	//Objeto Handler para guardar en lista entidades que interactuan con otros
 	private static Handler handler;
 	
-	//Tipo de nivel que se generara (1 - Bosque, 2 - Volcan, 3 - Desierto, 4 - Tundra)
-	private int tipoDeNivel;
-
+	
+	
 	//Iniciar juego
-	public static void main(String args[])
-	{
-		new Game();
-	}
 	public Game()
 	{
 		corriendo = false;
-		new MiCanvas("Earth 2099", this);
-		VentanaAncho = MiCanvas.getWindowWidth();
-		VentanaAltura = MiCanvas.getWindowHeight();
+		new MiCanvas(VentanaAncho,VentanaAltura, "Earth 2099", this);
 	}
 	
 	//Inicar el thread
@@ -84,42 +73,29 @@ public class Game extends Canvas implements Runnable{
 		camara = new Camara(0,0);
 		handler = new Handler();
 		
-
-		personaje = new Personaje(4000,4000,30,60,"Personaje",handler,this);
-		handler.agregarObjeto(personaje);
-		
-		//Crear un tipo de nivel al azar
-		Random tipoRandom = new Random();
-		tipoDeNivel = tipoRandom.nextInt(4) + 1;
-		
-		
 		//Crear mapa que tendra los tiles
-		map = new GameMap(this,tipoDeNivel);
-
+		map = new GameMap(this);
+		personaje = new Personaje(4000,4000,30,30,"Personaje",handler,this);
 		
 		//Crear algoritmo de busqueda
 		a = new AStarSearch(map);
-
+		handler.agregarObjeto(personaje);
 		
-
-		
-		
-
 		//Crear colisiones basadas en donde hay tiles bloqueados
 		for (int x=0;x<map.getWidthInTiles();x++) {
 			for (int y=0;y<map.getHeightInTiles();y++) {
 				if(map.blocked(x, y))
 				{
-					if(map.getTipo(x,y) == 0)
-						handler.agregarObjeto(new AguaColision(80*x,80*y,80,80,handler,this));
-					else
-						handler.agregarObjeto(new BloqueColision(80*x,80*y,80,80,handler,this));
-
+					handler.agregarObjeto(new BloqueColision(80*x,80*y,80,80,handler,this));
 				}
 
 			}
 		}
-		
+
+		handler.agregarObjeto(new Zombi(4333,4000,80,80,"Zombi 1",100,5,8,handler,this));
+		handler.agregarObjeto(new Zombi(4333,4000,80,80,"Zombi 2",100,5,8,handler,this));
+		handler.agregarObjeto(new Fantasma(4333,4000,80,80,"Fantasma 1",100,5,2,handler,this));
+		handler.agregarObjeto(new Invisibilidad(4000,4000,80,80,"Invisibilidad",handler,this));
 		
 	
 		//Agregar KeyListener al jugador
@@ -189,23 +165,6 @@ public class Game extends Canvas implements Runnable{
 
 			
 		});
-		
-		this.addMouseMotionListener(new MouseMotionListener() {
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				// TODO Auto-generated method stub
-				personaje.cambiarPosicionMouse(e.getX(),e.getY());
-			}
-			
-			
-		});
 
 
 	}
@@ -221,7 +180,6 @@ public class Game extends Canvas implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	
 
 	//Llamar los metodos actualizar y render 60 veces por segundo y mantener el loop constante.
 	@Override
@@ -266,8 +224,13 @@ public class Game extends Canvas implements Runnable{
 	//Llamar los metodos actualizar de cada Entidad
 	private synchronized void actualizar()
 	{	
-
-		camara.actualizar(personaje);
+		for(int i = 0; i < handler.listaEntidades.size();i++)
+		{
+			if(handler.listaEntidades.get(i) instanceof Personaje)
+			{
+				camara.actualizar((Personaje) handler.listaEntidades.get(i));
+			}
+		}
 		//Se llamara aqui metodo actualizar de cada entidad en el Handler
 		handler.actualizar();
 	}
@@ -276,7 +239,7 @@ public class Game extends Canvas implements Runnable{
 		//Crear u obtener BufferStrategy
         bs = getBufferStrategy();
         if(bs == null){
-            createBufferStrategy(2);
+            createBufferStrategy(3);
             return;
         }
         try {
@@ -297,55 +260,17 @@ public class Game extends Canvas implements Runnable{
         	////////////////////////////////////////////////////////////////////////////
         	//Se llamara aqui metodo render de cada entidad
         	//Dibujar los tiles
-   	
-        	
-    		for (int x=(int) -camara.getxOffset() / 80;x < (int)(-camara.getxOffset() + VentanaAncho + 80) / 80;x++) {
-    			for (int y=(int) -camara.getyOffset() / 80;y < (int)(-camara.getyOffset() + VentanaAltura + 80) / 80;y++) {
-    				
-    				//Fuera del nivel
+    		for (int x=(int) -camara.getxOffset() / 80;x < (-camara.getxOffset() + VentanaAncho) / 80;x++) {
+    			for (int y=(int) -camara.getyOffset() / 80;y < (-camara.getyOffset() + VentanaAltura) / 80;y++) {
 	    			if(x > 99 || x < 0 || y > 99 || y < 0)
-	    			{
 	    				continue;
-	    			}
-	    			
-	    			//Dibujar dependiendo del tipo de tile y el tipo de nivel actual
     				if(map.getTipo(x, y) == 1)
     				{
-    					switch(tipoDeNivel)
-    					{
-    						case 1:
-    							g2d.drawImage(Assets.waterTile,x*80,y*80,null);
-    							break;
-    						case 2:
-    							g2d.drawImage(Assets.lavaTile,x*80,y*80,null);
-    							break;
-    						case 3:
-    							g2d.drawImage(Assets.waterTile,x*80,y*80,null);
-    							break;
-    						case 4:
-    							g2d.drawImage(Assets.iceTile,x*80,y*80,null);
-    							break;
-    					}
+    					g2d.drawImage(Assets.waterTile,x*80,y*80,null);
     				}else if(map.getTipo(x, y) == 0){
-    					switch(tipoDeNivel)
-    					{
-    						case 1:
-    							g2d.drawImage(Assets.grassTile,x*80,y*80,null);
-    							break;
-    						case 2:
-    							g2d.drawImage(Assets.rockTile,x*80,y*80,null);
-    							break;
-    						case 3:
-    							g2d.drawImage(Assets.desertTile,x*80,y*80,null);
-    							break;
-    						case 4:
-    							g2d.drawImage(Assets.snowTile,x*80,y*80,null);
-    							break;
-    					}
+    					g2d.drawImage(Assets.grassTile,x*80,y*80,null);
 
     				}
-    				
-
     				
 
     			}
@@ -366,11 +291,8 @@ public class Game extends Canvas implements Runnable{
         	g.drawString("W A S D para moverse", camPosX + 20, camPosY +  220);
         	g.drawString("1 , 2 , 3 para cambiar de arma", camPosX + 20, camPosY + 240);
         	g.drawString("R para recargar", camPosX + 20, camPosY + 260);
-        	g.drawString("P para activar modo DEBUG", camPosX + 20, camPosY + 280);
-        	g.drawString("Click para disparar a direccion de mouse", camPosX + 20, camPosY + 300);
-    		
-    		
-    		
+        	g.drawString("Click para disparar a direccion de mouse", camPosX + 20, camPosY + 280);
+        	
         	////////////////////////////////////////////////////////////////////////////
         	g2d.translate(-camara.getxOffset(), -camara.getyOffset()); //TERMINAR CAMARA
 
@@ -420,7 +342,7 @@ public class Game extends Canvas implements Runnable{
 	
 	
 	//Calcular camino al jugador
-	public Path obtenerCamino(int x, int y,int attackPoint)
+	public Path obtenerCamino(int x, int y)
 	{
 		
 		//Nueva busqueda
@@ -436,10 +358,14 @@ public class Game extends Canvas implements Runnable{
 			return path;
 		}
 		
+		//Mientras no se encuentre un camino valido
+		while(path==null)
+		{
 			
 		//Crear una posicion basada en la del jugador al azar
 		//Esto se usa para que el enemigo utilice diferentes caminos y ataque desde diferentes lados
-
+		Random rand = new Random();
+		int attackPoint = rand.nextInt(7);
 		int ex = 0, ye = 0;
 		switch(attackPoint)
 		{
@@ -494,7 +420,7 @@ public class Game extends Canvas implements Runnable{
 		//Calcular camino de posicion del jugador pasado hacia la posicion creada
 		path = a.findPath(getTilePosX(x),getTilePosY(y),ex,ye);
 		
-
+		}
 		//Regresar camino una vez que sea valido
 		return path;
 
@@ -515,22 +441,10 @@ public class Game extends Canvas implements Runnable{
 		return personaje.getY();
 	}
 	
-
-	
-	//Obtener handler
 	public static Handler getHandler()
 	{
 		return handler;
 	}
-	
-	public static void setDebug()
-	{
-		DEBUG = !DEBUG;
-	}
-	
-	public static boolean getDebug()
-	{
-		return DEBUG;
-	}
+
 	
 }

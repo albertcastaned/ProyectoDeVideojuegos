@@ -51,7 +51,7 @@ public abstract class Arma {
 	}
 	
 	//Metodo abstracto que cambiara dependiendo del tipo de arma
-	public abstract void disparar(int x, int y, int mx, int my,float angulo);
+	public abstract void disparar(int x, int y, int mx, int my);
 	
 	
 	public String getNombre()

@@ -38,11 +38,7 @@ public class KeyInput implements KeyListener{
         	personaje.asignarArma(2);
         
         if(key == KeyEvent.VK_R)
-        	personaje.recargar();
-        
-        if(key == KeyEvent.VK_P)
-        	Game.setDebug();
-        
+        	personaje.recargar(); 
         if(key == KeyEvent.VK_ESCAPE)
         	System.exit(0);
 	}

@@ -1,9 +1,6 @@
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
+import java.awt.Graphics;
+import java.util.ListIterator;
 
 //Templete de los tipos de enemigos que habra
 public abstract class TemplateEnemy extends Entidad{
@@ -12,49 +9,24 @@ public abstract class TemplateEnemy extends Entidad{
 	protected int vida;
 	//Daño que hacen
 	protected int dano;
-
+	
 	//Velocidad a la que el enemigo se mueve
 	protected int velocidad;
 	
 	//Arma que portan si es que lo hacen
 	private Arma arma;
-	protected boolean useArma = false;
-	protected int knockbackX = 0,knockbackY = 0;
-	protected Timer timerKnockback;
+	private boolean useArma;
+	
 
-	//Animacion
-	protected image.AnimationSprite imagen,imgArriba,imgAbajo,imgDerecha,imgIzquierda;
 	public TemplateEnemy(int x, int y,int ancho, int altura, String nombre, int vidaMax,int dano, int velocidad,Handler handler,Game main) {
 		super(x,y,ancho,altura,nombre,handler,main);
 		vida = vidaMax;
 		this.dano = dano;
 		this.velocidad = velocidad;
-		timerKnockback = new Timer(30,resetKnockback);
 
 	}
-	public void setKnockbackX(int a)
-	{
-		knockbackX = a;
-	}
-	public void setKnockbackY(int a)
-	{
-		knockbackY = a;
-	}
-	public void activateTimer()
-	{
-		timerKnockback.start();
-	}
-	//Timer
-    ActionListener resetKnockback = new ActionListener(){
+	
 
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			knockbackX = 0;
-			knockbackY = 0;
-			timerKnockback.stop();
-		}
-    };
 	public int getVida() {
 		return vida;
 	}
@@ -89,20 +61,52 @@ public abstract class TemplateEnemy extends Entidad{
 		this.useArma = useArma;
 	}
 
-	
-	
-	
-	public void render(Graphics2D g) {
+	@Override
+	public synchronized void render(Graphics g) {
 		if(enCamara())
 		{
-			imagen.render(g);
-			
-			if(Game.getDebug())
-			{
-				g.setColor(Color.RED);
-				g.drawRect(x, y, ancho, altura);
-			}
+		g.setColor(Color.RED);
+		g.fillOval((int)x,(int)y,ancho,altura);
 		}
+		
+	}
+	
+
+	public abstract void atacar(int x, int y);
+	
+	public abstract void disparar(int x, int y);
+	
+	public void checarColision()
+	{
+		//Obtener Entidades del Handler
+		ListIterator <Entidad> iterator = handler.listaEntidades.listIterator();
+		while (iterator.hasNext())
+		{
+			Entidad aux = iterator.next();
+			
+
+			//Colision con un Enemigo
+			if (aux instanceof Bala)
+			{
+				if (chocandoEn(x, y, aux))
+				{	
+
+
+					
+					//Si choca con bala eliminar bala y cambiar posicion de enemigo
+					velX = aux.getVelX();
+					velY = aux.getVelY();
+					handler.quitarObjeto(aux);
+					this.vida -= 5;
+					
+					if(this.vida == 0)
+						handler.quitarObjeto(this);
+				}
+
+			}
+
+		}
+		
 	}
 
 

@@ -5,8 +5,8 @@ public class Escopeta extends Arma {
 		
 	}
 
-	@Override
-	public void disparar(int x, int y, int mx, int my,float angulo) {
+	
+	public void disparar(int x, int y, int mx, int my) {
 
 		//Si ha pasado el tiempo para poder disparar y tiene balas
 		if(numBalas > 0 && getPuedeDisparar())
@@ -17,7 +17,7 @@ public class Escopeta extends Arma {
 		timer.start();
 		
 		//Crear tipo de bala de esta arma
-		Bala bal = new BalaOla(x,y,mx,my,angulo,handler,main);
+		Bala bal = new BalaOla(x,y,mx,my,danio,handler,main);
 		
 		//Agregar al handler
 		handler.agregarObjeto(bal);
@@ -28,6 +28,5 @@ public class Escopeta extends Arma {
 	
 		}
 	}
-
 
 }
