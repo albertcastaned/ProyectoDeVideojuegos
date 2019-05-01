@@ -16,7 +16,8 @@ public class Game extends Canvas implements Runnable{
 	
 	private static final long serialVersionUID = 1L;
 	//Iniciar dimensiones de ventana
-	private static final int VentanaAncho = 1000, VentanaAltura = 1000;
+	private static int VentanaAncho;
+	private static int VentanaAltura;
 	
 	//Variables para Thread
 	private Thread thread;
@@ -45,8 +46,6 @@ public class Game extends Canvas implements Runnable{
 	//Tipo de nivel que se generara (1 - Bosque, 2 - Volcan, 3 - Desierto, 4 - Tundra)
 	private int tipoDeNivel;
 
-	private MiCanvas canvas;
-	
 	//Iniciar juego
 	public static void main(String args[])
 	{
@@ -55,7 +54,9 @@ public class Game extends Canvas implements Runnable{
 	public Game()
 	{
 		corriendo = false;
-		canvas = new MiCanvas(VentanaAncho,VentanaAltura, "Earth 2099", this);
+		new MiCanvas("Earth 2099", this);
+		VentanaAncho = MiCanvas.getWindowWidth();
+		VentanaAltura = MiCanvas.getWindowHeight();
 	}
 	
 	//Inicar el thread
@@ -96,18 +97,9 @@ public class Game extends Canvas implements Runnable{
 		
 		//Crear algoritmo de busqueda
 		a = new AStarSearch(map);
-		handler.agregarObjeto(new Esqueleto(4080,4080,40,40,"Esqueleto",100,5,8,Game.getHandler(),this));
 
 		
-		//Crear una posicion para el enemigo mientras no este en un espacio bloqueado que no debe de estar
-		int enemigoPosX = 4330,enemigoPosY = 4000;
-		while(map.blocked(getTilePosX(enemigoPosX), getTilePosY(enemigoPosY)))
-		{
-			Random ran = new Random();
 
-			enemigoPosX = ran.nextInt(7920);
-			enemigoPosY = ran.nextInt(7920);
-		}
 		
 
 		
@@ -288,7 +280,8 @@ public class Game extends Canvas implements Runnable{
 		//Crear u obtener BufferStrategy
         bs = getBufferStrategy();
         if(bs == null){
-            createBufferStrategy(3);
+            createBufferStrategy(2
+            		);
             return;
         }
         try {
@@ -309,10 +302,16 @@ public class Game extends Canvas implements Runnable{
         	////////////////////////////////////////////////////////////////////////////
         	//Se llamara aqui metodo render de cada entidad
         	//Dibujar los tiles
-    		for (int x=(int) -camara.getxOffset() / 80;x < (-camara.getxOffset() + VentanaAncho) / 80;x++) {
-    			for (int y=(int) -camara.getyOffset() / 80;y < (-camara.getyOffset() + VentanaAltura) / 80;y++) {
+   	
+        	
+    		for (int x=(int) -camara.getxOffset() / 80;x < (int)(-camara.getxOffset() + VentanaAncho + 80) / 80;x++) {
+    			for (int y=(int) -camara.getyOffset() / 80;y < (int)(-camara.getyOffset() + VentanaAltura + 80) / 80;y++) {
+    				
+    				//Fuera del nivel
 	    			if(x > 99 || x < 0 || y > 99 || y < 0)
+	    			{
 	    				continue;
+	    			}
 	    			
 	    			//Dibujar dependiendo del tipo de tile y el tipo de nivel actual
     				if(map.getTipo(x, y) == 1)
@@ -520,6 +519,7 @@ public class Game extends Canvas implements Runnable{
 	
 
 	
+	//Obtener handler
 	public static Handler getHandler()
 	{
 		return handler;

@@ -1,25 +1,35 @@
 import java.util.Random;
 
+
+
+//Factory creadora de los power-ups
 public class PowerUpFactory extends Factory{
 
+	//Numero de power-ups actuales en el mapa para limitarlos
 	private static int countPowerUps = 0;
+	
+	//Referencia al main
 	private Game game;
 	public PowerUpFactory(int tiempo, int[][] map,Game game) {
 		super(tiempo, map);
 		this.game = game;
 	}
 
+	//Baja el numero de power-ups actuales en el mapa
 	public static void bajarCountPowerUps()
 	{
 		countPowerUps-=1;
 	}
+	
+	//Crea las instancias
 	@Override
 	public void crear() {
-		// TODO Auto-generated method stub
 		//Numero maximo de enemigos 30
 		if(countPowerUps >= 10)
 			return;
 
+		
+		//Posicion de la matriz actual
 		Random ran = new Random();
 		int x = ran.nextInt(99);
 		int y = ran.nextInt(99);

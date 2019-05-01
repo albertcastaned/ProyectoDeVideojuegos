@@ -1,4 +1,3 @@
-import java.awt.Graphics2D;
 
 //Enemigo que puede pasar por colisiones
 public class Fantasma extends TemplateEnemy{

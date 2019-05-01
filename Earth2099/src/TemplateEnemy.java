@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 //Templete de los tipos de enemigos que habra

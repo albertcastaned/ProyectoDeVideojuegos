@@ -182,8 +182,7 @@ public class Zombi extends TemplateEnemy{
 	public void render(Graphics2D g)
 	{
 		imagen.render(g);
-		g.setColor(Color.RED);
-		g.drawRect(x, y, ancho, altura);
+
 	}
 
 

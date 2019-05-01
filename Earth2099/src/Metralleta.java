@@ -18,7 +18,7 @@ public class Metralleta extends Arma{
 		timer.start();
 		
 		//Crear tipo de bala de esta arma
-		Bala bal = new BalaNormal(x,y,mx,my,danio,angulo,handler,main);
+		Bala bal = new BalaNormal(x,y,mx,my,angulo,handler,main);
 		
 		//Agregar al handler
 		handler.agregarObjeto(bal);

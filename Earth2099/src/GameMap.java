@@ -23,9 +23,19 @@ public class GameMap implements TiledBaseMap {
 		terrain = mapGenerator.placeTile();
 		tipo = mapGenerator.placeTile();
 		mapGenerator.generarAdornos(main);
-		new EnemyFactory(9000,terrain,main);
+		new EnemyFactory(3000,terrain,main);
 		new PowerUpFactory(5000,terrain,main);
 
+	}
+	
+	public void reset(Game main,int tipoDeNivel)
+	{
+		
+		mapGenerator = new GeneradorDeMapa(this,tipoDeNivel);
+		//Crear tiles del mapa copiando la matriz del map generator
+		terrain = mapGenerator.placeTile();
+		tipo = mapGenerator.placeTile();
+		mapGenerator.generarAdornos(main);
 	}
 
 

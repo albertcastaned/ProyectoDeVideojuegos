@@ -1,4 +1,3 @@
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 //Superclase que define a todos los objetos que pueden interactuar con otros y se pueden mover

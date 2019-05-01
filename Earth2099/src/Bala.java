@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
@@ -10,15 +11,13 @@ import image.Assets;
 //Clase bala que se movera a velocidad constante en una direccion hasta chocar con algun solido o fuera del escenario
 public class Bala extends Entidad{
 
-	//Tamaño de la bala
-	protected int tamanio;
-	protected BufferedImage img;
-	public Bala(int x, int y, int mousePosX, int mousePosY, int tamanio, float angulo, Handler handler,Game main)
-	{
-		
-		super(x,y,tamanio,tamanio,"Bala",handler,main);
 
-		this.tamanio = tamanio;
+	protected static BufferedImage img = Assets.bala;
+	public Bala(int x, int y, int mousePosX, int mousePosY, float angulo, Handler handler,Game main)
+	{
+	
+		super(x,y,img.getWidth(),img.getHeight(),"Bala",handler,main);
+
 		
 		//Obtener velocidad x y velocidad y utilizando la hipotenusa respecto a ellas
 		float dirX = mousePosX - x;
@@ -28,9 +27,8 @@ public class Bala extends Entidad{
 		velX = (int) (30 * dirX/dirLength);
 		velY = (int) (30 * dirY/dirLength);
 
-		System.out.println(angulo - 5);
-		float finalAngulo = (float) Math.toRadians(angulo - 5);
 		img = Assets.bala;
+		float finalAngulo = (float) Math.toRadians(angulo - 10);
 		AffineTransform tx = new AffineTransform();
 		tx.rotate(finalAngulo,img.getWidth()/2,img.getHeight()/2);
 		
@@ -106,6 +104,8 @@ public class Bala extends Entidad{
 	public  void render(Graphics2D g2d)
 	{
 		g2d.drawImage(img,x,y,null);
+		g2d.setColor(Color.RED);
+		g2d.drawRect(x, y, ancho, altura);
 		
 	}
 

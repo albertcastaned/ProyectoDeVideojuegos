@@ -13,21 +13,20 @@ import image.Assets;
 
 //Clase que el jugador controla
 public class Personaje extends Entidad{
-	//Sprites
-	private image.AnimationSprite imagen;
-	private image.AnimationSprite abajoAnimacion;
-	private image.AnimationSprite abajoDerechaAnimacion;
-	private image.AnimationSprite derechaAnimacion;
-	private image.AnimationSprite arribaDerechaAnimacion;
-	private image.AnimationSprite arribaAnimacion;
-	private image.AnimationSprite arribaIzquierdaAnimacion;
-	private image.AnimationSprite izquierdaAnimacion;
-	private image.AnimationSprite abajoIzquierdaAnimacion;
+	
+	//Sprites / Animaciones
+	private static image.AnimationSprite imagen,abajoAnimacion,abajoDerechaAnimacion,derechaAnimacion,
+	arribaDerechaAnimacion,arribaAnimacion,arribaIzquierdaAnimacion,izquierdaAnimacion,abajoIzquierdaAnimacion;
+
 	
 	private int imageOffsetX;
 	private int imageOffsetY;
-	private BufferedImage armaImagen;
 	
+	//Imagen actual de arma
+	private static BufferedImage armaImagen;
+	
+	
+	//Angulo del jugador al Mouse
 	private float angulo;
 
 	//Posicion del mouse
@@ -161,7 +160,7 @@ public class Personaje extends Entidad{
 		abajoIzquierdaAnimacion.setAnimSpd(10);
 		
 		imagen = abajoAnimacion;
-
+		
 	}
 	
 	//Timer
@@ -279,7 +278,7 @@ public class Personaje extends Entidad{
 		
 	}
 	public float getAngulo(Point destino) {
-	    float angulo = (float) Math.toDegrees(Math.atan2(destino.y - 500, destino.x - 500));
+	    float angulo = (float) Math.toDegrees(Math.atan2(destino.y - Game.getVentanaAltura()/2, destino.x - Game.getVentanaAncho()/2));
 
 	    if(angulo < 0)
 	    	angulo += 360;

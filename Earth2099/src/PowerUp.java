@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 //Clase entidad que cambiara atributos al personaje, se generaran al azar por el escenario

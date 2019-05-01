@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -91,7 +90,7 @@ public class Esqueleto extends TemplateEnemy {
 			destinoY = main.getJugadorY();
 			
 			//Agregar bala del enemigo al handler
-			handler.agregarObjeto(new BalaEnemigo(x,y,destinoX,destinoY,20,getAngulo(new Point(destinoX,destinoY)),handler,main));
+			handler.agregarObjeto(new BalaEnemigo(x,y,destinoX,destinoY,getAngulo(new Point(destinoX,destinoY)),handler,main));
 		}
     };
     
@@ -222,8 +221,6 @@ public class Esqueleto extends TemplateEnemy {
 	@Override
 	public void render(Graphics2D g) {
 		imagen.render(g);
-		g.setColor(Color.RED);
-		g.drawRect(x, y, ancho, altura);
 	}
 }
 
