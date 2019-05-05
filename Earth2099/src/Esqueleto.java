@@ -128,8 +128,11 @@ public class Esqueleto extends TemplateEnemy {
 					timerTirarHueso.stop();
 
 				}
-				else
-					pathIndex = 0;
+				else {
+					pathIndex = 1;
+					px = p.getStep(pathIndex).getX() * 80;
+					py = p.getStep(pathIndex).getY() * 80;
+				}
 
 				}
 

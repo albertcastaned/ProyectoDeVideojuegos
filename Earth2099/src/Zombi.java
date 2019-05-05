@@ -71,7 +71,7 @@ public class Zombi extends TemplateEnemy{
 		int distanciaAPuntoX = Math.abs(px - x);
 		int distanciaAPuntoY = Math.abs(py - y);
 		//Si la distancia es igual o menor a 8
-		if(8 >= (distanciaAPuntoX + distanciaAPuntoY))
+		if(16 >= distanciaAPuntoX + distanciaAPuntoY)
 		{
 			//Si esta al final de la lista del camino
 			if(pathIndex >= p.getLength() - 1)
@@ -88,12 +88,20 @@ public class Zombi extends TemplateEnemy{
 				}else {
 				//Sino crear un nuevo camino
 				p = main.obtenerCamino(x, y,attackPoint);
-				if(p==null)
-					siguiendo = false;
-				else
-					pathIndex = 0;
+					if(p==null)
+					{
+						siguiendo = false;
+					}
+					else {
+						pathIndex = 1;
+						px = p.getStep(pathIndex).getX() * 80;
+						py = p.getStep(pathIndex).getY() * 80;
+					}
 
 				}
+
+
+
 				
 
 			}else {

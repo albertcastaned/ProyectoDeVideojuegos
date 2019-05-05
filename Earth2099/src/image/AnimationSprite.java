@@ -1,5 +1,7 @@
 package image;
-import java.awt.Graphics;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 
 public class AnimationSprite {
 	
@@ -90,10 +92,12 @@ public class AnimationSprite {
 	
 	public void render(Graphics g)
 	{
+		BufferedImage img = sprite.get(imageIndex);
+
 			if(width!=0)
-			g.drawImage(sprite.get(imageIndex), sX,sY,width,height,null);
+			g.drawImage(img, sX,sY,width,height,null);
 			else
-			g.drawImage(sprite.get(imageIndex), sX,sY,null);
+			g.drawImage(img, sX,sY,null);
 
 	}
 	

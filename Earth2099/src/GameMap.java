@@ -23,8 +23,7 @@ public class GameMap implements TiledBaseMap {
 		terrain = mapGenerator.placeTile();
 		tipo = mapGenerator.placeTile();
 		mapGenerator.generarAdornos(main);
-		new EnemyFactory(3000,terrain,main);
-		new PowerUpFactory(5000,terrain,main);
+
 
 	}
 	
@@ -41,7 +40,10 @@ public class GameMap implements TiledBaseMap {
 
 	
 	
-
+	public int[][] getTerrainMat()
+	{
+		return terrain;
+	}
 	
 	//Limpiar tiles visitados
 	public void clearVisited() {

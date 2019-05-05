@@ -1,5 +1,8 @@
+import image.Assets;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 
@@ -30,6 +33,19 @@ public abstract class Arma {
 	
 	//Timer que cambia puedeDisparar en cierto tiempo determinado
 	protected Timer timer;
+
+	//Imagenes
+	protected BufferedImage armaAbajo;
+	protected BufferedImage armaArriba;
+	protected BufferedImage armaIzquierda;
+	protected BufferedImage armaDerecha;
+	protected BufferedImage armaIzquierdaAbajo;
+	protected BufferedImage armaIzquierdaArriba;
+	protected BufferedImage armaDerechaArriba;
+	protected BufferedImage armaDerechaAbajo;
+
+	protected BufferedImage actual;
+
 	
 	public Arma(String s,int d, int n, int m, int t,Handler handler,Game main)
 	{
@@ -43,6 +59,41 @@ public abstract class Arma {
 		this.main = main;
 		timer = new Timer(tiempoDisparar,timerPoderDisparar);
 
+	}
+	public void cambiarImagen(int id)
+	{
+		switch(id)
+		{
+			case 0:
+				actual = armaArriba;
+				break;
+			case 1:
+				actual = armaAbajo;
+				break;
+			case 2:
+				actual = armaDerecha;
+				break;
+			case 4:
+				actual = armaIzquierda;
+				break;
+			case 5:
+				actual = armaDerechaAbajo;
+				break;
+			case 6:
+				actual = armaDerechaArriba;
+				break;
+			case 7:
+				actual = armaIzquierdaAbajo;
+				break;
+			case 8:
+				actual = armaIzquierdaArriba;
+				break;
+		}
+	}
+
+	public BufferedImage obtenerImagen()
+	{
+		return actual;
 	}
 	//Obtener string formato numBalas/maxBalas
 	public String getBalas()
@@ -77,10 +128,8 @@ public abstract class Arma {
 	//Timer
     ActionListener timerPoderDisparar = new ActionListener(){
 
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
 			puedeDisparar = true;
 			timer.stop();
 		}

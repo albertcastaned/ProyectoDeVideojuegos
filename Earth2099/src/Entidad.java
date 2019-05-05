@@ -26,7 +26,9 @@ public abstract class Entidad {
 		this.main = main;
 	}
 
-	public int getAltura()
+
+
+    public int getAltura()
 	{
 		return altura;
 	}

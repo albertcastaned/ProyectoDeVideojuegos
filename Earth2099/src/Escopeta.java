@@ -1,8 +1,20 @@
+import image.Assets;
+
+import java.util.Random;
+
 //Subclase que dispara las BalaOla
 public class Escopeta extends Arma {
 	public Escopeta(String s, int d, int n, int m, int t, Handler handler,Game main) {
 		super(s, d, n, m, t, handler,main);
-		
+		armaAbajo = Assets.pArmaAbajoEsc;
+		armaArriba = Assets.pArmaArribaEsc;
+		armaDerecha = Assets.pArmaDerechaEsc;
+		armaIzquierda = Assets.pArmaIzquierdaEsc;
+		armaDerechaAbajo = Assets.pArmaADEsc;
+		armaDerechaArriba = Assets.pArmaArDEsc;
+		armaIzquierdaAbajo = Assets.pArmaAIEsc;
+		armaIzquierdaArriba = Assets.pArmaArIEsc;
+		actual = armaAbajo;
 	}
 
 	@Override
@@ -15,15 +27,15 @@ public class Escopeta extends Arma {
 		//Empezar timer
 		puedeDisparar = false;
 		timer.start();
-		
-		//Crear tipo de bala de esta arma
-		Bala bal = new BalaOla(x,y,mx,my,angulo,handler,main);
-		
+
 		//Agregar al handler
-		handler.agregarObjeto(bal);
-		
+		Random ran = new Random();
+		handler.agregarObjeto(new BalaEscopeta(x,y,mx + ran.nextInt(160) + 30,my + ran.nextInt(160) + 30,angulo,handler,main));
+		handler.agregarObjeto(new BalaEscopeta(x,y,mx - ran.nextInt(160) + 30,my - ran.nextInt(160) + 30,angulo,handler,main));
+		handler.agregarObjeto(new BalaEscopeta(x,y,mx,my,angulo,handler,main));
+
 		//Quitar una bala al arma
-		numBalas--;
+		numBalas-=3;
 		
 	
 		}

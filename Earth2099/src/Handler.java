@@ -55,6 +55,8 @@ public class Handler {
 		}
 	}
 	
+
+	
 	//Agregar entidad a la lista
 	public void agregarObjeto(Entidad obj)
 	{

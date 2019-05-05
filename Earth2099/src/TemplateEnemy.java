@@ -96,7 +96,14 @@ public abstract class TemplateEnemy extends Entidad{
 		if(enCamara())
 		{
 			imagen.render(g);
-			
+			if(vida<100) {
+				g.setColor(Color.black);
+				g.fillRect(x - 34, imagen.getY() - 12, 104, 14);
+				g.setColor(Color.red);
+				g.fillRect(x - 32, imagen.getY() - 10, 100, 10);
+				g.setColor(Color.green);
+				g.fillRect(x - 32, imagen.getY() - 10, vida, 10);
+			}
 			if(Game.getDebug())
 			{
 				g.setColor(Color.RED);

@@ -30,29 +30,7 @@ public class BalaEnemigo extends Bala{
 	
 	//Cambiar colision para que detecte al jugador y no al enemigo
 	@Override
-	public void checarColision() {
-		//Obtener Entidades del Handler
-		ListIterator <Entidad> iterator = handler.listaEntidades.listIterator();
-		while (iterator.hasNext())
-		{
-			Entidad aux = iterator.next();
-			
-
-			
-			if(aux instanceof Personaje)
-			{
-				if (chocandoEn(x, y, aux))
-				{
-				((Personaje) aux).setVida(((Personaje) aux).getVida() - 10);
-				handler.quitarObjeto(this);
-				}
-				break;
-			}
-
-
-		}
-		
-	}
+	public void checarColision() { }
 	
 	
 	
@@ -75,9 +53,15 @@ public class BalaEnemigo extends Bala{
 	@Override
 	public  void render(Graphics2D g2d)
 	{
-		imagen.render(g2d);
-		g2d.setColor(Color.RED);
-		g2d.drawRect(x, y, ancho, altura);
+		if(enCamara())
+		{
+			imagen.render(g2d);
+			if(Game.getDebug())
+			{
+				g2d.setColor(Color.RED);
+				g2d.drawRect(x, y, ancho, altura);
+			}
+		}
 		
 	}
 
