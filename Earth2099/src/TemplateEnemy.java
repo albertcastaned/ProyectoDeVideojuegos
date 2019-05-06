@@ -63,34 +63,6 @@ public abstract class TemplateEnemy extends Entidad{
 		this.vida = vida;
 
 	}
-
-	public int getDano() {
-		return dano;
-	}
-
-	public void setDano(int dano) {
-		this.dano = dano;
-	}
-
-	public Arma getArma() {
-		return arma;
-	}
-
-	public void setArma(Arma arma) {
-		this.arma = arma;
-	}
-
-	
-	public boolean isUseArma() {
-		return useArma;
-	}
-
-	public void setUseArma(boolean useArma) {
-		this.useArma = useArma;
-	}
-
-	
-	
 	
 	public void render(Graphics2D g) {
 		if(enCamara())

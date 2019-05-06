@@ -48,7 +48,6 @@ public class KeyInput implements KeyListener{
 			personaje.agarrarArma();
         if(key == KeyEvent.VK_ESCAPE)
 			System.exit(0);
-
 	}
 	
 	public void cambiarPersonaje(Personaje p)
@@ -58,7 +57,6 @@ public class KeyInput implements KeyListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 		 int key = e.getKeyCode();
 		 if (key == KeyEvent.VK_W) 
              personaje.setArriba(false);
@@ -69,13 +67,8 @@ public class KeyInput implements KeyListener{
          if (key == KeyEvent.VK_A)
         	 personaje.setIzquierda(false);
 
-         
          if (key == KeyEvent.VK_D)
         	 personaje.setDerecha(false);
-
-             
-
-
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {

@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ListIterator;
+import java.util.Random;
 
 import javax.swing.Timer;
 
@@ -59,6 +60,8 @@ public class Personaje extends Entidad{
 	private boolean puedeEsquivar = true;
 	private boolean puedeVolverAEsquivar = true;
 
+	//Contador de enemigos muertos
+
 	public Personaje(int x, int y, int ancho, int altura, String nombre, Handler handler,Game main) {
 		super(x,y,ancho,altura,nombre,handler,main);
 		vida = HUD.getVida();
@@ -68,9 +71,9 @@ public class Personaje extends Entidad{
 		posicionMouse.x = x;
 		posicionMouse.y = y;
 		//Agregar armas
-		armas = new Arma[3];
-		armas[0] = new Lanzallamas("Metralleta",10,60,60,700,handler,main);
-		armas[1] = new LaserArma("Laser",30,20,20,500,handler,main);
+		armas = new Arma[2];
+		armas[0] = HUD.getArma1();
+		armas[1] = HUD.getArma2();
 
 		indexArma = 0;
 		puntuacion = 0;
@@ -161,25 +164,19 @@ public class Personaje extends Entidad{
 	
 	//Timer
     ActionListener timerPoderDisparar = new ActionListener() {
-
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
 			puedeSerLastimado = true;
 			puedeSerLastimadoTimer.stop();
 		}
 	};
 	//Timer
 	ActionListener esquivandoTimer = new ActionListener(){
-
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			puedeVolverAEsquivar = false;
 			puedeEsquivar = true;
 			puedeEsquivarTimer.start();
-			imagen.setAnimSpd(10);
 			esquivando.stop();
 
 		}
@@ -187,12 +184,10 @@ public class Personaje extends Entidad{
 
 	//Timer
 	ActionListener volverAEsquivarListener = new ActionListener(){
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			puedeVolverAEsquivar = true;
 			puedeEsquivarTimer.stop();
-
 		}
 	};
     
@@ -237,7 +232,7 @@ public class Personaje extends Entidad{
 		if(!puedeEsquivar ||(velX == 0 && velY == 0) || !puedeVolverAEsquivar)
 			return;
 		puedeEsquivar = false;
-		imagen.setAnimSpd(0);
+
 
 		velX = (int)(velX * 1.8);
 		velY = (int)(velY * 1.8);
@@ -265,16 +260,20 @@ public class Personaje extends Entidad{
 //Cambiar posicion de arma del arreglo entre 1 y 3, se usa en el scroll del mouse
 	public void cambiarArma(int num)
 	{
-		if(indexArma + num >= 0 && indexArma + num < armasActuales)
-			indexArma  += num;
+		if(indexArma + num >= 0 && indexArma + num < armasActuales) {
+			indexArma += num;
+			HUD.setIndex(indexArma);
+		}
 	}
 	
 	//Asignar una posicion del arreglo de armas, se usa en las teclas 1,2,y 3
 	public void asignarArma(int num)
 	{
 
-		if(num < armasActuales && num >= 0)
+		if(num < armasActuales && num >= 0) {
 			indexArma = num;
+			HUD.setIndex(indexArma);
+		}
 	}
 
 	
@@ -305,6 +304,7 @@ public class Personaje extends Entidad{
 	//Actualizar
 	@Override
 	public void actualizar() {
+		//Si ha matado mas de 30 enemigos
 		//Asignar direccion dependiendo de las teclas
 		if (puedeEsquivar) {
 			asignarDireccion();
@@ -319,6 +319,16 @@ public class Personaje extends Entidad{
 			{
 				puedeEsquivar = true;
 				puedeEsquivarTimer.stop();
+			}else{
+				Random ran = new Random();
+				if(ran.nextInt(100) < 50) {
+					int aux = ran.nextInt(40);
+					int aux2 = ran.nextInt(40);
+					int aux3 = ran.nextInt(2) == 0 ? ran.nextInt(30) : -ran.nextInt(30);
+					int aux4 = ran.nextInt(2) == 0 ? ran.nextInt(30) : -ran.nextInt(40);
+					handler.agregarObjeto(new SlideEffect(x + aux3, y + aux4, 5 + aux, 5 + aux2, "Effecto", handler, main));
+				}
+
 			}
 		}
 		angulo = getAngulo(posicionMouse);
@@ -415,19 +425,49 @@ public class Personaje extends Entidad{
 				if (armasActuales < 3 && chocandoEn(x, y, aux)) {
 					switch (((ArmaMapa) aux).getArma()) {
 						case "Metralleta":
-							armas[indexArma] = new Metralleta("Metralleta", 50, 60, 60, 100, handler, main);
+							armas[indexArma] = new Metralleta("Metralleta", 50, 60, 60, 100, main);
+							if(indexArma==0)
+							{
+								HUD.setArma1(new Metralleta("Metralleta", 50, 60, 60, 100, main));
+							}else{
+								HUD.setArma2(new Metralleta("Metralleta", 50, 60, 60, 100, main));
+							}
 							break;
 						case "Escopeta":
-							armas[indexArma] = new Escopeta("Escopeta", 10, 40, 40, 1000, handler, main);
+							armas[indexArma] = new Escopeta("Escopeta", 10, 40, 40, 1000, main);
+							if(indexArma==0)
+							{
+								HUD.setArma1(new Escopeta("Escopeta", 10, 40, 40, 1000, main));
+							}else{
+								HUD.setArma2(new Escopeta("Escopeta", 10, 40, 40, 1000, main));
+							}
 							break;
 						case "Laser":
-							armas[indexArma] = new LaserArma("Laser", 30, 20, 20, 500, handler, main);
+							armas[indexArma] = new LaserArma("Laser", 30, 20, 20, 500, main);
+							if(indexArma==0)
+							{
+								HUD.setArma1( new LaserArma("Laser", 30, 20, 20, 500, main));
+							}else{
+								HUD.setArma2( new LaserArma("Laser", 30, 20, 20, 500, main));
+							}
 							break;
 						case "Wavy":
-							armas[indexArma] = new WavyArma("Wavy", 50, 30, 30, 300, handler, main);
+							armas[indexArma] = new WavyArma("Wavy", 50, 30, 30, 300, main);
+							if(indexArma==0)
+							{
+								HUD.setArma1(  new WavyArma("Wavy", 50, 30, 30, 300, main));
+							}else{
+								HUD.setArma2(  new WavyArma("Wavy", 50, 30, 30, 300, main));
+							}
 							break;
 						case "Lanzallamas":
-							armas[indexArma] = new Lanzallamas("Lanzallamas",120,120,120,700,handler,main);
+							armas[indexArma] = new Lanzallamas("Lanzallamas",120,120,120,700,main);
+							if(indexArma==0)
+							{
+								HUD.setArma1(new Lanzallamas("Lanzallamas",120,120,120,700,main));
+							}else{
+								HUD.setArma2(new Lanzallamas("Lanzallamas",120,120,120,700,main));
+							}
 							break;
 
 					}
@@ -486,8 +526,33 @@ public class Personaje extends Entidad{
 			{
 
 				//No hacer daño cuando esta esquivando
-				if(!puedeEsquivar || powerup instanceof Invisibilidad)
+				if(powerup instanceof Invisibilidad)
 					continue;
+				if(!puedeEsquivar)
+				{
+					if(chocandoEn(x,y,aux)) {
+
+						((TemplateEnemy) aux).setVida(((TemplateEnemy) aux).getVida() - 5);
+						handler.agregarObjeto(new TextoFlotante(aux.getX(), aux.getY(), 30, 30, "dmg", "-5", 1, handler, main));
+						if(((TemplateEnemy) aux).getVida() <= 0)
+						{
+							//Si es esqueleto parar el timer de tirar hueso
+							if(aux instanceof Esqueleto)
+								((Esqueleto) aux).stopTimer();
+							if(aux instanceof EsqueletoLider)
+								((EsqueletoLider) aux).stopTimer();
+							Random ran = new Random();
+							int auxNum = ran.nextInt(30)+15;
+
+							handler.agregarObjeto(new TextoFlotante(x,y,30,30,"dmg","+" + auxNum,3,handler,main));
+							HUD.sumarPuntos(auxNum);
+							handler.quitarObjeto(aux);
+							Game.bajarCountFactoryEnemigo();
+							Game.sumarMuerto();
+						}
+
+					}
+				}
 
 
 				if(puedeSerLastimado && chocandoEn(x,y,aux))
@@ -564,6 +629,13 @@ public class Personaje extends Entidad{
 			g.setColor(new Color(129, 241, 116, 90));
 			g.fillOval(x- 40,y - 40,altura+50,altura+50);
 		}
+		if(!puedeEsquivar)
+		{
+			g.setColor(new Color(142,195,255, 90));
+			g.fillOval(x- 40,y - 40,altura+50,altura+50);
+
+		}
+
 
 
 		g.drawImage(Assets.cursor,posicionMouse.x + camPosX - 20,posicionMouse.y + camPosY - 20,null);
@@ -574,6 +646,7 @@ public class Personaje extends Entidad{
 		}
     	
 	}
+
 
 
 	

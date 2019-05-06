@@ -93,6 +93,8 @@ public class BalaFuego extends Bala{
                         HUD.sumarPuntos(auxNum);
                         handler.quitarObjeto(aux);
                         Game.bajarCountFactoryEnemigo();
+                        Game.sumarMuerto();
+
                     }
 
 

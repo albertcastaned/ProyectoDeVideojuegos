@@ -2,9 +2,9 @@ import image.Assets;
 
 public class LaserArma extends Arma{
 
-    public LaserArma(String s, int d, int n, int m, int t, Handler handler,Game main)
+    public LaserArma(String s, int d, int n, int m, int t,Game main)
     {
-        super(s, d, n, m, t, handler,main);
+        super(s, d, n, m, t,main);
         armaAbajo = Assets.pArmaAbajoLaser;
         armaArriba = Assets.pArmaArribaLaser;
         armaDerecha = Assets.pArmaDerechaLaser;

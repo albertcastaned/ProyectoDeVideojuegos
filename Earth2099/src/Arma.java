@@ -29,7 +29,7 @@ public abstract class Arma {
 	protected boolean puedeDisparar;
 	
 	//Referencia al Handler
-	protected Handler handler;
+	protected static Handler handler;
 	
 	//Timer que cambia puedeDisparar en cierto tiempo determinado
 	protected Timer timer;
@@ -47,19 +47,24 @@ public abstract class Arma {
 	protected BufferedImage actual;
 
 	
-	public Arma(String s,int d, int n, int m, int t,Handler handler,Game main)
+	public Arma(String s,int d, int n, int m, int t,Game main)
 	{
 		nombre = s;
 		danio = d;
 		numBalas = n;
 		maxBalas = m;
 		tiempoDisparar = t;
-		this.handler = handler;
+		handler = Game.getHandler();
 		puedeDisparar = true;
 		this.main = main;
 		timer = new Timer(tiempoDisparar,timerPoderDisparar);
 
 	}
+	public BufferedImage getPortada()
+	{
+		return armaDerechaAbajo;
+	}
+
 	public void cambiarImagen(int id)
 	{
 		switch(id)

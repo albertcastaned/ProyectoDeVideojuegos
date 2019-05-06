@@ -4,8 +4,8 @@ import java.util.Random;
 
 //Subclase que dispara las BalaOla
 public class Escopeta extends Arma {
-	public Escopeta(String s, int d, int n, int m, int t, Handler handler,Game main) {
-		super(s, d, n, m, t, handler,main);
+	public Escopeta(String s, int d, int n, int m, int t, Game main) {
+		super(s, d, n, m, t,main);
 		armaAbajo = Assets.pArmaAbajoEsc;
 		armaArriba = Assets.pArmaArribaEsc;
 		armaDerecha = Assets.pArmaDerechaEsc;

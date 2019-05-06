@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class Lanzallamas extends Arma {
 
-    public Lanzallamas(String s, int d, int n, int m, int t, Handler handler, Game main) {
-        super(s, d, n, m, t, handler, main);
+    public Lanzallamas(String s, int d, int n, int m, int t, Game main) {
+        super(s, d, n, m, t, main);
         armaAbajo = Assets.pArmaAbajoFuego;
         armaArriba = Assets.pArmaArribaFuego;
         armaDerecha = Assets.pArmaDerechaFuego;

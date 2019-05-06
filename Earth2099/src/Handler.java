@@ -71,4 +71,9 @@ public class Handler {
 		listaEntidades.remove(obj);
 		//System.out.println("Objeto eliminado de Handler");
 	}
+	public void borrarTodo()
+	{
+		listaEntidades.clear();
+	}
+
 }

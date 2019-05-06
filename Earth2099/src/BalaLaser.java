@@ -51,6 +51,8 @@ public class BalaLaser extends Bala{
                         HUD.sumarPuntos(auxNum);
                         handler.quitarObjeto(aux);
                         Game.bajarCountFactoryEnemigo();
+                        Game.sumarMuerto();
+
                     }
                 }
 

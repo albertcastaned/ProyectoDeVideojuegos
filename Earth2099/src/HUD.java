@@ -1,18 +1,21 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class HUD {
 
     //variables estaticas por que nunca deben cambiar de su valor que ya estan
     public static int nivel = 1;
     public static int vida = 100;
-    public static int muertos;
     public static String balas;
     public static String nombreArma;
     public static int puntuacion = 0;
     public int x;
     public int y;
+
+    public static Arma arma1;
+    public static Arma arma2;
+
+    public static int armaIndex = 1;
 
     // cuando tenemos 15 muertos, es cuando queremos cambiar de nivel
     public HUD(int x, int y) {
@@ -20,9 +23,31 @@ public class HUD {
         this.y = y;
     }
 
+    public static Arma getArma1()
+    {
+        return arma1;
+    }
+    public static void setIndex(int a)
+    {
+        armaIndex = a;
+    }
 
+    public static Arma getArma2()
+    {
+        return arma2;
+    }
+
+    public static void setArma1(Arma a)
+    {
+        arma1 = a;
+    }
+    public static void setArma2(Arma a)
+    {
+        arma2 = a;
+    }
     //aquí dibujamos el grafico que aparece en pantalla
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
+
 
         g.setFont(new Font("TimesRoman",Font.BOLD,26));
         g.setColor(new Color(46, 46, 46));
@@ -50,6 +75,21 @@ public class HUD {
         g.drawString("Score: " + puntuacion,x + Game.getVentanaAncho() - 320 + 2 ,y + 60 + 2);
         g.setColor(Color.WHITE);
         g.drawString("Score: " + puntuacion,x + Game.getVentanaAncho() - 320,y + 60);
+
+        g.setColor(Color.black);
+        g.setStroke(new BasicStroke(6));
+        if(armaIndex == 0) {
+            g.drawRect(x  +22, y + 172, 80, 80);
+            g.setColor(Color.WHITE);
+            g.drawRect(x  +20, y + 170, 80, 80);
+        }else{
+            g.drawRect(x + 127, y + 172, 80, 80);
+            g.setColor(Color.WHITE);
+            g.drawRect(x + 125, y + 170, 80, 80);
+
+        }
+        g.drawImage(arma1.getPortada(),x + 25,y + 180,null);
+        g.drawImage(arma2.getPortada(),x+ 135,y+ 180,null);
 
 
     }
@@ -81,14 +121,6 @@ public class HUD {
 
     public static void setVida(int vida) {
         HUD.vida = vida;
-    }
-
-    public static int getMuertos() {
-        return muertos;
-    }
-
-    public static void setMuertos(int muertos) {
-        HUD.muertos = muertos;
     }
 
     public int getx() {

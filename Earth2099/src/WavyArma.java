@@ -1,8 +1,8 @@
 import image.Assets;
 
 public class WavyArma extends Arma {
-    public WavyArma(String s, int d, int n, int m, int t, Handler handler,Game main) {
-        super(s, d, n, m, t, handler,main);
+    public WavyArma(String s, int d, int n, int m, int t,Game main) {
+        super(s, d, n, m, t,main);
         armaAbajo = Assets.pArmaAbajowavy;
         armaArriba = Assets.pArmaArribawavy;
         armaDerecha = Assets.pArmaDerechawavy;

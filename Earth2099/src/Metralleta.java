@@ -3,9 +3,9 @@ import image.Assets;
 //Subclase que dispara BalaNormal
 public class Metralleta extends Arma{
 	
-	public Metralleta(String s,int d, int n, int m, int t,Handler handler,Game main)
+	public Metralleta(String s,int d, int n, int m, int t,Game main)
 	{
-		super(s,d,n,m,t,handler,main);
+		super(s,d,n,m,t,main);
 		armaAbajo = Assets.pArmaAbajo;
 		armaArriba = Assets.pArmaArriba;
 		armaDerecha = Assets.pArmaDerecha;

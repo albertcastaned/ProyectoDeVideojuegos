@@ -57,6 +57,8 @@ public class Game extends Canvas implements Runnable{
 	private static ArmaFactory armaFactory;
 
 	private HUD myHud;
+
+	private static int enemigosMuerto = 0;
 	//Iniciar juego
 	public static void main(String[] args)
 	{
@@ -92,7 +94,9 @@ public class Game extends Canvas implements Runnable{
 		//Crear instancias iniciales
 		camara = new Camara(0,0);
 		handler = new Handler();
-
+		myHud = new HUD(0,0);
+		myHud.setArma1(new Lanzallamas("Lanzallamas",10,60,60,700,this));
+		myHud.setArma2(new LaserArma("Laser",30,20,20,500,this));
 		personaje = new Personaje(4000,4000,30,60,"Personaje",handler,this);
 		handler.agregarObjeto(personaje);
 		//Crear un tipo de nivel al azar
@@ -112,9 +116,9 @@ public class Game extends Canvas implements Runnable{
 		powerupFactory = new PowerUpFactory(5000,mapMatrix,this);
 		armaFactory = new ArmaFactory(10000,mapMatrix,this);
 		creandoNivel = false;
-		myHud = new HUD(0,0);
-		keyInput = new KeyInput(personaje);
 
+
+		keyInput = new KeyInput(personaje);
 		//Agregar KeyListener al jugador
 		this.addKeyListener(keyInput);
 
@@ -168,13 +172,17 @@ public class Game extends Canvas implements Runnable{
 
 	}
 
-	
+	public static void sumarMuerto()
+	{
+		enemigosMuerto++;
+	}
+
 	public void resetear()
 	{
 		creandoNivel = true;
 		//Crear instancias iniciales
 		camara = new Camara(0,0);
-		handler = new Handler();
+		handler.borrarTodo();
 		
 
 		personaje = new Personaje(4000,4000,30,60,"Personaje",handler,this);
@@ -269,11 +277,16 @@ public class Game extends Canvas implements Runnable{
 
 	//Llamar los metodos actualizar de cada Entidad
 	private synchronized void actualizar()
-	{	
+	{
 
 		camara.actualizar(personaje);
 		//Se llamara aqui metodo actualizar de cada entidad en el Handler
 		handler.actualizar();
+		if(enemigosMuerto >= 30)
+		{
+			resetear();
+			enemigosMuerto = 0;
+		}
 	}
 	private synchronized void dibujar()
 	{
@@ -359,7 +372,7 @@ public class Game extends Canvas implements Runnable{
         	myHud.setx(camPosX);
         	myHud.sety(camPosY);
         	HUD.setVida(personaje.getVida());
-        	myHud.render(g);
+        	myHud.render(g2d);
 
 
 
