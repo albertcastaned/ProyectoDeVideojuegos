@@ -99,7 +99,7 @@ public class Bala extends Entidad{
 						handler.agregarObjeto(new TextoFlotante(x,y,30,30,"dmg","+" + auxNum,3,handler,main));
 						HUD.sumarPuntos(auxNum);
 						handler.quitarObjeto(aux);
-						Game.bajarCountFactoryEnemigo();
+						main.bajarCountFactoryEnemigo();
 					}
 					
 					
@@ -117,7 +117,7 @@ public class Bala extends Entidad{
 	public  void render(Graphics2D g2d)
 	{
 		g2d.drawImage(img,x,y,null);
-		if(Game.getDebug())
+		if(main.getDebug())
 		{
 		g2d.setColor(Color.RED);
 		g2d.drawRect(x, y, ancho, altura);

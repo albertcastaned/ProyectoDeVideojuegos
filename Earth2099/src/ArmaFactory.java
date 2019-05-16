@@ -18,7 +18,7 @@ public class ArmaFactory extends Factory{
     public void crear() {
         //Numero maximo de enemigos 30
 
-        if (countMax >= 10)
+        if (countMax >= 10 || !game.getCorriendo())
             return;
 
 
@@ -34,27 +34,27 @@ public class ArmaFactory extends Factory{
             //Tipo de enemigo basado en porcentaje de 1 al 100
             int tipoPowerUp = ran.nextInt(100) + 1;
             if (tipoPowerUp <= 20) {
-                Game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Metralleta", Assets.pArmaAD, Game.getHandler(), game));
+                game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Metralleta", Assets.pArmaAD, game.getHandler(), game));
                 System.out.println("FACTORY NUEVA ARMA EN X = " + x * 80 + " Y = " + y * 80);
                 countMax++;
             }
             if (tipoPowerUp > 20 && tipoPowerUp <= 40) {
-                Game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Wavy", Assets.pArmaAIwavy, Game.getHandler(), game));
+                game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Wavy", Assets.pArmaAIwavy, game.getHandler(), game));
                 System.out.println("FACTORY NUEVA ARMA EN X = " + x * 80 + " Y = " + y * 80);
                 countMax++;
             }
             if (tipoPowerUp > 40 && tipoPowerUp <= 60) {
-                Game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Laser", Assets.pArmaADLaser, Game.getHandler(), game));
+                game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Laser", Assets.pArmaADLaser, game.getHandler(), game));
                 System.out.println("FACTORY NUEVA ARMA EN X = " + x * 80 + " Y = " + y * 80);
                 countMax++;
             }
             if (tipoPowerUp > 60 && tipoPowerUp <= 80) {
-                Game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Escopeta", Assets.pArmaADEsc, Game.getHandler(), game));
+                game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Escopeta", Assets.pArmaADEsc, game.getHandler(), game));
                 System.out.println("FACTORY NUEVA ARMA EN X = " + x * 80 + " Y = " + y * 80);
                 countMax++;
             }
             if (tipoPowerUp > 80 && tipoPowerUp <= 100) {
-                Game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Lanzallamas", Assets.pArmaADFuego, Game.getHandler(), game));
+                game.getHandler().agregarObjeto(new ArmaMapa(x * 80, y * 80, 80, 80, "Lanzallamas", Assets.pArmaADFuego, game.getHandler(), game));
                 System.out.println("FACTORY NUEVA ARMA EN X = " + x * 80 + " Y = " + y * 80);
                 countMax++;
             }

@@ -285,7 +285,7 @@ public class Personaje extends Entidad{
 		
 	}
 	public float getAngulo(Point destino) {
-	    float angulo = (float) Math.toDegrees(Math.atan2(destino.y - Game.getVentanaAltura()/2, destino.x - Game.getVentanaAncho()/2));
+	    float angulo = (float) Math.toDegrees(Math.atan2(destino.y - MiCanvas.getCanvas().getState().getVentanaAltura()/2, destino.x - MiCanvas.getCanvas().getState().getVentanaAncho()/2));
 
 	    if(angulo < 0)
 	    	angulo += 360;
@@ -304,6 +304,8 @@ public class Personaje extends Entidad{
 	//Actualizar
 	@Override
 	public void actualizar() {
+
+
 		//Si ha matado mas de 30 enemigos
 		//Asignar direccion dependiendo de las teclas
 		if (puedeEsquivar) {
@@ -473,7 +475,7 @@ public class Personaje extends Entidad{
 					}
 					if(armasActuales < 1)
 						armasActuales++;
-					Game.bajarCountFactoryArmas();
+					main.bajarCountFactoryArmas();
 					handler.quitarObjeto(aux);
 				}
 			}
@@ -547,8 +549,8 @@ public class Personaje extends Entidad{
 							handler.agregarObjeto(new TextoFlotante(x,y,30,30,"dmg","+" + auxNum,3,handler,main));
 							HUD.sumarPuntos(auxNum);
 							handler.quitarObjeto(aux);
-							Game.bajarCountFactoryEnemigo();
-							Game.sumarMuerto();
+							main.bajarCountFactoryEnemigo();
+							main.sumarMuerto();
 						}
 
 					}
@@ -562,11 +564,9 @@ public class Personaje extends Entidad{
 
 					puedeSerLastimado = false;
 					puedeSerLastimadoTimer.start();
-					if(vida <= 0)
-						System.exit(0);
+
 				}
-				if(vida <= 0)
-					System.exit(0);
+
 			}
 			if(aux instanceof BalaEnemigo)
 			{
@@ -576,13 +576,15 @@ public class Personaje extends Entidad{
 						continue;
 					setVida(getVida() - 10);
 					handler.agregarObjeto(new TextoFlotante(x,y,30,30,"dmg","-10",1,handler,main));
+
 					handler.quitarObjeto(aux);
+
 				}
 			}
 		      if(aux instanceof PowerUp){
 		        if(chocandoEn(x, y, aux)){
 		          this.powerup = ((PowerUp)aux);
-		          Game.bajarCountFactoryPowerUp();
+					main.bajarCountFactoryPowerUp();
 		          handler.quitarObjeto(aux);
 		        }
 		      }
@@ -639,16 +641,12 @@ public class Personaje extends Entidad{
 
 
 		g.drawImage(Assets.cursor,posicionMouse.x + camPosX - 20,posicionMouse.y + camPosY - 20,null);
-		if(Game.getDebug())
+		if(main.getDebug())
 		{
 			g.setColor(Color.RED);
 			g.drawRect(x, y, ancho, altura);
 		}
     	
 	}
-
-
-
-	
 	
 }

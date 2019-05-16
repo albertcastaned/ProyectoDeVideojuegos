@@ -115,7 +115,7 @@ public class GeneradorDeMapa {
 				{
 				if(!map.blocked(x, y))
 				{
-				Game.getHandler().agregarObjeto(new Decoracion(x*80 + xImagenOffset,y*80 + yImagenOffset,decoracionImagen,Game.getHandler(),main));
+				main.getHandler().agregarObjeto(new Decoracion(x*80 + xImagenOffset,y*80 + yImagenOffset,decoracionImagen,main.getHandler(),main));
 				map.setBloqueado(x, y + 1);
 				map.setTipo(x, y+1);
 				}

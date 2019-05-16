@@ -73,7 +73,17 @@ public class Handler {
 	}
 	public void borrarTodo()
 	{
-		listaEntidades.clear();
+		//Iterar
+		Iterator<Entidad> itr = listaEntidades.iterator();
+		while(itr.hasNext())
+		{
+			Entidad ent = itr.next();
+			if(ent instanceof Esqueleto)
+				((Esqueleto) ent).stopTimer();
+			if(ent instanceof  EsqueletoLider)
+				((EsqueletoLider) ent).stopTimer();
+			listaEntidades.remove(ent);
+		}
 	}
 
 }

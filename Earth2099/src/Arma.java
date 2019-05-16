@@ -54,7 +54,7 @@ public abstract class Arma {
 		numBalas = n;
 		maxBalas = m;
 		tiempoDisparar = t;
-		handler = Game.getHandler();
+		handler = main.getHandler();
 		puedeDisparar = true;
 		this.main = main;
 		timer = new Timer(tiempoDisparar,timerPoderDisparar);

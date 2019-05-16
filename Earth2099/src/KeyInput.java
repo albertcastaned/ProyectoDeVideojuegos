@@ -37,11 +37,13 @@ public class KeyInput implements KeyListener{
         if(key == KeyEvent.VK_3)
         	personaje.asignarArma(2);
 
-        
-        if(key == KeyEvent.VK_P)
-        	Game.setDebug();
+
         if(key == KeyEvent.VK_Z)
-        	personaje.cambiarNivel();
+		{
+			personaje.setVida(0);
+		}
+
+
 		if(key == KeyEvent.VK_SHIFT)
 			personaje.esquivar();
 		if(key == KeyEvent.VK_SPACE)

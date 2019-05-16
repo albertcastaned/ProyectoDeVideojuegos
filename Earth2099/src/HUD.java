@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.geom.Line2D;
 
 public class HUD {
 
@@ -15,12 +14,21 @@ public class HUD {
     public static Arma arma1;
     public static Arma arma2;
 
-    public static int armaIndex = 1;
+    public static int armaIndex = 0;
 
     // cuando tenemos 15 muertos, es cuando queremos cambiar de nivel
     public HUD(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public static void resetearHUD()
+    {
+        nivel = 0;
+        vida = 100;
+        puntuacion = 0;
+        armaIndex = 0;
+
     }
 
     public static Arma getArma1()
@@ -72,9 +80,9 @@ public class HUD {
         g.drawString(nombreArma + ": " + balas + " Balas ",x + 15 ,y + 120);
 
         g.setColor(Color.BLACK);
-        g.drawString("Score: " + puntuacion,x + Game.getVentanaAncho() - 320 + 2 ,y + 60 + 2);
+        g.drawString("Score: " + puntuacion,x + MiCanvas.getCanvas().getState().getVentanaAncho() - 320 + 2 ,y + 60 + 2);
         g.setColor(Color.WHITE);
-        g.drawString("Score: " + puntuacion,x + Game.getVentanaAncho() - 320,y + 60);
+        g.drawString("Score: " + puntuacion,x + MiCanvas.getCanvas().getState().getVentanaAncho() - 320,y + 60);
 
         g.setColor(Color.black);
         g.setStroke(new BasicStroke(6));

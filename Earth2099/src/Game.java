@@ -12,18 +12,11 @@ import image.Assets;
 
 
 //Clase principal que incializa las demas, y controla el Game Loop
-public class Game extends Canvas implements Runnable{
+public class Game extends GameState implements Runnable{
 	
 	private static final long serialVersionUID = 1L;
-	//Iniciar dimensiones de ventana
-	private static int VentanaAncho;
-	private static int VentanaAltura;
-	
 	
 	private static boolean DEBUG = false;
-	//Variables para Thread
-	private Thread thread;
-	private volatile boolean corriendo;
 	
 	private volatile boolean creandoNivel = true;
 	
@@ -45,12 +38,10 @@ public class Game extends Canvas implements Runnable{
 	private Camara camara;
 	
 	//Objeto Handler para guardar en lista entidades que interactuan con otros
-	private static Handler handler;
+	private Handler handler;
 	
 	//Tipo de nivel que se generara (1 - Bosque, 2 - Volcan, 3 - Desierto, 4 - Tundra)
 	private int tipoDeNivel;
-	
-	private KeyInput keyInput;
 	
 	private static EnemyFactory enemyFactory;
 	private static PowerUpFactory powerupFactory;
@@ -59,17 +50,24 @@ public class Game extends Canvas implements Runnable{
 	private HUD myHud;
 
 	private static int enemigosMuerto = 0;
-	//Iniciar juego
-	public static void main(String[] args)
-	{
-		new Game();
-	}
+
+  	private KeyInput keyInput;
+
 	public Game()
 	{
 		corriendo = false;
-		new MiCanvas("Earth 2099", this);
-		VentanaAncho = MiCanvas.getWindowWidth();
-		VentanaAltura = MiCanvas.getWindowHeight();
+    this.windowTitle = "Earth 2099";
+		this.VentanaAncho = MiCanvas.getWindowWidth();
+		this.VentanaAltura = MiCanvas.getWindowHeight();
+	}
+
+	public Game(MiCanvas canvas)
+	{
+		corriendo = false;
+    	this.windowTitle = "Earth 2099";
+		this.VentanaAncho = MiCanvas.getWindowWidth();
+		this.VentanaAltura = MiCanvas.getWindowHeight();
+    	canvas.setState(this);
 	}
 	
 	//Inicar el thread
@@ -95,8 +93,51 @@ public class Game extends Canvas implements Runnable{
 		camara = new Camara(0,0);
 		handler = new Handler();
 		myHud = new HUD(0,0);
-		myHud.setArma1(new Lanzallamas("Lanzallamas",10,60,60,700,this));
-		myHud.setArma2(new LaserArma("Laser",30,20,20,500,this));
+		myHud.resetearHUD();
+		Random ran = new Random();
+
+		int arma1 = ran.nextInt(5);
+		switch(arma1)
+		{
+			case 0:
+				myHud.setArma1(new Metralleta("Metralleta", 50, 60, 60, 100, this));
+				break;
+			case 1:
+				myHud.setArma1(new Escopeta("Escopeta", 10, 40, 40, 1000, this));
+				break;
+			case 2:
+				myHud.setArma1(new LaserArma("Laser", 30, 20, 20, 500, this));
+				break;
+			case 3:
+				myHud.setArma1(new WavyArma("Wavy", 50, 30, 30, 300, this));
+				break;
+			case 4:
+				myHud.setArma1(new Lanzallamas("Lanzallamas",120,120,120,700,this));
+				break;
+		}
+		int arma2 = arma1;
+		while(arma1 == arma2)
+			arma2 = ran.nextInt(5);
+
+		switch(arma2)
+		{
+			case 0:
+				myHud.setArma2(new Metralleta("Metralleta", 50, 60, 60, 100, this));
+				break;
+			case 1:
+				myHud.setArma2(new Escopeta("Escopeta", 10, 40, 40, 1000, this));
+				break;
+			case 2:
+				myHud.setArma2(new LaserArma("Laser", 30, 20, 20, 500, this));
+				break;
+			case 3:
+				myHud.setArma2(new WavyArma("Wavy", 50, 30, 30, 300, this));
+				break;
+			case 4:
+				myHud.setArma2(new Lanzallamas("Lanzallamas",120,120,120,700,this));
+				break;
+		}
+
 		personaje = new Personaje(4000,4000,30,60,"Personaje",handler,this);
 		handler.agregarObjeto(personaje);
 		//Crear un tipo de nivel al azar
@@ -114,7 +155,7 @@ public class Game extends Canvas implements Runnable{
 		int[][] mapMatrix = map.getTerrainMat();
 		enemyFactory = new EnemyFactory(3000,mapMatrix,this);
 		powerupFactory = new PowerUpFactory(5000,mapMatrix,this);
-		armaFactory = new ArmaFactory(10000,mapMatrix,this);
+		armaFactory = new ArmaFactory(5000,mapMatrix,this);
 		creandoNivel = false;
 
 
@@ -172,6 +213,10 @@ public class Game extends Canvas implements Runnable{
 
 	}
 
+	public boolean getCorriendo()
+	{
+		return corriendo;
+	}
 	public static void sumarMuerto()
 	{
 		enemigosMuerto++;
@@ -241,61 +286,35 @@ public class Game extends Canvas implements Runnable{
 		}
 	}
 
-	//Llamar los metodos actualizar y render 60 veces por segundo y mantener el loop constante.
-	@Override
-	public synchronized void run() {
-				int fps = 60, ticks = 0;
-				double timePerTick = 1000000000 / fps, delta = 0;
-				long now, lastTime = System.nanoTime(), timer = 0;
-				while (corriendo)
-				{
-					if(!creandoNivel)
-					{
-						now = System.nanoTime();
-						delta += (now-lastTime) / timePerTick;
-						timer += now - lastTime;
-						lastTime = now;
-						
-						if (delta >= 1)
-						{
-							actualizar();
-							dibujar();
-							ticks ++;
-							delta --;
-						}
-						if (timer >= 1000000000)
-						{
-							System.out.println("Ticks and frames: " + ticks);
-							ticks = 0;
-							timer = 0;
-						}
-					}
-				}
-		stop();
-		
-	}
-
 	//Llamar los metodos actualizar de cada Entidad
-	private synchronized void actualizar()
+	synchronized void actualizar()
 	{
+		//Si perdio
+		if(personaje.getVida() <= 0) {
 
+			Main.setState(MiCanvas.getCanvas().getState(), new GameOver());
+			return;
+		}
 		camara.actualizar(personaje);
 		//Se llamara aqui metodo actualizar de cada entidad en el Handler
 		handler.actualizar();
-		if(enemigosMuerto >= 30)
+		if(enemigosMuerto >= 20)
 		{
 			resetear();
 			enemigosMuerto = 0;
 		}
 	}
-	private synchronized void dibujar()
+	synchronized void dibujar()
 	{
+		if(!corriendo)
+			return;
 		//Crear u obtener BufferStrategy
 		BufferStrategy bs = getBufferStrategy();
-        if(bs == null){
-            createBufferStrategy(2);
-            return;
-        }
+
+    	if(bs == null){
+        createBufferStrategy(2);
+        return;
+    	}
         try {
         	//Dibujar el fondo
         	g = bs.getDrawGraphics();
@@ -374,10 +393,9 @@ public class Game extends Canvas implements Runnable{
         	HUD.setVida(personaje.getVida());
         	myHud.render(g2d);
 
-
-
         	////////////////////////////////////////////////////////////////////////////
         	g2d.translate(-camara.getxOffset(), -camara.getyOffset()); //TERMINAR CAMARA
+
 
         }finally {
         	g.dispose();
@@ -399,14 +417,6 @@ public class Game extends Canvas implements Runnable{
 	}
 
 	
-	//Regresa dimensiones de la ventana 
-	public static int getVentanaAncho() {
-		return VentanaAncho;
-	}
-
-	public static int getVentanaAltura() {
-		return VentanaAltura;
-	}
 	//Calcular posicion del tile en proporcion a las dimensiones de los tiles (Por ahora 80x80)
 	public int getTilePosX(int x)
 	{
@@ -517,31 +527,31 @@ public class Game extends Canvas implements Runnable{
 
 	
 	//Obtener handler
-	public static Handler getHandler()
+	public Handler getHandler()
 	{
 		return handler;
 	}
 	
-	public static void setDebug()
+	public void setDebug()
 	{
 		DEBUG = !DEBUG;
 	}
 	
-	public static boolean getDebug()
+	public boolean getDebug()
 	{
 		return DEBUG;
 	}
 	
-	public static void bajarCountFactoryEnemigo()
+	public void bajarCountFactoryEnemigo()
 	{
 		enemyFactory.bajarCount();
 	}
 	
-	public static void bajarCountFactoryPowerUp()
+	public void bajarCountFactoryPowerUp()
 	{
 		powerupFactory.bajarCount();
 	}
-	public static void bajarCountFactoryArmas()
+	public void bajarCountFactoryArmas()
 	{
 		armaFactory.bajarCount();
 	}

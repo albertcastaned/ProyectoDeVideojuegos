@@ -46,7 +46,7 @@ public class BalaEnemigo extends Bala{
 		imagen.setY((int)y);
 		imagen.setX((int)x);
 		//Eliminar si esta fuera de la camara
-		if(x < -main.getCamaraXOffset() || x > (-main.getCamaraXOffset() + Game.getVentanaAncho()) || y < -main.getCamaraYOffset() || y > (-main.getCamaraYOffset() + Game.getVentanaAltura()))
+		if(x < -main.getCamaraXOffset() || x > (-main.getCamaraXOffset() + MiCanvas.getCanvas().getState().getVentanaAncho()) || y < -main.getCamaraYOffset() || y > (-main.getCamaraYOffset() + MiCanvas.getCanvas().getState().getVentanaAltura()))
 			handler.quitarObjeto(this);
 	}
 	//Dibujar la bala
@@ -56,7 +56,7 @@ public class BalaEnemigo extends Bala{
 		if(enCamara())
 		{
 			imagen.render(g2d);
-			if(Game.getDebug())
+			if(main.getDebug())
 			{
 				g2d.setColor(Color.RED);
 				g2d.drawRect(x, y, ancho, altura);

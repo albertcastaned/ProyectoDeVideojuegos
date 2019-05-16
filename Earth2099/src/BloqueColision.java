@@ -19,7 +19,7 @@ public class BloqueColision extends Entidad {
 
 	//Dibujar
 	public void render(Graphics2D g) {
-		if(Game.getDebug())
+		if(main.getDebug())
 		{
 			g.setColor(Color.RED);
 			g.drawRect(x, y, ancho, altura);

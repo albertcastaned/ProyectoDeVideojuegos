@@ -50,8 +50,8 @@ public class BalaLaser extends Bala{
                         handler.agregarObjeto(new TextoFlotante(x,y,30,30,"dmg","+" + auxNum,3,handler,main));
                         HUD.sumarPuntos(auxNum);
                         handler.quitarObjeto(aux);
-                        Game.bajarCountFactoryEnemigo();
-                        Game.sumarMuerto();
+                        main.bajarCountFactoryEnemigo();
+                        main.sumarMuerto();
 
                     }
                 }

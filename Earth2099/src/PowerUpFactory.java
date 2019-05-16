@@ -22,7 +22,7 @@ public class PowerUpFactory extends Factory{
 	{
 		//Numero maximo de enemigos 30
 		
-		if(countMax >= 10)
+		if(countMax >= 10 || !game.getCorriendo())
 			return;
 		//Posicion de la matriz actual
 		Random ran = new Random();
@@ -36,15 +36,15 @@ public class PowerUpFactory extends Factory{
 		{
 			//Tipo de enemigo basado en porcentaje de 1 al 100
 			int tipoPowerUp = ran.nextInt(100) + 1;
-			if(tipoPowerUp <= 40)
+			if(tipoPowerUp <= 70)
 			{
 				int aux = ran.nextInt(100) + 1;
 				if(aux <= 33) {
-					Game.getHandler().agregarObjeto(new Invisibilidad(x * 80, y * 80, 80, 80, "Invisibilidad", Game.getHandler(), game));
+					game.getHandler().agregarObjeto(new Invisibilidad(x * 80, y * 80, 80, 80, "Invisibilidad", game.getHandler(), game));
 				}else if(aux > 33 && aux <= 66){
-					Game.getHandler().agregarObjeto(new Vida(x * 80, y * 80, 80, 80, "Vida", Game.getHandler(), game));
+					game.getHandler().agregarObjeto(new Vida(x * 80, y * 80, 80, 80, "Vida", game.getHandler(), game));
 				}else {
-					Game.getHandler().agregarObjeto(new CartuchoBala(x * 80, y * 80, 80, 80, "Cartucho balas", Game.getHandler(), game));
+					game.getHandler().agregarObjeto(new CartuchoBala(x * 80, y * 80, 80, 80, "Cartucho balas", game.getHandler(), game));
 
 				}
 			}

@@ -49,7 +49,7 @@ public class BalaEscopeta extends Bala {
         y += velY;
 
         //Eliminar si esta fuera de la camara
-        if(x < -main.getCamaraXOffset() || x > (-main.getCamaraXOffset() + Game.getVentanaAncho()) || y < -main.getCamaraYOffset() || y > (-main.getCamaraYOffset() + Game.getVentanaAltura()))
+        if(x < -main.getCamaraXOffset() || x > (-main.getCamaraXOffset() + MiCanvas.getCanvas().getState().getVentanaAncho()) || y < -main.getCamaraYOffset() || y > (-main.getCamaraYOffset() + MiCanvas.getCanvas().getState().getVentanaAltura()))
             handler.quitarObjeto(this);
     }
 
@@ -96,8 +96,8 @@ public class BalaEscopeta extends Bala {
                         handler.agregarObjeto(new TextoFlotante(x,y,30,30,"dmg","+" + auxNum,3,handler,main));
                         HUD.sumarPuntos(auxNum);
                         handler.quitarObjeto(aux);
-                        Game.bajarCountFactoryEnemigo();
-                        Game.sumarMuerto();
+                        main.bajarCountFactoryEnemigo();
+                        main.sumarMuerto();
 
                     }
 
